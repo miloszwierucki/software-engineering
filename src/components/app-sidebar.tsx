@@ -1,16 +1,13 @@
 import * as React from "react";
 import {
-  Bot,
   Command,
-  Frame,
-  Map,
-  PieChart,
   Send,
   SquareTerminal,
+  ListPlus,
+  ListTree,
 } from "lucide-react";
 
 import { NavSecondary } from "@/components/nav-secondary";
-import { NavProjects } from "@/components/nav-projects";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -24,29 +21,31 @@ import {
 } from "@/components/ui/sidebar";
 
 const data = {
+  // TODO: add user data
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "sheldon",
+    email: "system@slave.com",
+    avatar: "",
   },
+  // TODO: add all nav items
   navMain: [
     {
-      title: "Playground",
+      title: "Zgłoszenia",
       url: "#",
       icon: SquareTerminal,
-      isActive: true,
+      isDisabled: false,
       items: [
         {
-          title: "History",
+          title: "Zarządzaj",
           url: "#",
+          icon: ListTree,
+          isDisabled: false,
         },
         {
-          title: "Starred",
+          title: "Dodaj",
           url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          icon: ListPlus,
+          isDisabled: false,
         },
       ],
     },
@@ -56,23 +55,6 @@ const data = {
       title: "Feedback",
       url: "#",
       icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Zgłoszenia",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Zasoby",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Darowizny",
-      url: "#",
-      icon: Map,
     },
   ],
 };
@@ -99,7 +81,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
