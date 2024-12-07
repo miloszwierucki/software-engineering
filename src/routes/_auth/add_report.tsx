@@ -224,7 +224,7 @@ function AddReport() {
             )}
           />
 
-          <Button type="submit">Submit Report</Button>
+          <Button type="submit">Wyślij zgłoszenie</Button>
         </form>
       </Form>
     </div>

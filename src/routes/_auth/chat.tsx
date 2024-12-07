@@ -114,15 +114,15 @@ function ChatComponent() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <Textarea
-              placeholder="Type your message here..."
+              placeholder="Napisz swoją wiadomość..."
               {...form.register('message')}
-              className="min-h-[80px]"
+              className="min-h-[80px] resize-none"
             />
             <button
               type="submit"
               className="w-full bg-primary text-primary-foreground rounded-md py-2 px-4 hover:bg-primary/90"
             >
-              Send Message
+              Wyślij wiadomość
             </button>
           </form>
         </Form>

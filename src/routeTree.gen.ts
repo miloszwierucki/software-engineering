@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthManageresourcesImport } from './routes/_auth/manage_resources'
 import { Route as AuthManagereportImport } from './routes/_auth/manage_report'
 import { Route as AuthChatImport } from './routes/_auth/chat'
@@ -22,7 +23,6 @@ import { Route as AuthAddreportImport } from './routes/_auth/add_report'
 // Create Virtual Routes
 
 const AboutLazyImport = createFileRoute('/about')()
-const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
@@ -32,11 +32,11 @@ const AboutLazyRoute = AboutLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
-const IndexLazyRoute = IndexLazyImport.update({
-  id: '/',
+const AuthIndexRoute = AuthIndexImport.update({
+  id: '/_auth/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
 const AuthManageresourcesRoute = AuthManageresourcesImport.update({
   id: '/_auth/manage_resources',
@@ -72,13 +72,6 @@ const AuthAddreportRoute = AuthAddreportImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -121,91 +114,98 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManageresourcesImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/': {
+      id: '/_auth/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
   '/chat': typeof AuthChatRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
   '/chat': typeof AuthChatRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/_auth/add_report': typeof AuthAddreportRoute
   '/_auth/add_resources': typeof AuthAddresourcesRoute
   '/_auth/chat': typeof AuthChatRoute
   '/_auth/manage_report': typeof AuthManagereportRoute
   '/_auth/manage_resources': typeof AuthManageresourcesRoute
+  '/_auth/': typeof AuthIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/about'
     | '/add_report'
     | '/add_resources'
     | '/chat'
     | '/manage_report'
     | '/manage_resources'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/about'
     | '/add_report'
     | '/add_resources'
     | '/chat'
     | '/manage_report'
     | '/manage_resources'
+    | '/'
   id:
     | '__root__'
-    | '/'
     | '/about'
     | '/_auth/add_report'
     | '/_auth/add_resources'
     | '/_auth/chat'
     | '/_auth/manage_report'
     | '/_auth/manage_resources'
+    | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
   AuthAddreportRoute: typeof AuthAddreportRoute
   AuthAddresourcesRoute: typeof AuthAddresourcesRoute
   AuthChatRoute: typeof AuthChatRoute
   AuthManagereportRoute: typeof AuthManagereportRoute
   AuthManageresourcesRoute: typeof AuthManageresourcesRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
   AuthAddreportRoute: AuthAddreportRoute,
   AuthAddresourcesRoute: AuthAddresourcesRoute,
   AuthChatRoute: AuthChatRoute,
   AuthManagereportRoute: AuthManagereportRoute,
   AuthManageresourcesRoute: AuthManageresourcesRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -218,17 +218,14 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
         "/about",
         "/_auth/add_report",
         "/_auth/add_resources",
         "/_auth/chat",
         "/_auth/manage_report",
-        "/_auth/manage_resources"
+        "/_auth/manage_resources",
+        "/_auth/"
       ]
-    },
-    "/": {
-      "filePath": "index.lazy.tsx"
     },
     "/about": {
       "filePath": "about.lazy.tsx"
@@ -247,6 +244,9 @@ export const routeTree = rootRoute
     },
     "/_auth/manage_resources": {
       "filePath": "_auth/manage_resources.tsx"
+    },
+    "/_auth/": {
+      "filePath": "_auth/index.tsx"
     }
   }
 }
