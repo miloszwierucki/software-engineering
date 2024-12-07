@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Bot,
+  // Bot,
   Command,
   Frame,
   Map,
@@ -84,7 +84,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
@@ -100,6 +100,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <a href="/add_report">Dodaj zgłoszenie</a>
+        <a href="/manage_report">Zarządzaj zgłoszeniami</a>
+        <a href="/add_resources">Dodaj zasób</a>
+        <a href="/manage_resources">Zarządzaj zasobami</a>
+        <a href="/chat">Chat</a>
+        <a href="/about">about</a>
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
