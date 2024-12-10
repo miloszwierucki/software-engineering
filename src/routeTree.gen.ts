@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
+import { Route as AuthReportsImport } from './routes/_auth/reports'
+import { Route as AuthAccountImport } from './routes/_auth/account'
 import { Route as AuthAboutImport } from './routes/_auth/about'
 
 // Create/Update Routes
@@ -32,6 +34,18 @@ const AuthRoute = AuthImport.update({
 const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthReportsRoute = AuthReportsImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthAccountRoute = AuthAccountImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -66,6 +80,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAboutImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/account': {
+      id: '/_auth/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthAccountImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/reports': {
+      id: '/_auth/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthReportsImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
@@ -80,11 +108,15 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthAboutRoute: typeof AuthAboutRoute
+  AuthAccountRoute: typeof AuthAccountRoute
+  AuthReportsRoute: typeof AuthReportsRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAboutRoute: AuthAboutRoute,
+  AuthAccountRoute: AuthAccountRoute,
+  AuthReportsRoute: AuthReportsRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -94,12 +126,16 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/about': typeof AuthAboutRoute
+  '/account': typeof AuthAccountRoute
+  '/reports': typeof AuthReportsRoute
   '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AuthAboutRoute
+  '/account': typeof AuthAccountRoute
+  '/reports': typeof AuthReportsRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -108,15 +144,24 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/_auth/about': typeof AuthAboutRoute
+  '/_auth/account': typeof AuthAccountRoute
+  '/_auth/reports': typeof AuthReportsRoute
   '/_auth/': typeof AuthIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/about' | '/'
+  fullPaths: '' | '/login' | '/about' | '/account' | '/reports' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/'
-  id: '__root__' | '/_auth' | '/login' | '/_auth/about' | '/_auth/'
+  to: '/login' | '/about' | '/account' | '/reports' | '/'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/login'
+    | '/_auth/about'
+    | '/_auth/account'
+    | '/_auth/reports'
+    | '/_auth/'
   fileRoutesById: FileRoutesById
 }
 
@@ -148,6 +193,8 @@ export const routeTree = rootRoute
       "filePath": "_auth.tsx",
       "children": [
         "/_auth/about",
+        "/_auth/account",
+        "/_auth/reports",
         "/_auth/"
       ]
     },
@@ -156,6 +203,14 @@ export const routeTree = rootRoute
     },
     "/_auth/about": {
       "filePath": "_auth/about.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/account": {
+      "filePath": "_auth/account.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/reports": {
+      "filePath": "_auth/reports.tsx",
       "parent": "/_auth"
     },
     "/_auth/": {

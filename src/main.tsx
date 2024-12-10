@@ -8,6 +8,8 @@ import { routeTree } from "./routeTree.gen";
 import { AuthProvider, useAuth } from "./auth";
 import "./index.css";
 
+import "./i18n";
+
 // Create a new router instance
 export const router = createRouter({
   routeTree,

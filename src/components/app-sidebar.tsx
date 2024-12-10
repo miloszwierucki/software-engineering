@@ -31,19 +31,19 @@ const data = {
   navMain: [
     {
       title: "Zgłoszenia",
-      url: "#",
+      url: "/reports",
       icon: SquareTerminal,
       isDisabled: false,
       items: [
         {
           title: "Zarządzaj",
-          url: "#",
+          url: "/reports",
           icon: ListTree,
           isDisabled: false,
         },
         {
           title: "Dodaj",
-          url: "#",
+          url: "/reports?new=true",
           icon: ListPlus,
           isDisabled: false,
         },

@@ -1,0 +1,14 @@
+{
+  "translation": {
+    "auth": {
+      "tabs": {
+        "logIn": "Log In",
+        "signUp": "Sign Up"
+      }
+    },
+    "loginPage": {
+      "title": "Login",
+      "description": "Enter your email below to login to your account"
+    }
+  }
+}

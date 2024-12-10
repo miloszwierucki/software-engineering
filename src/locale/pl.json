@@ -1,0 +1,14 @@
+{
+  "translation": {
+    "auth": {
+      "tabs": {
+        "logIn": "Zaloguj się",
+        "signUp": "Zarejestruj się"
+      }
+    },
+    "loginPage": {
+      "title": "Logowanie",
+      "description": "Wprowadź swój adres e-mail poniżej, aby zalogować się do swojego konta"
+    }
+  }
+}
