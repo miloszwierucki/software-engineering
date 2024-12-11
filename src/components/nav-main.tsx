@@ -23,12 +23,12 @@ export function NavMain({
 }: {
   items: {
     title: string;
-    url: string;
+    link: { to: string; search?: Record<string, unknown> };
     icon: LucideIcon;
     isDisabled?: boolean;
     items?: {
       title: string;
-      url: string;
+      link: { to: string; search?: Record<string, unknown> };
       icon: LucideIcon;
       isDisabled?: boolean;
     }[];
@@ -43,7 +43,7 @@ export function NavMain({
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild disabled={item.isDisabled}>
-              <Link href={item.url}>
+              <Link {...item.link}>
                 <item.icon />
                 <span>{item.title}</span>
               </Link>
@@ -74,9 +74,9 @@ export function NavMain({
                   <DropdownMenuItem
                     key={item.title}
                     asChild
-                    disabled={!item.isDisabled}
+                    disabled={item.isDisabled}
                   >
-                    <Link href={item.url}>
+                    <Link {...item.link}>
                       <item.icon className="text-muted-foreground" />
                       <span>{item.title}</span>
                     </Link>

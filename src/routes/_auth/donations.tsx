@@ -16,8 +16,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+type DonationSearch = {
+  new: boolean;
+};
+
 export const Route = createFileRoute("/_auth/donations")({
   component: DonationsRoute,
+  validateSearch: (search: Record<string, unknown>): DonationSearch => {
+    // validate and parse the search params into a typed state
+    console.log(search);
+    return {
+      new: search.new === true,
+    };
+  },
 });
 
 interface Donation {
@@ -185,22 +196,35 @@ const donations: Donation[] = [
 
 function DonationsRoute() {
   const [data, setData] = useState<Donation[]>(donations);
+  const { new: createNew } = Route.useSearch();
+  const [openDialog, setOpenDialog] = useState(createNew);
 
-  const handleAddNewReport = () => {
+  const [newDonation, setNewDonation] = useState<{
+    donatorName: string;
+    resources: {
+      resourceId: number;
+      name: string;
+      quantity: number;
+    }[];
+  }>({
+    donatorName: "",
+    resources: [],
+  });
+
+  const handleAddNewDonation = () => {
     setData([
       ...data,
       {
-        donation_id: 1,
-        donator: { userId: 4, name: "Ewa Zielińska" },
-        status: "COMPLETED",
-        donationDate: "2023-11-06T00:00:00.000Z",
-        acceptDate: "2023-11-24T00:00:00.000Z",
-        resources: [
-          { resourceId: 3, name: "Medical Supplies", quantity: 10 },
-          { resourceId: 1, name: "Blanket", quantity: 5 },
-        ],
+        donation_id: data.length + 1,
+        donator: { userId: 0, name: newDonation.donatorName },
+        status: "PENDING",
+        donationDate: new Date().toISOString(),
+        acceptDate: "",
+        resources: newDonation.resources,
       },
     ]);
+
+    setOpenDialog(false);
   };
 
   return (
@@ -213,7 +237,7 @@ function DonationsRoute() {
           </p>
         </div>
 
-        <Dialog>
+        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
             <Button variant="outline">Add new donation</Button>
           </DialogTrigger>
@@ -226,30 +250,46 @@ function DonationsRoute() {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
+                <Label htmlFor="donator" className="text-right">
+                  Donator
                 </Label>
                 <Input
-                  id="name"
-                  defaultValue="Pedro Duarte"
+                  id="donator"
+                  placeholder="Pedro Duarte"
                   className="col-span-3"
+                  onChange={(event) =>
+                    setNewDonation((prev) => ({
+                      ...prev,
+                      donatorName: event.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Username
+                <Label htmlFor="resources" className="text-right">
+                  Resources
                 </Label>
                 <Input
-                  id="username"
-                  defaultValue="@peduarte"
+                  id="resources"
+                  placeholder="Apple, Banana, Orange"
                   className="col-span-3"
+                  onChange={(event) => {
+                    const resources = event.target.value.split(",");
+
+                    setNewDonation((prev) => ({
+                      ...prev,
+                      resources: resources.map((resource) => ({
+                        resourceId: 0,
+                        name: resource,
+                        quantity: 0,
+                      })),
+                    }));
+                  }}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={handleAddNewReport}>
-                Save changes
-              </Button>
+              <Button onClick={handleAddNewDonation}>Save changes</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

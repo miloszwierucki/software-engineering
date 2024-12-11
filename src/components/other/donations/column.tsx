@@ -150,12 +150,17 @@ export const columns = () => {
       },
       cell: ({ row }) => {
         const date = new Date(row.getValue("donationDate"));
-        const formatted = date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
-        return <div className="text-right font-medium">{formatted}</div>;
+
+        if (date instanceof Date && !isNaN(date.getTime())) {
+          const formatted = date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          return <div className="text-right font-medium">{formatted}</div>;
+        }
+
+        return <div className="text-right font-medium">-</div>;
       },
     },
     {
@@ -177,12 +182,17 @@ export const columns = () => {
       },
       cell: ({ row }) => {
         const date = new Date(row.getValue("acceptDate"));
-        const formatted = date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
-        return <div className="text-right font-medium">{formatted}</div>;
+
+        if (date instanceof Date && !isNaN(date.getTime())) {
+          const formatted = date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          return <div className="text-right font-medium">{formatted}</div>;
+        }
+
+        return <div className="text-right font-medium">-</div>;
       },
     },
     {

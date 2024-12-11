@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Command,
-  Send,
-  SquareTerminal,
-  ListPlus,
-  ListTree,
-} from "lucide-react";
+import { Command, Send, ListPlus, ListTree, Gift } from "lucide-react";
 
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavMain } from "@/components/nav-main";
@@ -30,20 +24,20 @@ const data = {
   // TODO: add all nav items
   navMain: [
     {
-      title: "Zgłoszenia",
-      url: "/reports",
-      icon: SquareTerminal,
+      title: "Dotacje",
+      link: { to: "/donations" },
+      icon: Gift,
       isDisabled: false,
       items: [
         {
           title: "Zarządzaj",
-          url: "/reports",
+          link: { to: "/donations" },
           icon: ListTree,
           isDisabled: false,
         },
         {
           title: "Dodaj",
-          url: "/reports?new=true",
+          link: { to: "/donations", search: { new: true } },
           icon: ListPlus,
           isDisabled: false,
         },
@@ -53,7 +47,7 @@ const data = {
   navSecondary: [
     {
       title: "Feedback",
-      url: "#",
+      link: { to: "/#" },
       icon: Send,
     },
   ],
@@ -66,7 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <a href="/#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
