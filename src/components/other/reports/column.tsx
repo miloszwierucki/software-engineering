@@ -1,28 +1,39 @@
-"use client";
+import {
+  ArrowUpDown,
+  Check,
+  CheckCheck,
+  Clock,
+  MoreHorizontal,
+} from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { EditReport } from "./edit";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
+export type Raport = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  victim: string;
+  charity: string;
+  category: string;
+  location: string;
+  status: "pending" | "accepted" | "completed";
+  report_date: string; // Format: YYYY-MM-DD
+  accept_date: string; // Format: YYYY-MM-DD
+  completion_date: string; // Format: YYYY-MM-DD
+  resources: any[]; // Adjust type if specific structure is known
+  volunteers: any[]; // Adjust type if specific structure is known
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Raport>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -46,39 +57,105 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Report ID
           <ArrowUpDown />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+    enableHiding: false,
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "victim",
+    header: "Victim",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("victim")}</div>
+    ),
+  },
+  {
+    accessorKey: "charity",
+    header: "Charity",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("charity")}</div>
+    ),
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("category")}</div>
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) =>
+      row.getValue("status") === "pending" ? (
+        <div className="inline-flex items-center gap-1 text-gray-400">
+          <Clock size="14" />
+          Pending
+        </div>
+      ) : row.getValue("status") === "accepted" ? (
+        <div className="inline-flex items-center gap-1 text-lime-400">
+          <Check size="14" />
+          Accepted
+        </div>
+      ) : (
+        <div className="inline-flex items-center gap-1 text-green-600">
+          <CheckCheck size="14" />
+          Completed
+        </div>
+      ),
+  },
+  {
+    accessorKey: "report_date",
+    header: ({ column }) => {
+      return (
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Report date
+            <ArrowUpDown />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
+      const date = new Date(row.getValue("report_date"));
+      const formatted = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
       return <div className="text-right font-medium">{formatted}</div>;
     },
   },
@@ -96,16 +173,14 @@ export const columns: ColumnDef<Payment>[] = [
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              Copy raport ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={editRow({ row })}>Edit</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -7,6 +7,7 @@ export default {
       backgroundImage: {
         "log-in": "url('@/assets/background/log-in.webp')",
         "sign-up": "url('@/assets/background/sign-up.webp')",
+        "panel-gradient": "url('@/assets/panel-gradient.svg')",
       },
       borderRadius: {
         lg: "var(--radius)",
