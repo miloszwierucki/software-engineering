@@ -15,26 +15,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Raport = {
-  id: string;
-  victim: string;
-  charity: string;
-  category: string;
-  location: string;
-  status: "pending" | "accepted" | "completed";
-  report_date: string; // Format: YYYY-MM-DD
-  accept_date: string; // Format: YYYY-MM-DD
-  completion_date: string; // Format: YYYY-MM-DD
-  resources: any[]; // Adjust type if specific structure is known
-  volunteers: any[]; // Adjust type if specific structure is known
-};
+interface Donation {
+  donation_id: number;
+  donator: {
+    userId: number;
+    name: string;
+  };
+  status: "PENDING" | "ACCEPTED" | "COMPLETED";
+  donationDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
+  acceptDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
+  resources: {
+    resourceId: number;
+    name: string;
+    quantity: number;
+  }[];
+}
 
 export const columns = () => {
-  const { t } = useTranslation();
+  // TODO: Please uncomment me :P
+  // const { t } = useTranslation();
 
   return [
     {
@@ -60,51 +63,42 @@ export const columns = () => {
       enableHiding: false,
     },
     {
-      accessorKey: "id",
+      accessorKey: "donation_id",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Report ID
+            Dodsjmdf ID
             <ArrowUpDown />
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("donation_id")}</div>
+      ),
       enableHiding: false,
     },
     {
-      accessorKey: "victim",
-      header: "Victim",
+      accessorKey: "donator.name",
+      header: "Donator",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("victim")}</div>
+        <div className="capitalize">{row.original.donator.name}</div>
       ),
     },
     {
-      accessorKey: "charity",
-      header: "Charity",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("charity")}</div>
-      ),
-    },
-    {
-      accessorKey: "category",
-      header: ({ column }) => {
+      accessorKey: "resources",
+      header: "Resources",
+      cell: ({ row }) => {
+        const arr: any[] = row.getValue("resources");
+
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Category
-            <ArrowUpDown />
-          </Button>
+          <div className="truncate text-right font-medium">
+            {arr.map((resource) => resource.name).join(", ")}
+          </div>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("category")}</div>
-      ),
     },
     {
       accessorKey: "status",
@@ -120,12 +114,12 @@ export const columns = () => {
         );
       },
       cell: ({ row }) =>
-        row.getValue("status") === "pending" ? (
+        row.getValue("status") === "PENDING" ? (
           <div className="inline-flex items-center gap-1 text-gray-400">
             <Clock size="14" />
             Pending
           </div>
-        ) : row.getValue("status") === "accepted" ? (
+        ) : row.getValue("status") === "ACCEPTED" ? (
           <div className="inline-flex items-center gap-1 text-lime-400">
             <Check size="14" />
             Accepted
@@ -138,7 +132,7 @@ export const columns = () => {
         ),
     },
     {
-      accessorKey: "report_date",
+      accessorKey: "donationDate",
       header: ({ column }) => {
         return (
           <div className="flex justify-end">
@@ -148,14 +142,41 @@ export const columns = () => {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Report date
+              Dontate Date
               <ArrowUpDown />
             </Button>
           </div>
         );
       },
       cell: ({ row }) => {
-        const date = new Date(row.getValue("report_date"));
+        const date = new Date(row.getValue("donationDate"));
+        const formatted = date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+    },
+    {
+      accessorKey: "acceptDate",
+      header: ({ column }) => {
+        return (
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Accept Date
+              <ArrowUpDown />
+            </Button>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("acceptDate"));
         const formatted = date.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -168,7 +189,7 @@ export const columns = () => {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const payment = row.original;
+        const donation = row.original;
 
         return (
           <DropdownMenu>
@@ -181,9 +202,11 @@ export const columns = () => {
 
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}
+                onClick={() =>
+                  navigator.clipboard.writeText(donation.donation_id.toString())
+                }
               >
-                Copy raport ID
+                Copy dontation ID
               </DropdownMenuItem>
               {/* <DropdownMenuItem onClick={editRow({ row })}>Edit</DropdownMenuItem> */}
             </DropdownMenuContent>
@@ -191,5 +214,5 @@ export const columns = () => {
         );
       },
     },
-  ] as ColumnDef<Raport>[];
+  ] as ColumnDef<Donation>[];
 };

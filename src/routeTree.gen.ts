@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
-import { Route as AuthReportsImport } from './routes/_auth/reports'
+import { Route as AuthDonationsImport } from './routes/_auth/donations'
 import { Route as AuthAccountImport } from './routes/_auth/account'
 import { Route as AuthAboutImport } from './routes/_auth/about'
 
@@ -37,9 +37,9 @@ const AuthIndexRoute = AuthIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthReportsRoute = AuthReportsImport.update({
-  id: '/reports',
-  path: '/reports',
+const AuthDonationsRoute = AuthDonationsImport.update({
+  id: '/donations',
+  path: '/donations',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -87,11 +87,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/reports': {
-      id: '/_auth/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthReportsImport
+    '/_auth/donations': {
+      id: '/_auth/donations'
+      path: '/donations'
+      fullPath: '/donations'
+      preLoaderRoute: typeof AuthDonationsImport
       parentRoute: typeof AuthImport
     }
     '/_auth/': {
@@ -109,14 +109,14 @@ declare module '@tanstack/react-router' {
 interface AuthRouteChildren {
   AuthAboutRoute: typeof AuthAboutRoute
   AuthAccountRoute: typeof AuthAccountRoute
-  AuthReportsRoute: typeof AuthReportsRoute
+  AuthDonationsRoute: typeof AuthDonationsRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAboutRoute: AuthAboutRoute,
   AuthAccountRoute: AuthAccountRoute,
-  AuthReportsRoute: AuthReportsRoute,
+  AuthDonationsRoute: AuthDonationsRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -127,7 +127,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/about': typeof AuthAboutRoute
   '/account': typeof AuthAccountRoute
-  '/reports': typeof AuthReportsRoute
+  '/donations': typeof AuthDonationsRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -135,7 +135,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/about': typeof AuthAboutRoute
   '/account': typeof AuthAccountRoute
-  '/reports': typeof AuthReportsRoute
+  '/donations': typeof AuthDonationsRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -145,22 +145,22 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/about': typeof AuthAboutRoute
   '/_auth/account': typeof AuthAccountRoute
-  '/_auth/reports': typeof AuthReportsRoute
+  '/_auth/donations': typeof AuthDonationsRoute
   '/_auth/': typeof AuthIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/about' | '/account' | '/reports' | '/'
+  fullPaths: '' | '/login' | '/about' | '/account' | '/donations' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/about' | '/account' | '/reports' | '/'
+  to: '/login' | '/about' | '/account' | '/donations' | '/'
   id:
     | '__root__'
     | '/_auth'
     | '/login'
     | '/_auth/about'
     | '/_auth/account'
-    | '/_auth/reports'
+    | '/_auth/donations'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
@@ -194,7 +194,7 @@ export const routeTree = rootRoute
       "children": [
         "/_auth/about",
         "/_auth/account",
-        "/_auth/reports",
+        "/_auth/donations",
         "/_auth/"
       ]
     },
@@ -209,8 +209,8 @@ export const routeTree = rootRoute
       "filePath": "_auth/account.tsx",
       "parent": "/_auth"
     },
-    "/_auth/reports": {
-      "filePath": "_auth/reports.tsx",
+    "/_auth/donations": {
+      "filePath": "_auth/donations.tsx",
       "parent": "/_auth"
     },
     "/_auth/": {
