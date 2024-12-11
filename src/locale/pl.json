@@ -17,7 +17,7 @@
     },
     "signUpPage": {
       "title": "Zarejestruj się",
-      "description":"Wprowadź swoje dane poniżej, aby założyć konto",
+      "description": "Wprowadź swoje dane poniżej, aby założyć konto",
       "form": {
         "firstname": "Imię",
         "surname": "Nazwisko",
@@ -66,11 +66,22 @@
         "subtitle": "Wypełnij wszystkie pola aby dodać darowiznę",
         "donator": "Darczyńca",
         "resources": "Zasoby",
+        "donationDate": "Data darowizny",
+        "acceptDate": "Data akceptacji",
+        "status": "Status",
         "saveButton": "Dodaj darowiznę"
       },
       "nextButton": "Następna strona",
       "previousButton": "Poprzednia strona",
-      "result": "Brak wyników"
+      "result": "Brak wyników",
+      "column": {
+        "label": "Kolumny",
+        "donator_name": "Darczyńca",
+        "resources": "Zasoby",
+        "Status": "Status",
+        "donationDate": "Data przekazania",
+        "acceptDate": "Data akceptacji"
+      }
     },
     "usersNav": {
       "settings": "Ustawienia",

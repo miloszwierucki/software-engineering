@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-interface Donation {
+export interface Donation {
   donation_id: number;
   donator: {
     userId: number;

@@ -9,36 +9,93 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
+import { Donation } from "./column";
+import { useTranslation } from "react-i18next";
+import { DatePicker } from "@/components/ui/data-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export function EditReport() {
+export function EditDonation({
+  data,
+  isOpen,
+  setIsOpen,
+}: {
+  data: Donation | null;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}) {
+  const { t } = useTranslation();
+
   return (
-    <Sheet>
+    <Sheet onOpenChange={setIsOpen} open={isOpen}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
+          <SheetTitle>Edit Donation</SheetTitle>
           <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
+            Edit the donation details from <strong>{data?.donator.name}</strong>
           </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
+            <Label htmlFor="donator" className="text-right">
+              {t("donationsTable.popup.donator")}
             </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+            <Input
+              id="donator"
+              placeholder="Pedro Duarte"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
+            <Label htmlFor="resources" className="text-right">
+              {t("donationsTable.popup.resources")}
             </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
+            <Input
+              id="resources"
+              placeholder="Apple, Banana, Orange"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="status" className="text-right">
+              {t("donationsTable.popup.status")}
+            </Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="accepted">Accepted</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="donationDate" className="text-right">
+              {t("donationsTable.popup.donationDate")}
+            </Label>
+            <DatePicker />
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="acceptDate" className="text-right">
+              {t("donationsTable.popup.acceptDate")}
+            </Label>
+            <DatePicker />
           </div>
         </div>
+
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
+            <Button>{t("donationsTable.popup.saveButton")}</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

@@ -16,6 +16,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
 
 const FALLBACK = "/";
 
@@ -36,17 +37,37 @@ function LoginComponent() {
   const router = useRouter();
   const search = Route.useSearch();
 
-  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("log-in");
+
+  const {
+    t,
+    i18n: { changeLanguage, language },
+  } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = useState(language);
+
+  const handleChangeLanguage = () => {
+    const newLanguage = currentLanguage === "en" ? "pl" : "en";
+    setCurrentLanguage(newLanguage);
+    changeLanguage(newLanguage);
+  };
 
   return (
     <main className="flex h-screen items-center justify-center bg-sign-up bg-cover bg-center bg-no-repeat">
       <Card className="w-full max-w-md p-2">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="m-auto grid w-full max-w-xs grid-cols-2">
-            <TabsTrigger value="sign-up">{t("auth.tabs.signUp")}</TabsTrigger>
-            <TabsTrigger value="log-in">{t("auth.tabs.logIn")}</TabsTrigger>
-          </TabsList>
+          <div className="flex w-full">
+            <TabsList className="m-auto grid w-full max-w-xs grid-cols-2">
+              <TabsTrigger value="sign-up">{t("auth.tabs.signUp")}</TabsTrigger>
+              <TabsTrigger value="log-in">{t("auth.tabs.logIn")}</TabsTrigger>
+            </TabsList>
+            <Toggle
+              aria-label="Toggle language"
+              onClick={handleChangeLanguage}
+              className="uppercase"
+            >
+              {currentLanguage}
+            </Toggle>
+          </div>
 
           <TabsContent value="log-in">
             <CardHeader>
@@ -57,11 +78,23 @@ function LoginComponent() {
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="email">{t("loginPage.form.email")}</Label>
-                  <Input id="email" type="email" placeholder="mail@example.com" required />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="mail@example.com"
+                    required
+                  />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password">{t("loginPage.form.password")}</Label>
-                  <Input id="password" type="password" placeholder="********" required />
+                  <Label htmlFor="password">
+                    {t("loginPage.form.password")}
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="********"
+                    required
+                  />
                 </div>
                 <Button
                   onClick={async () => {
@@ -87,7 +120,9 @@ function LoginComponent() {
             <CardContent>
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="firstname">{t("signUpPage.form.firstname")}</Label>
+                  <Label htmlFor="firstname">
+                    {t("signUpPage.form.firstname")}
+                  </Label>
                   <Input
                     id="firstname"
                     type="firstname"
@@ -96,7 +131,9 @@ function LoginComponent() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="surname">{t("signUpPage.form.surname")}</Label>
+                  <Label htmlFor="surname">
+                    {t("signUpPage.form.surname")}
+                  </Label>
                   <Input
                     id="surname"
                     type="surname"
@@ -116,7 +153,9 @@ function LoginComponent() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="password">{t("signUpPage.form.password")}</Label>
+                  <Label htmlFor="password">
+                    {t("signUpPage.form.password")}
+                  </Label>
                   <Input
                     id="password"
                     type="password"
@@ -126,7 +165,9 @@ function LoginComponent() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="repeatPassword">{t("signUpPage.form.repeatPassword")}</Label>
+                  <Label htmlFor="repeatPassword">
+                    {t("signUpPage.form.repeatPassword")}
+                  </Label>
                   <Input
                     id="repeatPassword"
                     type="password"

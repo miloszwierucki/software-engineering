@@ -17,7 +17,7 @@
     },
     "signUpPage": {
       "title": "Sign Up",
-      "description":"Enter your information below to sign up",
+      "description": "Enter your information below to sign up",
       "form": {
         "firstname": "Firstname",
         "surname": "Surname",
@@ -66,11 +66,22 @@
         "subtitle": "Fill all fields to add a donation",
         "donator": "Donator",
         "resources": "Resources",
+        "donationDate": "Donation Date",
+        "acceptDate": "Accept Date",
+        "status": "Status",
         "saveButton": "Save changes"
       },
       "nextButton": "Next",
       "previousButton": "Previous",
-      "result": "No results."
+      "result": "No results.",
+      "column": {
+        "label": "Columns",
+        "donator_name": "Donator",
+        "resources": "Resources",
+        "Status": "Status",
+        "donationDate": "Donate Date",
+        "acceptDate": "Accept Date"
+      }
     },
     "usersNav": {
       "settings": "Settings",

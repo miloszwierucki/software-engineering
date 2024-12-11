@@ -25,7 +25,6 @@ export const Route = createFileRoute("/_auth/donations")({
   component: DonationsRoute,
   validateSearch: (search: Record<string, unknown>): DonationSearch => {
     // validate and parse the search params into a typed state
-    console.log(search);
     return {
       new: search.new === true,
     };
@@ -232,29 +231,33 @@ function DonationsRoute() {
 
   return (
     <>
-      <div className="bg-panel-gradient inline-flex w-full items-center justify-between gap-2 bg-cover bg-no-repeat px-4 py-6">
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
         <div>
-          <h1 className="text-4xl font-semibold">{t("donationsTable.title")}</h1>
+          <h1 className="text-4xl font-semibold">
+            {t("donationsTable.title")}
+          </h1>
           <p className="ml-1 font-light text-gray-600">
-          {t("donationsTable.subtitle")}
+            {t("donationsTable.subtitle")}
           </p>
         </div>
 
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
-            <Button variant="outline">{t("donationsTable.addDonationButton")}</Button>
+            <Button variant="outline">
+              {t("donationsTable.addDonationButton")}
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>{t("donationsTable.popup.title")}</DialogTitle>
               <DialogDescription>
-              {t("donationsTable.popup.subtitle")}
+                {t("donationsTable.popup.subtitle")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="donator" className="text-right">
-                {t("donationsTable.popup.donator")}
+                  {t("donationsTable.popup.donator")}
                 </Label>
                 <Input
                   id="donator"
@@ -270,7 +273,7 @@ function DonationsRoute() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="resources" className="text-right">
-                {t("donationsTable.popup.resources")}
+                  {t("donationsTable.popup.resources")}
                 </Label>
                 <Input
                   id="resources"
@@ -292,7 +295,9 @@ function DonationsRoute() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAddNewDonation}>{t("donationsTable.popup.saveButton")}</Button>
+              <Button onClick={handleAddNewDonation}>
+                {t("donationsTable.popup.saveButton")}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
