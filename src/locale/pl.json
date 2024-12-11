@@ -8,7 +8,73 @@
     },
     "loginPage": {
       "title": "Logowanie",
-      "description": "Wprowadź swój adres e-mail poniżej, aby zalogować się do swojego konta"
+      "description": "Wprowadź swój adres e-mail poniżej, aby zalogować się do swojego konta",
+      "form": {
+        "email": "Adres Email",
+        "password": "Hasło"
+      },
+      "button": "Zaloguj się"
+    },
+    "signUpPage": {
+      "title": "Zarejestruj się",
+      "description":"Wprowadź swoje dane poniżej, aby założyć konto",
+      "form": {
+        "firstname": "Imię",
+        "surname": "Nazwisko",
+        "email": "Adres Email",
+        "password": "Hasło",
+        "repeatPassword": "Powtórz Hasło",
+        "phone": "Numer Telefonu"
+      },
+      "terms": "Akceptuję regulamin",
+      "button": "Zarejestruj się"
+    },
+    "accountPage": {
+      "title": "Konto",
+      "subtitle": "Edytuj swoje konto",
+      "form": {
+        "firstname": "Imię",
+        "surname": "Nazwisko",
+        "email": "Email",
+        "password": "Hasło",
+        "repeatPassword": "Powtórz Hasło",
+        "phone": "Numer Telefonu"
+      },
+      "dataButton": "Zatwierdź zmiany",
+      "passwordButton": "Zmień hasło"
+    },
+    "sideNavBar": {
+      "donationTitle": "Darowizny",
+      "manageTitle": "Zarządzaj",
+      "addTitle": "Dodaj"
+    },
+    "donationsTable": {
+      "title": "Darowizny",
+      "subtitle": "Informacje o wszystkich darowiznach",
+      "donationID": "Numer darowizny",
+      "donatorName": "Darczyńca",
+      "resources": "Zasoby",
+      "status": "Status",
+      "donationDate": "Data przekazania",
+      "acceptDate": "Data akceptacji",
+      "openMenu": "Otwórz menu",
+      "copyDonationID": "Skopiuj numer darowizny",
+      "addDonationButton": "Dodaj darowiznę",
+      "filterPlaceholder": "Filtruj",
+      "popup": {
+        "title": "Dodaj nową darowiznę",
+        "subtitle": "Wypełnij wszystkie pola aby dodać darowiznę",
+        "donator": "Darczyńca",
+        "resources": "Zasoby",
+        "saveButton": "Dodaj darowiznę"
+      },
+      "nextButton": "Następna strona",
+      "previousButton": "Poprzednia strona",
+      "result": "Brak wyników"
+    },
+    "usersNav": {
+      "settings": "Ustawienia",
+      "signOut": "Wyloguj się"
     }
   }
 }

@@ -28,9 +28,9 @@ function AccountComponent() {
     <>
       <div className="bg-panel-gradient inline-flex w-full items-center justify-between gap-2 bg-cover bg-no-repeat px-4 py-6">
         <div>
-          <h1 className="text-4xl font-semibold">Accounr</h1>
+          <h1 className="text-4xl font-semibold">{t("accountPage.title")}</h1>
           <p className="ml-1 font-light text-gray-600">
-            Edit profile your mather ....
+          {t("accountPage.subtitle")}
           </p>
         </div>
 
@@ -46,16 +46,16 @@ function AccountComponent() {
       <div className="mx-auto grid w-full grid-cols-2 gap-10 px-4">
         <div className="flex flex-col gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="firstname">Imię</Label>
+            <Label htmlFor="firstname">{t("accountPage.form.firstname")}</Label>
             <Input id="firstname" type="firstname" placeholder="..." required />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="surname">Nazwisko</Label>
+            <Label htmlFor="surname">{t("accountPage.form.surname")}</Label>
             <Input id="surname" type="surname" placeholder="..." required />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("accountPage.form.email")}</Label>
             <Input
               id="email"
               type="email"
@@ -65,16 +65,16 @@ function AccountComponent() {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="phone">Phone</Label>
+            <Label htmlFor="phone">{t("accountPage.form.phone")}</Label>
             <Input id="phone" type="tel" placeholder="+48000000000" required />
           </div>
 
-          <Button className="mt-2 w-full">Zmień dane</Button>
+          <Button className="mt-2 w-full">{t("accountPage.dataButton")}</Button>
         </div>
 
         <div className="flex flex-col gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("accountPage.form.password")}</Label>
             <Input
               id="password"
               type="password"
@@ -84,7 +84,7 @@ function AccountComponent() {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="repeatPassword">Password x2</Label>
+            <Label htmlFor="repeatPassword">{t("accountPage.form.repeatPassword")}</Label>
             <Input
               id="repeatPassword"
               type="password"
@@ -93,7 +93,7 @@ function AccountComponent() {
             />
           </div>
 
-          <Button className="mt-2 w-full">Zmień hasło kutwo</Button>
+          <Button className="mt-2 w-full">{t("accountPage.passwordButton")}</Button>
         </div>
       </div>
     </>

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -48,6 +49,8 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { t } = useTranslation();
 
   const table = useReactTable({
     data,
@@ -72,7 +75,7 @@ export function DataTable<TData, TValue>({
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter for donator..."
+          placeholder= {t("donationsTable.filterPlaceholder")}
           value={
             (table.getColumn("donator_name")?.getFilterValue() as string) ?? ""
           }
@@ -151,7 +154,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("donationsTable.result")}
                 </TableCell>
               </TableRow>
             )}
@@ -170,7 +173,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            {t("donationsTable.previousButton")}
           </Button>
           <Button
             variant="outline"
@@ -178,7 +181,7 @@ export function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            {t("donationsTable.nextButton")}
           </Button>
         </div>
       </div>

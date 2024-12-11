@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { DataTable } from "@/components/other/donations/data-table";
 import { columns } from "@/components/other/donations/column";
 import { Button } from "@/components/ui/button";
@@ -199,6 +200,8 @@ function DonationsRoute() {
   const { new: createNew } = Route.useSearch();
   const [openDialog, setOpenDialog] = useState(createNew);
 
+  const { t } = useTranslation();
+
   const [newDonation, setNewDonation] = useState<{
     donatorName: string;
     resources: {
@@ -231,27 +234,27 @@ function DonationsRoute() {
     <>
       <div className="bg-panel-gradient inline-flex w-full items-center justify-between gap-2 bg-cover bg-no-repeat px-4 py-6">
         <div>
-          <h1 className="text-4xl font-semibold">Dontarinda</h1>
+          <h1 className="text-4xl font-semibold">{t("donationsTable.title")}</h1>
           <p className="ml-1 font-light text-gray-600">
-            All rfsdgfhghgjeports from your ass
+          {t("donationsTable.subtitle")}
           </p>
         </div>
 
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger asChild>
-            <Button variant="outline">Add new donation</Button>
+            <Button variant="outline">{t("donationsTable.addDonationButton")}</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add new donation</DialogTitle>
+              <DialogTitle>{t("donationsTable.popup.title")}</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
+              {t("donationsTable.popup.subtitle")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="donator" className="text-right">
-                  Donator
+                {t("donationsTable.popup.donator")}
                 </Label>
                 <Input
                   id="donator"
@@ -267,7 +270,7 @@ function DonationsRoute() {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="resources" className="text-right">
-                  Resources
+                {t("donationsTable.popup.resources")}
                 </Label>
                 <Input
                   id="resources"
@@ -289,7 +292,7 @@ function DonationsRoute() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleAddNewDonation}>Save changes</Button>
+              <Button onClick={handleAddNewDonation}>{t("donationsTable.popup.saveButton")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

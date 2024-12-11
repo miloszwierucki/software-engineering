@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Command, Send, ListPlus, ListTree, Gift } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -14,6 +15,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
+
 const data = {
   // TODO: add user data
   user: {
@@ -22,38 +24,42 @@ const data = {
     avatar: "",
   },
   // TODO: add all nav items
-  navMain: [
+};
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  
+  const { t } = useTranslation();
+
+  const navMain = [
     {
-      title: "Dotacje",
+      title: t("sideNavBar.donationTitle"),
       link: { to: "/donations" },
       icon: Gift,
       isDisabled: false,
       items: [
         {
-          title: "Zarządzaj",
+          title: t("sideNavBar.manageTitle"),
           link: { to: "/donations" },
           icon: ListTree,
           isDisabled: false,
         },
         {
-          title: "Dodaj",
+          title: t("sideNavBar.addTitle"),
           link: { to: "/donations", search: { new: true } },
           icon: ListPlus,
           isDisabled: false,
         },
       ],
     },
-  ],
-  navSecondary: [
+  ];
+  const navSecondary = [
     {
       title: "Feedback",
       link: { to: "/#" },
       icon: Send,
     },
-  ],
-};
+  ];
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -74,8 +80,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={navMain} />
+        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

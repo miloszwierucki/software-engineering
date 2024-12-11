@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -37,7 +37,7 @@ interface Donation {
 
 export const columns = () => {
   // TODO: Please uncomment me :P
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   return [
     {
@@ -70,7 +70,7 @@ export const columns = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Dodsjmdf ID
+            {t("donationsTable.donationID")}
             <ArrowUpDown />
           </Button>
         );
@@ -82,14 +82,14 @@ export const columns = () => {
     },
     {
       accessorKey: "donator.name",
-      header: "Donator",
+      header: t("donationsTable.donatorName"),
       cell: ({ row }) => (
         <div className="capitalize">{row.original.donator.name}</div>
       ),
     },
     {
       accessorKey: "resources",
-      header: "Resources",
+      header: t("donationsTable.resources"),
       cell: ({ row }) => {
         const arr: any[] = row.getValue("resources");
 
@@ -101,7 +101,7 @@ export const columns = () => {
       },
     },
     {
-      accessorKey: "status",
+      accessorKey: t("donationsTable.status"),
       header: ({ column }) => {
         return (
           <Button
@@ -142,7 +142,7 @@ export const columns = () => {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Dontate Date
+              {t("donationsTable.donationDate")}
               <ArrowUpDown />
             </Button>
           </div>
@@ -174,7 +174,7 @@ export const columns = () => {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Accept Date
+              {t("donationsTable.acceptDate")}
               <ArrowUpDown />
             </Button>
           </div>
@@ -205,7 +205,7 @@ export const columns = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">{t("donationsTable.openMenu")}</span>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
@@ -216,7 +216,7 @@ export const columns = () => {
                   navigator.clipboard.writeText(donation.donation_id.toString())
                 }
               >
-                Copy dontation ID
+                {t("donationsTable.copyDonationID")}
               </DropdownMenuItem>
               {/* <DropdownMenuItem onClick={editRow({ row })}>Edit</DropdownMenuItem> */}
             </DropdownMenuContent>

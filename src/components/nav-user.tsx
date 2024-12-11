@@ -18,6 +18,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/auth";
+import { useTranslation } from "react-i18next";
+
 
 export function NavUser({
   user,
@@ -32,6 +34,7 @@ export function NavUser({
   const navigate = useNavigate();
   const router = useRouter();
   const auth = useAuth();
+  const { t } = useTranslation();
 
   return (
     <SidebarMenu>
@@ -74,7 +77,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => navigate({ to: "/account" })}>
                 <Settings2 />
-                Settings
+                {t("usersNav.settings")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -88,7 +91,7 @@ export function NavUser({
               }
             >
               <LogOut />
-              Sign out
+              {t("usersNav.signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
