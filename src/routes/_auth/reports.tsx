@@ -255,7 +255,7 @@ function ReportRoute() {
       </div>
 
       <div className="mx-auto w-full px-4">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns()} data={data} />
       </div>
     </>
   );
