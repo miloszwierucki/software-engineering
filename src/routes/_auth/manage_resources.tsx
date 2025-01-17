@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from "react-i18next";
 
 // Dane z backendu
 const resources = [
@@ -39,19 +40,22 @@ export const Route = createFileRoute('/_auth/manage_resources')({
 })
 
 function RouteComponent() {
+
+  const { t } = useTranslation();
+
   return (
     <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-bold mb-6">Zarządzanie zasobami</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("manage_resources.title")}</h1>
 
       <div className="border rounded-lg mb-6">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>Typ</TableHead>
-              <TableHead>Nazwa</TableHead>
-              <TableHead>Opis</TableHead>
-              <TableHead>Ilość</TableHead>
+              <TableHead>{t("manage_resources.category")}</TableHead>
+              <TableHead>{t("manage_resources.name")}</TableHead>
+              <TableHead>{t("manage_resources.description")}</TableHead>
+              <TableHead>{t("manage_resources.amount")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -70,7 +74,7 @@ function RouteComponent() {
 
       <div className="flex justify-end">
         <Button variant="default" className="bg-black hover:bg-gray-800">
-          Costam
+          {t("manage_resources.button")}
         </Button>
       </div>
     </div>

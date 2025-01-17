@@ -1,0 +1,82 @@
+{
+    "translation": {
+      "index": {
+        "title": "Raport Działań",
+        "open_reps": "Otwarte Raporty",
+        "closed_reps": "Zamknięte Raporty",
+        "resources": "Dostępne Zasoby",
+        "res_category": "Kategoria",
+        "res_name": "Nazwa",
+        "res_amount": "Ilość"
+      },
+      "add_report": {
+        "title": "Formularz zgłoszenia",
+        "category": "Kategoria",
+        "category_desc": "Wybierz kategorię zgłoszenia.",
+        "map": "Wybierz lokalizację na mapie",
+        "map_desc": "Kliknij na mapę, aby ustawić pinezke. Aktualne współrzędne: ",
+        "city": "Miasto",
+        "city_desc": "Podaj nazwę miasta, w którym potrzebna jest pomoc.",
+        "street": "Ulica",
+        "street_desc": "Podaj nazwę ulicy, na której potrzebna jest pomoc.",
+        "building_number": "Numer budynku",
+        "building_number_desc": "Podaj numer budynku, w którym potrzebna jest pomoc.",
+        "zip_code": "Kod pocztowy",
+        "zip_code_desc": "Podaj kod pocztowy obszaru, format XX-XXX.",
+        "button": "Wyślij zgłoszenie",
+        "enter_c": "Wpisz nazwę miasta",
+        "enter_s": "Wpisz nazwę ulicy",
+        "enter_bn": "Wpisz numer budynku",
+        "enter_zc": "Wpisz kod pocztowy"
+      },
+      "add_resources": {
+        "title": "Zatwierdzanie Zasobów",
+        "unconfirmed": "Niepotwierdzone Zasoby",
+        "category": "Kategoria",
+        "name": "Nazwa",
+        "amount": "Ilość",
+        "status": "Status",
+        "button": "Potwierdź wybór",
+        "accept": "Akceptuj",
+        "reject": "Odrzuć"
+      },
+      "chat": {
+        "message": "Napisz swoją wiadomość...",
+        "button": "Wyślij wiadomość"
+      },
+      "manage_reports": {
+        "title": "Zarządzanie zgłoszeniami",
+        "organization": "ID Organizacji",
+        "f_name": "Imię",
+        "l_name": "Nazwisko",
+        "category": "Kategoria",
+        "date": "Data zgłoszenia",
+        "status": "Status",
+        "action": "Akcje",
+        "manage": "Zarządzaj",
+        "popup":{
+            "title": "Zarządzanie zgłoszeniem",
+            "organization": "ID Organizacji",
+            "person": "Osoba",
+            "category": "Kategoria",
+            "status": "Status",
+            "accept": "Akceptuj zgłoszenie",
+            "finish": "Zakończ zgłoszenie",
+            "close": "Zamknij"
+        },
+        "statuses":{
+            "pending": "Oczekujące",
+            "accepted": "Zaakceptowane",
+            "closed": "Zakończone"
+        }
+      },
+      "manage_resources": {
+        "title": "Zarządzanie zasobami",
+        "category": "Kategoria",
+        "name": "Nazwa",
+        "description": "Opis",
+        "amount": "Ilość",
+        "button": "Costam"
+      }
+    }
+  }

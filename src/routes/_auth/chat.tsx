@@ -3,6 +3,7 @@ import { Form } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useForm } from 'react-hook-form'
 import { useState, useEffect } from 'react'
+import { useTranslation } from "react-i18next";
 
 interface Message {
   id: number
@@ -79,6 +80,8 @@ function ChatComponent() {
     form.reset()
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col h-[88vh] max-h-screen p-2">
       <div className="flex-1 overflow-y-auto mb-4 space-y-4">
@@ -114,7 +117,7 @@ function ChatComponent() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <Textarea
-              placeholder="Napisz swoją wiadomość..."
+              placeholder={t("chat.message")}
               {...form.register('message')}
               className="min-h-[80px] resize-none"
             />
@@ -122,7 +125,7 @@ function ChatComponent() {
               type="submit"
               className="w-full bg-primary text-primary-foreground rounded-md py-2 px-4 hover:bg-primary/90"
             >
-              Wyślij wiadomość
+              {t("chat.button")}
             </button>
           </form>
         </Form>

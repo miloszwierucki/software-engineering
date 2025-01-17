@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute('/_auth/')({
   component: RouteComponent,
@@ -43,14 +44,16 @@ function RouteComponent() {
     closed: 45,
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Raport Działań</h1>
+      <h1 className="text-3xl font-bold">{t("index.title")}</h1>
       
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Otwarte Raporty</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("index.open_reps")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{reportStatus.open}</div>
@@ -58,7 +61,7 @@ function RouteComponent() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Zamknięte Raporty</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("index.closed_reps")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{reportStatus.closed}</div>
@@ -68,15 +71,15 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Dostępne Zasoby</CardTitle>
+          <CardTitle>{t("index.resources")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Kategoria</TableHead>
-                <TableHead>Nazwa</TableHead>
-                <TableHead className="text-right">Ilość</TableHead>
+                <TableHead>{t("index.res_category")}</TableHead>
+                <TableHead>{t("index.res_name")}</TableHead>
+                <TableHead className="text-right">{t("index.res_amount")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

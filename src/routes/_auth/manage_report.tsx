@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
+import { useTranslation } from "react-i18next";
 
 interface Report {
   id: number
@@ -89,10 +90,12 @@ function RouteComponent() {
     }
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Zarządzanie zgłoszeniami</h1>
+        <h1 className="text-2xl font-bold">{t("manage_reports.title")}</h1>
       </div>
 
       <div className="border rounded-lg">
@@ -100,13 +103,13 @@ function RouteComponent() {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>ID Organizacji</TableHead>
-              <TableHead>Imię</TableHead>
-              <TableHead>Nazwisko</TableHead>
-              <TableHead>Kategoria</TableHead>
-              <TableHead>Data zgłoszenia</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Akcje</TableHead>
+              <TableHead>{t("manage_reports.organization")}</TableHead>
+              <TableHead>{t("manage_reports.f_name")}</TableHead>
+              <TableHead>{t("manage_reports.l_name")}</TableHead>
+              <TableHead>{t("manage_reports.category")}</TableHead>
+              <TableHead>{t("manage_reports.date")}</TableHead>
+              <TableHead>{t("manage_reports.status")}</TableHead>
+              <TableHead>{t("manage_reports.action")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -132,7 +135,7 @@ function RouteComponent() {
                       setIsDialogOpen(true)
                     }}
                   >
-                    Zarządzaj
+                    {t("manage_reports.manage")}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -144,17 +147,17 @@ function RouteComponent() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Zarządzanie zgłoszeniem</DialogTitle>
+            <DialogTitle>{t("manage_reports.popup.title")}</DialogTitle>
           </DialogHeader>
           
           {selectedReport && (
             <div className="py-4">
               <div className="space-y-2">
                 <p><strong>ID:</strong> {selectedReport.id}</p>
-                <p><strong>ID Organizacji:</strong> {selectedReport.charityId}</p>
-                <p><strong>Osoba:</strong> {selectedReport.firstName} {selectedReport.lastName}</p>
-                <p><strong>Kategoria:</strong> {selectedReport.category}</p>
-                <p><strong>Status:</strong> <span className={getStatusColor(selectedReport.status)}>{selectedReport.status}</span></p>
+                <p><strong>{t("manage_reports.popup.organization")}:</strong> {selectedReport.charityId}</p>
+                <p><strong>{t("manage_reports.popup.person")}:</strong> {selectedReport.firstName} {selectedReport.lastName}</p>
+                <p><strong>{t("manage_reports.popup.category")}:</strong> {selectedReport.category}</p>
+                <p><strong>{t("manage_reports.popup.status")}:</strong> <span className={getStatusColor(selectedReport.status)}>{selectedReport.status}</span></p>
               </div>
             </div>
           )}
@@ -165,7 +168,7 @@ function RouteComponent() {
                 onClick={() => handleStatusChange(selectedReport.id, 'Zaakceptowane')}
                 className="bg-green-600 hover:bg-green-700"
               >
-                Akceptuj zgłoszenie
+                {t("manage_reports.popup.accept")}
               </Button>
             )}
             {selectedReport?.status !== 'Zakończone' && selectedReport && (
@@ -173,14 +176,14 @@ function RouteComponent() {
                 onClick={() => handleStatusChange(selectedReport.id, 'Zakończone')}
                 className="bg-red-600 hover:bg-red-700"
               >
-                Zakończ zgłoszenie
+                {t("manage_reports.popup.finish")}
               </Button>
             )}
             <Button
               variant="outline"
               onClick={() => setIsDialogOpen(false)}
             >
-              Zamknij
+              {t("manage_reports.popup.close")}
             </Button>
           </DialogFooter>
         </DialogContent>

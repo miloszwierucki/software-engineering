@@ -24,6 +24,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import { useState, useEffect } from 'react'
 import 'leaflet/dist/leaflet.css'
 import { Icon } from 'leaflet'
+import { useTranslation } from "react-i18next";
 
 // Walidacja formularza
 const formSchema = z.object({
@@ -93,9 +94,11 @@ function AddReport() {
     console.log(values)
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Formularz zgłoszenia</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("add_report.title")}</h1>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -104,7 +107,7 @@ function AddReport() {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kategoria</FormLabel>
+                <FormLabel>{t("add_report.category")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -119,7 +122,7 @@ function AddReport() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Wybierz kategorię zgłoszenia.
+                  {t("add_report.category_desc")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -131,7 +134,7 @@ function AddReport() {
             name="coordinates"
             render={() => (
               <FormItem>
-                <FormLabel>Wybierz lokalizację na mapie</FormLabel>
+                <FormLabel>{t("add_report.map")}</FormLabel>
                 <FormControl>
                   <div className="h-[400px] w-full rounded-md border">
                     <MapContainer
@@ -148,7 +151,7 @@ function AddReport() {
                   </div>
                 </FormControl>
                 <FormDescription>
-                  Kliknij na mapę, aby ustawić pinezke. Aktualne współrzędne:&nbsp;
+                  {t("add_report.map_desc")}
                   {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
                 </FormDescription>
                 <FormMessage />
@@ -161,12 +164,12 @@ function AddReport() {
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Miasto</FormLabel>
+                <FormLabel>{t("add_report.city")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Wpisz nazwę miasta" {...field} />
+                  <Input placeholder={t("add_report.enter_c")} {...field} />
                 </FormControl>
                 <FormDescription>
-                  Podaj nazwę miasta, w którym potrzebna jest pomoc.
+                  {t("add_report.city_desc")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -178,12 +181,12 @@ function AddReport() {
             name="street"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ulica</FormLabel>
+                <FormLabel>{t("add_report.street")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Wpisz nazwę ulicy" {...field} />
+                  <Input placeholder={t("add_report.enter_s")} {...field} />
                 </FormControl>
                 <FormDescription>
-                  Podaj nazwę ulicy, na której potrzebna jest pomoc.
+                  {t("add_report.street_desc")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -195,12 +198,12 @@ function AddReport() {
             name="buildingNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Numer budynku</FormLabel>
+                <FormLabel>{t("add_report.building_number")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Wpisz numer budynku" {...field} />
+                  <Input placeholder={t("add_report.enter_bn")} {...field} />
                 </FormControl>
                 <FormDescription>
-                  Podaj numer budynku, w którym potrzebna jest pomoc.
+                  {t("add_report.building_number_desc")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -212,19 +215,19 @@ function AddReport() {
             name="zipCode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kod pocztowy</FormLabel>
+                <FormLabel>{t("add_report.zip_code")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Wpisz kod pocztowy" {...field} />
+                  <Input placeholder={t("add_report.enter_zc")} {...field} />
                 </FormControl>
                 <FormDescription>
-                  Podaj kod pocztowy obszaru, format XX-XXX.
+                  {t("add_report.zip_code_desc")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit">Wyślij zgłoszenie</Button>
+          <Button type="submit">{t("add_report.button")}</Button>
         </form>
       </Form>
     </div>
