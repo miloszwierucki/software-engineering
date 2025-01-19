@@ -8,139 +8,222 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthManageresourcesImport } from './routes/_auth/manage_resources'
 import { Route as AuthManagereportImport } from './routes/_auth/manage_report'
+import { Route as AuthDonationsImport } from './routes/_auth/donations'
 import { Route as AuthChatImport } from './routes/_auth/chat'
 import { Route as AuthAddresourcesImport } from './routes/_auth/add_resources'
 import { Route as AuthAddreportImport } from './routes/_auth/add_report'
-
-// Create Virtual Routes
-
-const AboutLazyImport = createFileRoute('/about')()
+import { Route as AuthAccountImport } from './routes/_auth/account'
+import { Route as AuthAboutImport } from './routes/_auth/about'
 
 // Create/Update Routes
 
-const AboutLazyRoute = AboutLazyImport.update({
-  id: '/about',
-  path: '/about',
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthIndexRoute = AuthIndexImport.update({
-  id: '/_auth/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthManageresourcesRoute = AuthManageresourcesImport.update({
-  id: '/_auth/manage_resources',
+  id: '/manage_resources',
   path: '/manage_resources',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthManagereportRoute = AuthManagereportImport.update({
-  id: '/_auth/manage_report',
+  id: '/manage_report',
   path: '/manage_report',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthDonationsRoute = AuthDonationsImport.update({
+  id: '/donations',
+  path: '/donations',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthChatRoute = AuthChatImport.update({
-  id: '/_auth/chat',
+  id: '/chat',
   path: '/chat',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthAddresourcesRoute = AuthAddresourcesImport.update({
-  id: '/_auth/add_resources',
+  id: '/add_resources',
   path: '/add_resources',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthAddreportRoute = AuthAddreportImport.update({
-  id: '/_auth/add_report',
+  id: '/add_report',
   path: '/add_report',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthAccountRoute = AuthAccountImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthAboutRoute = AuthAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/about': {
+      id: '/_auth/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthAboutImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/account': {
+      id: '/_auth/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthAccountImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/add_report': {
       id: '/_auth/add_report'
       path: '/add_report'
       fullPath: '/add_report'
       preLoaderRoute: typeof AuthAddreportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
     }
     '/_auth/add_resources': {
       id: '/_auth/add_resources'
       path: '/add_resources'
       fullPath: '/add_resources'
       preLoaderRoute: typeof AuthAddresourcesImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
     }
     '/_auth/chat': {
       id: '/_auth/chat'
       path: '/chat'
       fullPath: '/chat'
       preLoaderRoute: typeof AuthChatImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/donations': {
+      id: '/_auth/donations'
+      path: '/donations'
+      fullPath: '/donations'
+      preLoaderRoute: typeof AuthDonationsImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/manage_report': {
       id: '/_auth/manage_report'
       path: '/manage_report'
       fullPath: '/manage_report'
       preLoaderRoute: typeof AuthManagereportImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
     }
     '/_auth/manage_resources': {
       id: '/_auth/manage_resources'
       path: '/manage_resources'
       fullPath: '/manage_resources'
       preLoaderRoute: typeof AuthManageresourcesImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
     }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AuthImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthRouteChildren {
+  AuthAboutRoute: typeof AuthAboutRoute
+  AuthAccountRoute: typeof AuthAccountRoute
+  AuthAddreportRoute: typeof AuthAddreportRoute
+  AuthAddresourcesRoute: typeof AuthAddresourcesRoute
+  AuthChatRoute: typeof AuthChatRoute
+  AuthDonationsRoute: typeof AuthDonationsRoute
+  AuthManagereportRoute: typeof AuthManagereportRoute
+  AuthManageresourcesRoute: typeof AuthManageresourcesRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthAboutRoute: AuthAboutRoute,
+  AuthAccountRoute: AuthAccountRoute,
+  AuthAddreportRoute: AuthAddreportRoute,
+  AuthAddresourcesRoute: AuthAddresourcesRoute,
+  AuthChatRoute: AuthChatRoute,
+  AuthDonationsRoute: AuthDonationsRoute,
+  AuthManagereportRoute: AuthManagereportRoute,
+  AuthManageresourcesRoute: AuthManageresourcesRoute,
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/about': typeof AboutLazyRoute
+  '': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/about': typeof AuthAboutRoute
+  '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
   '/chat': typeof AuthChatRoute
+  '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
   '/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/about': typeof AboutLazyRoute
+  '/login': typeof LoginRoute
+  '/about': typeof AuthAboutRoute
+  '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
   '/chat': typeof AuthChatRoute
+  '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
   '/': typeof AuthIndexRoute
@@ -148,10 +231,14 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/about': typeof AboutLazyRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_auth/about': typeof AuthAboutRoute
+  '/_auth/account': typeof AuthAccountRoute
   '/_auth/add_report': typeof AuthAddreportRoute
   '/_auth/add_resources': typeof AuthAddresourcesRoute
   '/_auth/chat': typeof AuthChatRoute
+  '/_auth/donations': typeof AuthDonationsRoute
   '/_auth/manage_report': typeof AuthManagereportRoute
   '/_auth/manage_resources': typeof AuthManageresourcesRoute
   '/_auth/': typeof AuthIndexRoute
@@ -160,28 +247,39 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | ''
+    | '/login'
     | '/about'
+    | '/account'
     | '/add_report'
     | '/add_resources'
     | '/chat'
+    | '/donations'
     | '/manage_report'
     | '/manage_resources'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/login'
     | '/about'
+    | '/account'
     | '/add_report'
     | '/add_resources'
     | '/chat'
+    | '/donations'
     | '/manage_report'
     | '/manage_resources'
     | '/'
   id:
     | '__root__'
-    | '/about'
+    | '/_auth'
+    | '/login'
+    | '/_auth/about'
+    | '/_auth/account'
     | '/_auth/add_report'
     | '/_auth/add_resources'
     | '/_auth/chat'
+    | '/_auth/donations'
     | '/_auth/manage_report'
     | '/_auth/manage_resources'
     | '/_auth/'
@@ -189,23 +287,13 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  AboutLazyRoute: typeof AboutLazyRoute
-  AuthAddreportRoute: typeof AuthAddreportRoute
-  AuthAddresourcesRoute: typeof AuthAddresourcesRoute
-  AuthChatRoute: typeof AuthChatRoute
-  AuthManagereportRoute: typeof AuthManagereportRoute
-  AuthManageresourcesRoute: typeof AuthManageresourcesRoute
-  AuthIndexRoute: typeof AuthIndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  AboutLazyRoute: AboutLazyRoute,
-  AuthAddreportRoute: AuthAddreportRoute,
-  AuthAddresourcesRoute: AuthAddresourcesRoute,
-  AuthChatRoute: AuthChatRoute,
-  AuthManagereportRoute: AuthManagereportRoute,
-  AuthManageresourcesRoute: AuthManageresourcesRoute,
-  AuthIndexRoute: AuthIndexRoute,
+  AuthRoute: AuthRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 
 export const routeTree = rootRoute
@@ -218,35 +306,62 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/about",
+        "/_auth",
+        "/login"
+      ]
+    },
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/about",
+        "/_auth/account",
         "/_auth/add_report",
         "/_auth/add_resources",
         "/_auth/chat",
+        "/_auth/donations",
         "/_auth/manage_report",
         "/_auth/manage_resources",
         "/_auth/"
       ]
     },
-    "/about": {
-      "filePath": "about.lazy.tsx"
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/_auth/about": {
+      "filePath": "_auth/about.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/account": {
+      "filePath": "_auth/account.tsx",
+      "parent": "/_auth"
     },
     "/_auth/add_report": {
-      "filePath": "_auth/add_report.tsx"
+      "filePath": "_auth/add_report.tsx",
+      "parent": "/_auth"
     },
     "/_auth/add_resources": {
-      "filePath": "_auth/add_resources.tsx"
+      "filePath": "_auth/add_resources.tsx",
+      "parent": "/_auth"
     },
     "/_auth/chat": {
-      "filePath": "_auth/chat.tsx"
+      "filePath": "_auth/chat.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/donations": {
+      "filePath": "_auth/donations.tsx",
+      "parent": "/_auth"
     },
     "/_auth/manage_report": {
-      "filePath": "_auth/manage_report.tsx"
+      "filePath": "_auth/manage_report.tsx",
+      "parent": "/_auth"
     },
     "/_auth/manage_resources": {
-      "filePath": "_auth/manage_resources.tsx"
+      "filePath": "_auth/manage_resources.tsx",
+      "parent": "/_auth"
     },
     "/_auth/": {
-      "filePath": "_auth/index.tsx"
+      "filePath": "_auth/index.tsx",
+      "parent": "/_auth"
     }
   }
 }

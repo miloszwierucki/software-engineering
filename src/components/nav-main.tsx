@@ -1,10 +1,13 @@
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { MoreHorizontal, type LucideIcon } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -12,9 +15,7 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function NavMain({
@@ -22,53 +23,68 @@ export function NavMain({
 }: {
   items: {
     title: string;
-    url: string;
+    link: { to: string; search?: Record<string, unknown> };
     icon: LucideIcon;
-    isActive?: boolean;
+    isDisabled?: boolean;
     items?: {
       title: string;
-      url: string;
+      link: { to: string; search?: Record<string, unknown> };
+      icon: LucideIcon;
+      isDisabled?: boolean;
     }[];
   }[];
 }) {
+  const { isMobile } = useSidebar();
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel>Menu</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild disabled={item.isDisabled}>
+              <Link {...item.link}>
+                <item.icon />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+
+            {/* Dropdown menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuAction showOnHover>
+                  <MoreHorizontal />
+                  <span className="sr-only">More</span>
+                </SidebarMenuAction>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                className="w-48"
+                side={isMobile ? "bottom" : "right"}
+                align={isMobile ? "end" : "start"}
+              >
+                {/* Menu item (category) name */}
+                <DropdownMenuItem disabled>
                   <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-              {item.items?.length ? (
-                <>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <ChevronRight />
-                      <span className="sr-only">Toggle</span>
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </>
-              ) : null}
-            </SidebarMenuItem>
-          </Collapsible>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                {item.items?.map((item) => (
+                  <DropdownMenuItem
+                    key={item.title}
+                    asChild
+                    disabled={item.isDisabled}
+                  >
+                    <Link {...item.link}>
+                      <item.icon className="text-muted-foreground" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
         ))}
       </SidebarMenu>
     </SidebarGroup>

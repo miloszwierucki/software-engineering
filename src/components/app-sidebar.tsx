@@ -1,16 +1,20 @@
 import * as React from "react";
+
 import {
   // Bot,
   Command,
+  Send,
+  ListPlus,
+  ListTree,
+  Gift,
   Frame,
   Map,
   PieChart,
-  Send,
   SquareTerminal,
 } from "lucide-react";
 
+import { useTranslation } from "react-i18next";
 import { NavSecondary } from "@/components/nav-secondary";
-import { NavProjects } from "@/components/nav-projects";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -24,67 +28,55 @@ import {
 } from "@/components/ui/sidebar";
 
 const data = {
+  // TODO: add user data
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "sheldon",
+    email: "system@slave.com",
+    avatar: "",
   },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Zgłoszenia",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Zasoby",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Darowizny",
-      url: "#",
-      icon: Map,
-    },
-  ],
+  // TODO: add all nav items
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useTranslation();
+
+  const navMain = [
+    {
+      title: t("sideNavBar.donationTitle"),
+      link: { to: "/donations" },
+      icon: Gift,
+      isDisabled: false,
+      items: [
+        {
+          title: t("sideNavBar.manageTitle"),
+          link: { to: "/donations" },
+          icon: ListTree,
+          isDisabled: false,
+        },
+        {
+          title: t("sideNavBar.addTitle"),
+          link: { to: "/donations", search: { new: true } },
+          icon: ListPlus,
+          isDisabled: false,
+        },
+      ],
+    },
+  ];
+  const navSecondary = [
+    {
+      title: "Feedback",
+      link: { to: "/#" },
+      icon: Send,
+    },
+  ];
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <a href="/#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Command className="size-4" />
                 </div>
@@ -98,15 +90,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={navMain} />
         <a href="/add_report">Dodaj zgłoszenie</a>
         <a href="/manage_report">Zarządzaj zgłoszeniami</a>
         <a href="/add_resources">Dodaj zasób</a>
         <a href="/manage_resources">Zarządzaj zasobami</a>
         <a href="/chat">Chat</a>
         <a href="/about">about</a>
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

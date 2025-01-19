@@ -1,30 +1,17 @@
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import type { AuthContextState } from "@/auth";
 
-export const Route = createRootRoute({
+interface RouterContext {
+  auth: AuthContextState;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2">
-            <div className="flex items-center gap-2 px-4">
-              <SidebarTrigger className="-ml-1" />
-            </div>
-          </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <Outlet />
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
-      <TanStackRouterDevtools />
+      <Outlet />
+      <TanStackRouterDevtools position="bottom-right" initialIsOpen={false} />
     </>
   ),
 });

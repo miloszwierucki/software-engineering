@@ -1,4 +1,5 @@
 import { ChevronsUpDown, LogOut, Settings2 } from "lucide-react";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -16,6 +17,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/auth";
+import { useTranslation } from "react-i18next";
+
 
 export function NavUser({
   user,
@@ -27,6 +31,10 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
+  const router = useRouter();
+  const auth = useAuth();
+  const { t } = useTranslation();
 
   return (
     <SidebarMenu>
@@ -67,15 +75,23 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate({ to: "/account" })}>
                 <Settings2 />
-                Settings
+                {t("usersNav.settings")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                auth.logOut().then(() => {
+                  router.invalidate().finally(() => {
+                    navigate({ to: "/" });
+                  });
+                })
+              }
+            >
               <LogOut />
-              Log out
+              {t("usersNav.signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,92 +1,179 @@
 {
-    "translation": {
-      "index": {
-        "title": "Action Review",
-        "open_reps": "Open Reports",
-        "closed_reps": "Closed Reports",
-        "resources": "Available Resources",
-        "res_category": "Category",
-        "res_name": "Name",
-        "res_amount": "Amount",
-        "map": "Map"
+  "translation": {
+    "auth": {
+      "tabs": {
+        "logIn": "Log In",
+        "signUp": "Sign Up"
+      }
+    },
+    "loginPage": {
+      "title": "Login",
+      "description": "Enter your email below to login to your account",
+      "form": {
+        "email": "Email",
+        "password": "Password"
       },
-      "add_report": {
-        "title": "Report Form",
-        "category": "Category",
-        "category_desc": "Choose report category.",
-        "map": "Choose location on the map",
-        "map_desc": "Click on the map to set a pin. Current coordinates: ",
-        "city": "City",
-        "city_desc": "Enter the name of the city where help is needed.",
-        "street": "Street",
-        "street_desc": "Enter the name of the street where help is needed.",
-        "building_number": "Building number",
-        "building_number_desc": "Enter the building number where help is needed.",
-        "zip_code": "Zip code",
-        "zip_code_desc": "Enter the area's zip code, XX-XXX format.",
-        "button": "Submit report",
-        "enter_c": "Enter city name",
-        "enter_s": "Enter street name",
-        "enter_bn": "Enter building number",
-        "enter_zc": "Enter zip code"
+      "button": "Login"
+    },
+    "signUpPage": {
+      "title": "Sign Up",
+      "description": "Enter your information below to sign up",
+      "form": {
+        "firstname": "Firstname",
+        "surname": "Surname",
+        "email": "Email",
+        "password": "Password",
+        "repeatPassword": "Repeat Password",
+        "phone": "Phone number"
       },
-      "add_resources": {
-        "title": "Resource Approval",
-        "unconfirmed": "Unconfirmed resources",
-        "category": "Category",
-        "name": "Name",
-        "amount": "Amount",
+      "terms": "Accept terms and condition",
+      "button": "Sign Up"
+    },
+    "accountPage": {
+      "title": "Account",
+      "subtitle": "Edit your profile",
+      "form": {
+        "firstname": "Firstname",
+        "surname": "Surname",
+        "email": "Email",
+        "password": "Password",
+        "repeatPassword": "Repeat Password",
+        "phone": "Phone number"
+      },
+      "dataButton": "Apply Changes",
+      "passwordButton": "Change Password"
+    },
+    "sideNavBar": {
+      "donationTitle": "Donations",
+      "manageTitle": "Manage",
+      "addTitle": "Add"
+    },
+    "donationsTable": {
+      "title": "Donations",
+      "subtitle": "All donations and info about them",
+      "donationID": "Donation ID",
+      "donatorName": "Donator",
+      "resources": "Resources",
+      "status": "Status",
+      "donationDate": "Donate Date",
+      "acceptDate": "Accept Date",
+      "openMenu": "Open Menu",
+      "copyDonationID": "Copy Donations ID",
+      "addDonationButton": "Add new donation",
+      "filterPlaceholder": "Filter for donator...",
+      "popup": {
+        "title": "Add new donation",
+        "subtitle": "Fill all fields to add a donation",
+        "donator": "Donator",
+        "resources": "Resources",
+        "donationDate": "Donation Date",
+        "acceptDate": "Accept Date",
         "status": "Status",
-        "button": "Confirm choices",
-        "accept": "Accept",
-        "reject": "Reject"
+        "saveButton": "Save changes"
       },
-      "chat": {
-        "message": "Write your message...",
-        "button": "Send message"
-      },
-      "manage_reports": {
-        "title": "Managing Reports",
+      "nextButton": "Next",
+      "previousButton": "Previous",
+      "result": "No results.",
+      "column": {
+        "label": "Columns",
+        "donator_name": "Donator",
+        "resources": "Resources",
+        "Status": "Status",
+        "donationDate": "Donate Date",
+        "acceptDate": "Accept Date"
+      }
+    },
+    "usersNav": {
+      "settings": "Settings",
+      "signOut": "Sign out"
+    },
+    "index": {
+      "title": "Action Review",
+      "open_reps": "Open Reports",
+      "closed_reps": "Closed Reports",
+      "resources": "Available Resources",
+      "res_category": "Category",
+      "res_name": "Name",
+      "res_amount": "Amount",
+      "map": "Map"
+    },
+    "add_report": {
+      "title": "Report Form",
+      "category": "Category",
+      "category_desc": "Choose report category.",
+      "map": "Choose location on the map",
+      "map_desc": "Click on the map to set a pin. Current coordinates: ",
+      "city": "City",
+      "city_desc": "Enter the name of the city where help is needed.",
+      "street": "Street",
+      "street_desc": "Enter the name of the street where help is needed.",
+      "building_number": "Building number",
+      "building_number_desc": "Enter the building number where help is needed.",
+      "zip_code": "Zip code",
+      "zip_code_desc": "Enter the area's zip code, XX-XXX format.",
+      "button": "Submit report",
+      "enter_c": "Enter city name",
+      "enter_s": "Enter street name",
+      "enter_bn": "Enter building number",
+      "enter_zc": "Enter zip code"
+    },
+    "add_resources": {
+      "title": "Resource Approval",
+      "unconfirmed": "Unconfirmed resources",
+      "category": "Category",
+      "name": "Name",
+      "amount": "Amount",
+      "status": "Status",
+      "button": "Confirm choices",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "chat": {
+      "message": "Write your message...",
+      "button": "Send message"
+    },
+    "manage_reports": {
+      "title": "Managing Reports",
+      "organization": "Organization ID",
+      "f_name": "First Name",
+      "l_name": "Last Name",
+      "category": "Category",
+      "date": "Report date",
+      "status": "Status",
+      "action": "Action",
+      "manage": "Manage",
+      "popup": {
+        "title": "Managing Report",
         "organization": "Organization ID",
-        "f_name": "First Name",
-        "l_name": "Last Name",
+        "person": "Person",
         "category": "Category",
-        "date": "Report date",
         "status": "Status",
-        "action": "Action",
-        "manage": "Manage",
-        "popup":{
-            "title": "Managing Report",
-            "organization": "Organization ID",
-            "person": "Person",
-            "category": "Category",
-            "status": "Status",
-            "accept": "Accept report",
-            "finish": "Close report",
-            "close": "Close"
-        },
-        "statuses":{
-            "pending": "Pending",
-            "accepted": "Accepted",
-            "closed": "Closed"
-        }
+        "accept": "Accept report",
+        "finish": "Close report",
+        "close": "Close"
       },
-      "manage_resources": {
-        "title": "Managing Resources",
-        "category": "Category",
-        "name": "Name",
-        "description": "Description",
-        "amount": "Amount",
-        "action": "Action",
-        "assign": "Assign",
-        "popup": {
-          "title": "Assign Resource",
-          "select_report": "Select Report",
-          "select_placeholder": "Select a report...",
-          "quantity": "Quantity",
-          "assign": "Assign Resource",
-          "cancel": "Cancel"
-        }
+      "statuses": {
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "closed": "Closed"
+      }
+    },
+    "manage_resources": {
+      "title": "Managing Resources",
+      "category": "Category",
+      "name": "Name",
+      "description": "Description",
+      "amount": "Amount",
+      "action": "Action",
+      "assign": "Assign",
+      "popup": {
+        "title": "Assign Resource",
+        "select_report": "Select Report",
+        "select_placeholder": "Select a report...",
+        "quantity": "Quantity",
+        "assign": "Assign Resource",
+        "cancel": "Cancel"
       }
     }
   }
+}
