@@ -33,11 +33,17 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginComponent() {
-  const { logIn } = useAuth();
+  const { logIn, signUp } = useAuth();
   const router = useRouter();
   const search = Route.useSearch();
 
   const [activeTab, setActiveTab] = useState("log-in");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [surname, setSurname] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [phone, setPhone] = useState("");
 
   const {
     t,
@@ -49,6 +55,24 @@ function LoginComponent() {
     const newLanguage = currentLanguage === "en" ? "pl" : "en";
     setCurrentLanguage(newLanguage);
     changeLanguage(newLanguage);
+  };
+
+  const handleLogin = async () => {
+    try {
+      await logIn(email, password);
+      router.history.push(search.redirect || FALLBACK);
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+
+  const handleSignUp = async () => {
+    try {
+      await signUp(email, password, firstname, surname, phone);
+      router.history.push(search.redirect || FALLBACK);
+    } catch (error) {
+      console.error("Sign up failed", error);
+    }
   };
 
   return (
@@ -82,6 +106,8 @@ function LoginComponent() {
                     id="email"
                     type="email"
                     placeholder="mail@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -93,16 +119,12 @@ function LoginComponent() {
                     id="password"
                     type="password"
                     placeholder="********"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
-                <Button
-                  onClick={async () => {
-                    logIn();
-                    router.history.push(search.redirect || FALLBACK);
-                  }}
-                  className="w-full"
-                >
+                <Button onClick={handleLogin} className="w-full">
                   {t("loginPage.button")}
                 </Button>
               </div>
@@ -127,6 +149,8 @@ function LoginComponent() {
                     id="firstname"
                     type="firstname"
                     placeholder="..."
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
                     required
                   />
                 </div>
@@ -138,6 +162,8 @@ function LoginComponent() {
                     id="surname"
                     type="surname"
                     placeholder="..."
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
                     required
                   />
                 </div>
@@ -148,6 +174,8 @@ function LoginComponent() {
                     id="email"
                     type="email"
                     placeholder="mail@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -160,6 +188,8 @@ function LoginComponent() {
                     id="password"
                     type="password"
                     placeholder="********"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
@@ -172,6 +202,8 @@ function LoginComponent() {
                     id="repeatPassword"
                     type="password"
                     placeholder="********"
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
                     required
                   />
                 </div>
@@ -182,6 +214,8 @@ function LoginComponent() {
                     id="phone"
                     type="tel"
                     placeholder="+48000000000"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     required
                   />
                 </div>
@@ -191,13 +225,7 @@ function LoginComponent() {
                   <Label htmlFor="terms">{t("signUpPage.terms")}</Label>
                 </div>
 
-                <Button
-                  onClick={async () => {
-                    logIn();
-                    router.history.push(search.redirect || FALLBACK);
-                  }}
-                  className="mt-2 w-full"
-                >
+                <Button onClick={handleSignUp} className="mt-2 w-full">
                   {t("signUpPage.button")}
                 </Button>
               </div>
