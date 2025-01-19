@@ -7,7 +7,8 @@
         "resources": "Dostępne Zasoby",
         "res_category": "Kategoria",
         "res_name": "Nazwa",
-        "res_amount": "Ilość"
+        "res_amount": "Ilość",
+        "map": "Mapa"
       },
       "add_report": {
         "title": "Formularz zgłoszenia",
@@ -76,7 +77,16 @@
         "name": "Nazwa",
         "description": "Opis",
         "amount": "Ilość",
-        "button": "Costam"
+        "action": "Akcje",
+        "assign": "Przydziel",
+        "popup": {
+          "title": "Przydziel zasób",
+          "select_report": "Wybierz zgłoszenie",
+          "select_placeholder": "Wybierz zgłoszenie...",
+          "quantity": "Ilość",
+          "assign": "Przydziel",
+          "cancel": "Zamknij"
+        }
       }
     }
   }

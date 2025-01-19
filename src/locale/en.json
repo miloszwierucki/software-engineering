@@ -7,7 +7,8 @@
         "resources": "Available Resources",
         "res_category": "Category",
         "res_name": "Name",
-        "res_amount": "Amount"
+        "res_amount": "Amount",
+        "map": "Map"
       },
       "add_report": {
         "title": "Report Form",
@@ -76,7 +77,16 @@
         "name": "Name",
         "description": "Description",
         "amount": "Amount",
-        "button": "Costam"
+        "action": "Action",
+        "assign": "Assign",
+        "popup": {
+          "title": "Assign Resource",
+          "select_report": "Select Report",
+          "select_placeholder": "Select a report...",
+          "quantity": "Quantity",
+          "assign": "Assign Resource",
+          "cancel": "Cancel"
+        }
       }
     }
   }

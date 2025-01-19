@@ -76,7 +76,7 @@ function AddReport() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "costam1",
+      category: "Flood",
       coordinates: position,
       city: "",
       street: "",
@@ -115,10 +115,10 @@ function AddReport() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-[1000]">
-                    <SelectItem value="costam1">costam1</SelectItem>
-                    <SelectItem value="costam2">costam2</SelectItem>
-                    <SelectItem value="costam3">costam3</SelectItem>
-                    <SelectItem value="costam4">costam4</SelectItem>
+                    <SelectItem value="Flood">Flood</SelectItem>
+                    <SelectItem value="Fire">Fire</SelectItem>
+                    <SelectItem value="Earthquake">Earthquake</SelectItem>
+                    <SelectItem value="Tornado">Tornado</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
