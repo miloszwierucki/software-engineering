@@ -96,123 +96,134 @@ function IndexRoute() {
   const marker4Position: [number, number] = [51.754452, 19.483596];
 
   return (
-    <div className="space-y-6 p-6">
-      <h1 className="text-3xl font-bold">{t("index.title")}</h1>
+    <>
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
+        <div>
+          <h1 className="text-4xl font-semibold">
+            {t("index.title")}
+          </h1>
+          <p className="ml-1 font-light text-gray-600">
+            {t("index.subtitle")}
+          </p>
+        </div>
+      </div>
+      <div className="space-y-6 p-6">
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("index.map")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[400px] w-full rounded-md border">
-            <MapContainer
-              center={centerPosition}
-              zoom={13}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Polygon
-                positions={areaCoordinates}
-                pathOptions={{
-                  color: "blue",
-                  fillColor: "blue",
-                  fillOpacity: 0.1,
-                  weight: 2,
-                }}
-              />
-              <Polygon
-                positions={area2Coordinates}
-                pathOptions={{
-                  color: "blue",
-                  fillColor: "blue",
-                  fillOpacity: 0.1,
-                  weight: 2,
-                }}
-              />
-              <Polygon
-                positions={area3Coordinates}
-                pathOptions={{
-                  color: "red",
-                  fillColor: "red",
-                  fillOpacity: 0.1,
-                  weight: 2,
-                }}
-              />
-              <Polygon
-                positions={area4Coordinates}
-                pathOptions={{
-                  color: "red",
-                  fillColor: "red",
-                  fillOpacity: 0.1,
-                  weight: 2,
-                }}
-              />
-              <Marker position={marker1Position} icon={customIcon} />
-              <Marker position={marker2Position} icon={customIcon} />
-              <Marker position={marker3Position} icon={customIcon} />
-              <Marker position={marker4Position} icon={customIcon} />
-            </MapContainer>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="grid gap-4 md:grid-cols-2">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("index.open_reps")}
-            </CardTitle>
+          <CardHeader>
+            <CardTitle>{t("index.map")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{reportStatus.open}</div>
+            <div className="h-[400px] w-full rounded-md border">
+              <MapContainer
+                center={centerPosition}
+                zoom={13}
+                style={{ height: "100%", width: "100%" }}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Polygon
+                  positions={areaCoordinates}
+                  pathOptions={{
+                    color: "blue",
+                    fillColor: "blue",
+                    fillOpacity: 0.1,
+                    weight: 2,
+                  }}
+                />
+                <Polygon
+                  positions={area2Coordinates}
+                  pathOptions={{
+                    color: "blue",
+                    fillColor: "blue",
+                    fillOpacity: 0.1,
+                    weight: 2,
+                  }}
+                />
+                <Polygon
+                  positions={area3Coordinates}
+                  pathOptions={{
+                    color: "red",
+                    fillColor: "red",
+                    fillOpacity: 0.1,
+                    weight: 2,
+                  }}
+                />
+                <Polygon
+                  positions={area4Coordinates}
+                  pathOptions={{
+                    color: "red",
+                    fillColor: "red",
+                    fillOpacity: 0.1,
+                    weight: 2,
+                  }}
+                />
+                <Marker position={marker1Position} icon={customIcon} />
+                <Marker position={marker2Position} icon={customIcon} />
+                <Marker position={marker3Position} icon={customIcon} />
+                <Marker position={marker4Position} icon={customIcon} />
+              </MapContainer>
+            </div>
           </CardContent>
         </Card>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("index.open_reps")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{reportStatus.open}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("index.closed_reps")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{reportStatus.closed}</div>
+            </CardContent>
+          </Card>
+        </div>
+
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("index.closed_reps")}
-            </CardTitle>
+          <CardHeader>
+            <CardTitle>{t("index.resources")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{reportStatus.closed}</div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("index.res_category")}</TableHead>
+                  <TableHead>{t("index.res_name")}</TableHead>
+                  <TableHead className="text-right">
+                    {t("index.res_amount")}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {resources.map((resource, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">
+                      {resource.category}
+                    </TableCell>
+                    <TableCell>{resource.name}</TableCell>
+                    <TableCell className="text-right">
+                      {resource.quantity}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("index.resources")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("index.res_category")}</TableHead>
-                <TableHead>{t("index.res_name")}</TableHead>
-                <TableHead className="text-right">
-                  {t("index.res_amount")}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {resources.map((resource, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {resource.category}
-                  </TableCell>
-                  <TableCell>{resource.name}</TableCell>
-                  <TableCell className="text-right">
-                    {resource.quantity}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </div>
+    </>
   );
 }

@@ -81,112 +81,123 @@ function RouteComponent() {
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-bold mb-6">{t("manage_resources.title")}</h1>
-
-      <div className="border rounded-lg mb-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>{t("manage_resources.category")}</TableHead>
-              <TableHead>{t("manage_resources.name")}</TableHead>
-              <TableHead>{t("manage_resources.description")}</TableHead>
-              <TableHead>{t("manage_resources.amount")}</TableHead>
-              <TableHead>{t("manage_resources.action")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {resources.map((resource) => (
-              <TableRow key={resource.id}>
-                <TableCell>{resource.id}</TableCell>
-                <TableCell>{resource.type}</TableCell>
-                <TableCell>{resource.name}</TableCell>
-                <TableCell>{resource.description}</TableCell>
-                <TableCell>{resource.quantity}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setSelectedResource(resource)
-                      setIsDialogOpen(true)
-                    }}
-                  >
-                    {t("manage_resources.assign")}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    <>
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
+        <div>
+          <h1 className="text-4xl font-semibold">
+            {t("manage_resources.title")}
+          </h1>
+          <p className="ml-1 font-light text-gray-600">
+            {t("manage_resources.subtitle")}
+          </p>
+        </div>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("manage_resources.popup.title")}</DialogTitle>
-          </DialogHeader>
-          
-          {selectedResource && (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <p><strong>{t("manage_resources.name")}:</strong> {selectedResource.name}</p>
-                <p><strong>{t("manage_resources.category")}:</strong> {selectedResource.type}</p>
-                <p><strong>{t("manage_resources.amount")}:</strong> {selectedResource.quantity}</p>
-              </div>
+      <div className="p-6 space-y-6">
+        <div className="border rounded-lg mb-6">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>{t("manage_resources.category")}</TableHead>
+                <TableHead>{t("manage_resources.name")}</TableHead>
+                <TableHead>{t("manage_resources.description")}</TableHead>
+                <TableHead>{t("manage_resources.amount")}</TableHead>
+                <TableHead>{t("manage_resources.action")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {resources.map((resource) => (
+                <TableRow key={resource.id}>
+                  <TableCell>{resource.id}</TableCell>
+                  <TableCell>{resource.type}</TableCell>
+                  <TableCell>{resource.name}</TableCell>
+                  <TableCell>{resource.description}</TableCell>
+                  <TableCell>{resource.quantity}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedResource(resource)
+                        setIsDialogOpen(true)
+                      }}
+                    >
+                      {t("manage_resources.assign")}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
 
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("manage_resources.popup.title")}</DialogTitle>
+            </DialogHeader>
+            
+            {selectedResource && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label>{t("manage_resources.popup.select_report")}</label>
-                  <Select
-                    value={selectedReport}
-                    onValueChange={setSelectedReport}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("manage_resources.popup.select_placeholder")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {mockReports.map((report) => (
-                        <SelectItem key={report.id} value={report.id.toString()}>
-                          {report.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <p><strong>{t("manage_resources.name")}:</strong> {selectedResource.name}</p>
+                  <p><strong>{t("manage_resources.category")}:</strong> {selectedResource.type}</p>
+                  <p><strong>{t("manage_resources.amount")}:</strong> {selectedResource.quantity}</p>
                 </div>
 
-                <div className="space-y-2">
-                  <label>{t("manage_resources.popup.quantity")}</label>
-                  <Input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Number(e.target.value))}
-                    max={selectedResource.quantity}
-                    min={1}
-                  />
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label>{t("manage_resources.popup.select_report")}</label>
+                    <Select
+                      value={selectedReport}
+                      onValueChange={setSelectedReport}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t("manage_resources.popup.select_placeholder")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockReports.map((report) => (
+                          <SelectItem key={report.id} value={report.id.toString()}>
+                            {report.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label>{t("manage_resources.popup.quantity")}</label>
+                    <Input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => setQuantity(Number(e.target.value))}
+                      max={selectedResource.quantity}
+                      min={1}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <DialogFooter className="space-x-2">
-            <Button
-              onClick={handleAssignResource}
-              disabled={Boolean(!selectedReport || quantity <= 0 || (selectedResource && quantity > selectedResource.quantity))}
-            >
-              {t("manage_resources.popup.assign")}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              {t("manage_resources.popup.cancel")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <DialogFooter className="space-x-2">
+              <Button
+                onClick={handleAssignResource}
+                disabled={Boolean(!selectedReport || quantity <= 0 || (selectedResource && quantity > selectedResource.quantity))}
+              >
+                {t("manage_resources.popup.assign")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
+              >
+                {t("manage_resources.popup.cancel")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-    </div>
+      </div>
+    </>
   )
 }

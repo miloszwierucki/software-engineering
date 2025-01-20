@@ -45,6 +45,9 @@
     },
     "sideNavBar": {
       "donationTitle": "Donations",
+      "reportTitle": "Reports",
+      "resourceTitle": "Resources",
+      "chatTitle": "Chat",
       "manageTitle": "Manage",
       "addTitle": "Add"
     },
@@ -88,7 +91,8 @@
       "signOut": "Sign out"
     },
     "index": {
-      "title": "Action Review",
+      "title": "Action Overview",
+      "subtitle": "Overview of actions and map insight",
       "open_reps": "Open Reports",
       "closed_reps": "Closed Reports",
       "resources": "Available Resources",
@@ -99,6 +103,7 @@
     },
     "add_report": {
       "title": "Report Form",
+      "subtitle": "Form for report addition",
       "category": "Category",
       "category_desc": "Choose report category.",
       "map": "Choose location on the map",
@@ -119,6 +124,7 @@
     },
     "add_resources": {
       "title": "Resource Approval",
+      "subtitle": "All pending resources",
       "unconfirmed": "Unconfirmed resources",
       "category": "Category",
       "name": "Name",
@@ -134,6 +140,7 @@
     },
     "manage_reports": {
       "title": "Managing Reports",
+      "subtitle": "All reports and management of them",
       "organization": "Organization ID",
       "f_name": "First Name",
       "l_name": "Last Name",
@@ -160,6 +167,7 @@
     },
     "manage_resources": {
       "title": "Managing Resources",
+      "subtitle": "All resources and management of them",
       "category": "Category",
       "name": "Name",
       "description": "Description",

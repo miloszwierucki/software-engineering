@@ -93,101 +93,110 @@ function RouteComponent() {
   const { t } = useTranslation();
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{t("manage_reports.title")}</h1>
+    <>
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
+        <div>
+          <h1 className="text-4xl font-semibold">
+            {t("manage_reports.title")}
+          </h1>
+          <p className="ml-1 font-light text-gray-600">
+            {t("manage_reports.subtitle")}
+          </p>
+        </div>
       </div>
-
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>{t("manage_reports.organization")}</TableHead>
-              <TableHead>{t("manage_reports.f_name")}</TableHead>
-              <TableHead>{t("manage_reports.l_name")}</TableHead>
-              <TableHead>{t("manage_reports.category")}</TableHead>
-              <TableHead>{t("manage_reports.date")}</TableHead>
-              <TableHead>{t("manage_reports.status")}</TableHead>
-              <TableHead>{t("manage_reports.action")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {reports.map((report) => (
-              <TableRow key={report.id}>
-                <TableCell>{report.id}</TableCell>
-                <TableCell>{report.charityId}</TableCell>
-                <TableCell>{report.firstName}</TableCell>
-                <TableCell>{report.lastName}</TableCell>
-                <TableCell>{report.category}</TableCell>
-                <TableCell>{report.reportDate.toLocaleDateString()}</TableCell>
-                <TableCell>
-                  <span className={getStatusColor(report.status)}>
-                    {report.status.replace('_', ' ')}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => {
-                      setSelectedReport(report)
-                      setIsDialogOpen(true)
-                    }}
-                  >
-                    {t("manage_reports.manage")}
-                  </Button>
-                </TableCell>
+      
+      <div className="p-6 space-y-6">
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>{t("manage_reports.organization")}</TableHead>
+                <TableHead>{t("manage_reports.f_name")}</TableHead>
+                <TableHead>{t("manage_reports.l_name")}</TableHead>
+                <TableHead>{t("manage_reports.category")}</TableHead>
+                <TableHead>{t("manage_reports.date")}</TableHead>
+                <TableHead>{t("manage_reports.status")}</TableHead>
+                <TableHead>{t("manage_reports.action")}</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {reports.map((report) => (
+                <TableRow key={report.id}>
+                  <TableCell>{report.id}</TableCell>
+                  <TableCell>{report.charityId}</TableCell>
+                  <TableCell>{report.firstName}</TableCell>
+                  <TableCell>{report.lastName}</TableCell>
+                  <TableCell>{report.category}</TableCell>
+                  <TableCell>{report.reportDate.toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    <span className={getStatusColor(report.status)}>
+                      {report.status.replace('_', ' ')}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setSelectedReport(report)
+                        setIsDialogOpen(true)
+                      }}
+                    >
+                      {t("manage_reports.manage")}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("manage_reports.popup.title")}</DialogTitle>
-          </DialogHeader>
-          
-          {selectedReport && (
-            <div className="py-4">
-              <div className="space-y-2">
-                <p><strong>ID:</strong> {selectedReport.id}</p>
-                <p><strong>{t("manage_reports.popup.organization")}:</strong> {selectedReport.charityId}</p>
-                <p><strong>{t("manage_reports.popup.person")}:</strong> {selectedReport.firstName} {selectedReport.lastName}</p>
-                <p><strong>{t("manage_reports.popup.category")}:</strong> {selectedReport.category}</p>
-                <p><strong>{t("manage_reports.popup.status")}:</strong> <span className={getStatusColor(selectedReport.status)}>{selectedReport.status}</span></p>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("manage_reports.popup.title")}</DialogTitle>
+            </DialogHeader>
+            
+            {selectedReport && (
+              <div className="py-4">
+                <div className="space-y-2">
+                  <p><strong>ID:</strong> {selectedReport.id}</p>
+                  <p><strong>{t("manage_reports.popup.organization")}:</strong> {selectedReport.charityId}</p>
+                  <p><strong>{t("manage_reports.popup.person")}:</strong> {selectedReport.firstName} {selectedReport.lastName}</p>
+                  <p><strong>{t("manage_reports.popup.category")}:</strong> {selectedReport.category}</p>
+                  <p><strong>{t("manage_reports.popup.status")}:</strong> <span className={getStatusColor(selectedReport.status)}>{selectedReport.status}</span></p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <DialogFooter className="space-x-2">
-            {selectedReport?.status === 'Oczekujące' && (
+            <DialogFooter className="space-x-2">
+              {selectedReport?.status === 'Oczekujące' && (
+                <Button
+                  onClick={() => handleStatusChange(selectedReport.id, 'Zaakceptowane')}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {t("manage_reports.popup.accept")}
+                </Button>
+              )}
+              {selectedReport?.status !== 'Zakończone' && selectedReport && (
+                <Button
+                  onClick={() => handleStatusChange(selectedReport.id, 'Zakończone')}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {t("manage_reports.popup.finish")}
+                </Button>
+              )}
               <Button
-                onClick={() => handleStatusChange(selectedReport.id, 'Zaakceptowane')}
-                className="bg-green-600 hover:bg-green-700"
+                variant="outline"
+                onClick={() => setIsDialogOpen(false)}
               >
-                {t("manage_reports.popup.accept")}
+                {t("manage_reports.popup.close")}
               </Button>
-            )}
-            {selectedReport?.status !== 'Zakończone' && selectedReport && (
-              <Button
-                onClick={() => handleStatusChange(selectedReport.id, 'Zakończone')}
-                className="bg-red-600 hover:bg-red-700"
-              >
-                {t("manage_reports.popup.finish")}
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              {t("manage_reports.popup.close")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
   )
 }

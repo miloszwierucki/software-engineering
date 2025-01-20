@@ -59,7 +59,7 @@ export function NavMain({
               </DropdownMenuTrigger>
 
               <DropdownMenuContent
-                className="w-48"
+                className="w-48 z-[1000]"
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >

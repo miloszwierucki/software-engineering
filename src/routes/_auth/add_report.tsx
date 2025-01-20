@@ -97,139 +97,150 @@ function AddReport() {
   const { t } = useTranslation();
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">{t("add_report.title")}</h1>
-      
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("add_report.category")}</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <>
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
+        <div>
+          <h1 className="text-4xl font-semibold">
+            {t("add_report.title")}
+          </h1>
+          <p className="ml-1 font-light text-gray-600">
+            {t("add_report.subtitle")}
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto py-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("add_report.category")}</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Wybierz kategorię" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="z-[1000]">
+                      <SelectItem value="Flood">Flood</SelectItem>
+                      <SelectItem value="Fire">Fire</SelectItem>
+                      <SelectItem value="Earthquake">Earthquake</SelectItem>
+                      <SelectItem value="Tornado">Tornado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    {t("add_report.category_desc")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="coordinates"
+              render={() => (
+                <FormItem>
+                  <FormLabel>{t("add_report.map")}</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Wybierz kategorię" />
-                    </SelectTrigger>
+                    <div className="h-[400px] w-full rounded-md border">
+                      <MapContainer
+                        center={position}
+                        zoom={13}
+                        style={{ height: '100%', width: '100%' }}
+                      >
+                        <TileLayer
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <MapMarker position={position} setPosition={setPosition} />
+                      </MapContainer>
+                    </div>
                   </FormControl>
-                  <SelectContent className="z-[1000]">
-                    <SelectItem value="Flood">Flood</SelectItem>
-                    <SelectItem value="Fire">Fire</SelectItem>
-                    <SelectItem value="Earthquake">Earthquake</SelectItem>
-                    <SelectItem value="Tornado">Tornado</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  {t("add_report.category_desc")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormDescription>
+                    {t("add_report.map_desc")}
+                    {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="coordinates"
-            render={() => (
-              <FormItem>
-                <FormLabel>{t("add_report.map")}</FormLabel>
-                <FormControl>
-                  <div className="h-[400px] w-full rounded-md border">
-                    <MapContainer
-                      center={position}
-                      zoom={13}
-                      style={{ height: '100%', width: '100%' }}
-                    >
-                      <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      />
-                      <MapMarker position={position} setPosition={setPosition} />
-                    </MapContainer>
-                  </div>
-                </FormControl>
-                <FormDescription>
-                  {t("add_report.map_desc")}
-                  {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("add_report.city")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("add_report.enter_c")} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t("add_report.city_desc")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("add_report.city")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("add_report.enter_c")} {...field} />
-                </FormControl>
-                <FormDescription>
-                  {t("add_report.city_desc")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("add_report.street")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("add_report.enter_s")} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t("add_report.street_desc")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="street"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("add_report.street")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("add_report.enter_s")} {...field} />
-                </FormControl>
-                <FormDescription>
-                  {t("add_report.street_desc")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="buildingNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("add_report.building_number")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("add_report.enter_bn")} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t("add_report.building_number_desc")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="buildingNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("add_report.building_number")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("add_report.enter_bn")} {...field} />
-                </FormControl>
-                <FormDescription>
-                  {t("add_report.building_number_desc")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="zipCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("add_report.zip_code")}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={t("add_report.enter_zc")} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    {t("add_report.zip_code_desc")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="zipCode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("add_report.zip_code")}</FormLabel>
-                <FormControl>
-                  <Input placeholder={t("add_report.enter_zc")} {...field} />
-                </FormControl>
-                <FormDescription>
-                  {t("add_report.zip_code_desc")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit">{t("add_report.button")}</Button>
-        </form>
-      </Form>
-    </div>
+            <Button type="submit">{t("add_report.button")}</Button>
+          </form>
+        </Form>
+      </div>
+    </>
   )
 }

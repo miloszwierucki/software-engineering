@@ -45,6 +45,9 @@
     },
     "sideNavBar": {
       "donationTitle": "Darowizny",
+      "reportTitle": "Zgłoszenia",
+      "resourceTitle": "Zasoby",
+      "chatTitle": "Czat",
       "manageTitle": "Zarządzaj",
       "addTitle": "Dodaj"
     },
@@ -89,6 +92,7 @@
     },
     "index": {
       "title": "Raport Działań",
+      "subtitle": "Przegląd działań i wgląd w mape",
       "open_reps": "Otwarte Raporty",
       "closed_reps": "Zamknięte Raporty",
       "resources": "Dostępne Zasoby",
@@ -99,6 +103,7 @@
     },
     "add_report": {
       "title": "Formularz zgłoszenia",
+      "subtitle": "Formularz do dodania zgłoszenia",
       "category": "Kategoria",
       "category_desc": "Wybierz kategorię zgłoszenia.",
       "map": "Wybierz lokalizację na mapie",
@@ -119,6 +124,7 @@
     },
     "add_resources": {
       "title": "Zatwierdzanie Zasobów",
+      "subtitle": "Wszystkie niezatwierdzone zasoby",
       "unconfirmed": "Niepotwierdzone Zasoby",
       "category": "Kategoria",
       "name": "Nazwa",
@@ -134,6 +140,7 @@
     },
     "manage_reports": {
       "title": "Zarządzanie zgłoszeniami",
+      "subtitle": "Wszystkie zgłoszenia i zarządzanie nimi",
       "organization": "ID Organizacji",
       "f_name": "Imię",
       "l_name": "Nazwisko",
@@ -160,6 +167,7 @@
     },
     "manage_resources": {
       "title": "Zarządzanie zasobami",
+      "subtitle": "Wszystkie zasoby i zarządzanie nimi",
       "category": "Kategoria",
       "name": "Nazwa",
       "description": "Opis",

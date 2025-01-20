@@ -82,61 +82,71 @@ function RouteComponent() {
   const { t } = useTranslation();
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">{t("add_resources.title")}</h1>
+    <>
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
+        <div>
+          <h1 className="text-4xl font-semibold">
+            {t("add_resources.title")}
+          </h1>
+          <p className="ml-1 font-light text-gray-600">
+            {t("add_resources.subtitle")}
+          </p>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("add_resources.unconfirmed")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("add_resources.category")}</TableHead>
-                <TableHead>{t("add_resources.name")}</TableHead>
-                <TableHead className="text-right">{t("add_resources.amount")}</TableHead>
-                <TableHead className="text-center">{t("add_resources.status")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {resources.map((resource) => (
-                <TableRow key={resource.id}>
-                  <TableCell className="font-medium">{resource.category}</TableCell>
-                  <TableCell>{resource.name}</TableCell>
-                  <TableCell className="text-right">{resource.quantity}</TableCell>
-                  <TableCell>
-                    <RadioGroup
-                      defaultValue="pending"
-                      value={resource.status}
-                      onValueChange={(value) => handleStatusChange(resource.id, value)}
-                      className="flex space-x-4 justify-center"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="accepted" id={`accept-${resource.id}`} />
-                        <Label htmlFor={`accept-${resource.id}`}>{t("add_resources.accept")}</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="rejected" id={`reject-${resource.id}`} />
-                        <Label htmlFor={`reject-${resource.id}`}>{t("add_resources.reject")}</Label>
-                      </div>
-                    </RadioGroup>
-                  </TableCell>
+      <div className="p-6 space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("add_resources.unconfirmed")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("add_resources.category")}</TableHead>
+                  <TableHead>{t("add_resources.name")}</TableHead>
+                  <TableHead className="text-right">{t("add_resources.amount")}</TableHead>
+                  <TableHead className="text-center">{t("add_resources.status")}</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          
-          <div className="flex justify-end">
-            <Button 
-              onClick={handleConfirm}
-              className="bg-primary text-primary-foreground"
-            >
-              {t("add_resources.button")}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+              </TableHeader>
+              <TableBody>
+                {resources.map((resource) => (
+                  <TableRow key={resource.id}>
+                    <TableCell className="font-medium">{resource.category}</TableCell>
+                    <TableCell>{resource.name}</TableCell>
+                    <TableCell className="text-right">{resource.quantity}</TableCell>
+                    <TableCell>
+                      <RadioGroup
+                        defaultValue="pending"
+                        value={resource.status}
+                        onValueChange={(value) => handleStatusChange(resource.id, value)}
+                        className="flex space-x-4 justify-center"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="accepted" id={`accept-${resource.id}`} />
+                          <Label htmlFor={`accept-${resource.id}`}>{t("add_resources.accept")}</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="rejected" id={`reject-${resource.id}`} />
+                          <Label htmlFor={`reject-${resource.id}`}>{t("add_resources.reject")}</Label>
+                        </div>
+                      </RadioGroup>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <div className="flex justify-end">
+          <Button 
+            onClick={handleConfirm}
+            className="bg-primary text-primary-foreground"
+          >
+            {t("add_resources.button")}
+          </Button>
+        </div>
+      </div>
+    </>
   )
 }

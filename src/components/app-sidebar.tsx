@@ -11,6 +11,9 @@ import {
   Map,
   PieChart,
   SquareTerminal,
+  FileText,
+  MessagesSquare,
+  Library,
 } from "lucide-react";
 
 import { useTranslation } from "react-i18next";
@@ -61,6 +64,52 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
       ],
     },
+    {
+      title: t("sideNavBar.reportTitle"),
+      link: { to: "/add_report" },
+      icon: FileText,
+      isDisabled: false,
+      items: [
+        {
+          title: t("sideNavBar.manageTitle"),
+          link: { to: "/manage_report" },
+          icon: ListTree,
+          isDisabled: false,
+        },
+        {
+          title: t("sideNavBar.addTitle"),
+          link: { to: "/add_report", search: { new: true } },
+          icon: ListPlus,
+          isDisabled: false,
+        },
+      ],
+    },
+    {
+      title: t("sideNavBar.resourceTitle"),
+      link: { to: "/add_resources" },
+      icon: Library,
+      isDisabled: false,
+      items: [
+        {
+          title: t("sideNavBar.manageTitle"),
+          link: { to: "/manage_resources" },
+          icon: ListTree,
+          isDisabled: false,
+        },
+        {
+          title: t("sideNavBar.addTitle"),
+          link: { to: "/add_resources", search: { new: true } },
+          icon: ListPlus,
+          isDisabled: false,
+        },
+      ],
+    },{
+      title: t("sideNavBar.chatTitle"),
+      link: { to: "/chat" },
+      icon: MessagesSquare,
+      isDisabled: false,
+      items: [],
+    },
   ];
   const navSecondary = [
     {
@@ -91,12 +140,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
-        <a href="/add_report">Dodaj zgłoszenie</a>
-        <a href="/manage_report">Zarządzaj zgłoszeniami</a>
-        <a href="/add_resources">Dodaj zasób</a>
-        <a href="/manage_resources">Zarządzaj zasobami</a>
-        <a href="/chat">Chat</a>
-        <a href="/about">about</a>
         <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
