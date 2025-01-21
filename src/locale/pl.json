@@ -99,7 +99,17 @@
       "res_category": "Kategoria",
       "res_name": "Nazwa",
       "res_amount": "Ilość",
-      "map": "Mapa"
+      "map": "Mapa",
+      "my_reports": "Moje Zgłoszenia",
+      "charity": "ID Organizacji",
+      "category": "Kategoria",
+      "date": "Data Zgłoszenia",
+      "status": "Status",
+      "statuses": {
+        "pending": "Oczekujące",
+        "accepted": "Zaakceptowane",
+        "completed": "Zakończone"
+      }
     },
     "add_report": {
       "title": "Formularz zgłoszenia",

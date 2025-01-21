@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
+import { Route as AuthVictimindexImport } from './routes/_auth/victim_index'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthManageresourcesImport } from './routes/_auth/manage_resources'
 import { Route as AuthManagereportImport } from './routes/_auth/manage_report'
@@ -34,6 +35,12 @@ const LoginRoute = LoginImport.update({
 const AuthRoute = AuthImport.update({
   id: '/_auth',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthVictimindexRoute = AuthVictimindexImport.update({
+  id: '/victim_index',
+  path: '/victim_index',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 const AuthIndexRoute = AuthIndexImport.update({
@@ -164,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManageresourcesImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/victim_index': {
+      id: '/_auth/victim_index'
+      path: '/victim_index'
+      fullPath: '/victim_index'
+      preLoaderRoute: typeof AuthVictimindexImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
@@ -185,6 +199,7 @@ interface AuthRouteChildren {
   AuthDonationsRoute: typeof AuthDonationsRoute
   AuthManagereportRoute: typeof AuthManagereportRoute
   AuthManageresourcesRoute: typeof AuthManageresourcesRoute
+  AuthVictimindexRoute: typeof AuthVictimindexRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
@@ -197,6 +212,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDonationsRoute: AuthDonationsRoute,
   AuthManagereportRoute: AuthManagereportRoute,
   AuthManageresourcesRoute: AuthManageresourcesRoute,
+  AuthVictimindexRoute: AuthVictimindexRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -213,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/victim_index': typeof AuthVictimindexRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -226,6 +243,7 @@ export interface FileRoutesByTo {
   '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/victim_index': typeof AuthVictimindexRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -241,6 +259,7 @@ export interface FileRoutesById {
   '/_auth/donations': typeof AuthDonationsRoute
   '/_auth/manage_report': typeof AuthManagereportRoute
   '/_auth/manage_resources': typeof AuthManageresourcesRoute
+  '/_auth/victim_index': typeof AuthVictimindexRoute
   '/_auth/': typeof AuthIndexRoute
 }
 
@@ -257,6 +276,7 @@ export interface FileRouteTypes {
     | '/donations'
     | '/manage_report'
     | '/manage_resources'
+    | '/victim_index'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -269,6 +289,7 @@ export interface FileRouteTypes {
     | '/donations'
     | '/manage_report'
     | '/manage_resources'
+    | '/victim_index'
     | '/'
   id:
     | '__root__'
@@ -282,6 +303,7 @@ export interface FileRouteTypes {
     | '/_auth/donations'
     | '/_auth/manage_report'
     | '/_auth/manage_resources'
+    | '/_auth/victim_index'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
@@ -321,6 +343,7 @@ export const routeTree = rootRoute
         "/_auth/donations",
         "/_auth/manage_report",
         "/_auth/manage_resources",
+        "/_auth/victim_index",
         "/_auth/"
       ]
     },
@@ -357,6 +380,10 @@ export const routeTree = rootRoute
     },
     "/_auth/manage_resources": {
       "filePath": "_auth/manage_resources.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/victim_index": {
+      "filePath": "_auth/victim_index.tsx",
       "parent": "/_auth"
     },
     "/_auth/": {

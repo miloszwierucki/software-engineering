@@ -99,7 +99,16 @@
       "res_category": "Category",
       "res_name": "Name",
       "res_amount": "Amount",
-      "map": "Map"
+      "map": "Map",
+      "my_reports": "My Reports",
+      "charity": "Charity ID",
+      "date": "Report Date",
+      "status": "Status",
+      "statuses": {
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "completed": "Completed"
+      }
     },
     "add_report": {
       "title": "Report Form",
