@@ -16,68 +16,116 @@ import {
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from "react-i18next";
+import { api } from "@/utils/api";
 
 export const Route = createFileRoute('/_auth/add_resources')({
   component: RouteComponent,
 })
 
-interface ResourceSubmission {
-  id: number
-  category: string
-  name: string
-  quantity: number
-  status: 'pending' | 'accepted' | 'rejected'
+interface Resource {
+  id: number;
+  type: string;
+  name: string;
+  quantity: number;
+  available: boolean;
+  volunteer?: {
+    userId: number;
+  };
+  donation?: {
+    donation_id: number;
+  };
 }
 
+const mockResources: Resource[] = [
+  {
+    id: 1,
+    type: 'MONEY',
+    name: 'Pieniądze',
+    quantity: 500,
+    available: false,
+  },
+  {
+    id: 2,
+    type: 'CLOTHES',
+    name: 'Skarpety',
+    quantity: 10,
+    available: false,
+  },
+  {
+    id: 3,
+    type: 'FOOD',
+    name: 'Woda',
+    quantity: 100,
+    available: false,
+  },
+  {
+    id: 4,
+    type: 'VOLUNTEER',
+    name: 'Wolontariusze',
+    quantity: 1,
+    available: false,
+  },
+];
+
 function RouteComponent() {
-  const [resources, setResources] = useState<ResourceSubmission[]>([
-    {
-      id: 1,
-      category: 'Pieniądze',
-      name: 'Pieniądze',
-      quantity: 500,
-      status: 'pending',
-    },
-    {
-      id: 2,
-      category: 'Ubrania',
-      name: 'Skarpety',
-      quantity: 10,
-      status: 'pending',
-    },
-    {
-      id: 3,
-      category: 'Jedzenie',
-      name: 'Woda',
-      quantity: 100,
-      status: 'pending',
-    },
-    {
-      id: 4,
-      category: 'Wolontariusze',
-      name: 'Wolontariusze',
-      quantity: 1,
-      status: 'pending',
-    },
-  ])
+  const [resources, setResources] = useState<Resource[]>(mockResources);
 
-  const handleStatusChange = (id: number, value: string) => {
-    setResources(resources.map(resource => 
-      resource.id === id 
-        ? { ...resource, status: value as 'pending' | 'accepted' | 'rejected' }
-        : resource
-    ))
-  }
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const response = await api<Resource[]>("/resource/", "GET");
+        setResources(response);
+      } catch (err) {
+        console.error("Failed to fetch resources:", err);
+        setResources(mockResources);
+      }
+    };
 
-  const handleConfirm = () => {
-    // Wysłanie zatwierdzonych zasobów do backendu
-    const acceptedResources = resources.filter(r => r.status === 'accepted')
-    const rejectedResources = resources.filter(r => r.status === 'rejected')
-    console.log('Accepted resources:', acceptedResources)
-    console.log('Rejected resources:', rejectedResources)
-  }
+    fetchResources();
+  }, []);
+
+  const handleStatusChange = async (id: number, value: string) => {
+    try {
+      const resource = resources.find(r => r.id === id);
+      if (!resource) return;
+
+      const updatedResource = {
+        ...resource,
+        available: value === 'accepted'
+      };
+
+      await api<Resource>(
+        `/resource/${id}`,
+        "PUT",
+        updatedResource
+      );
+
+      setResources(prevResources =>
+        prevResources.map(resource =>
+          resource.id === id
+            ? { ...resource, available: value === 'accepted' }
+            : resource
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update resource:", error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const acceptedResources = resources.filter(r => r.available);
+      const rejectedResources = resources.filter(r => !r.available);
+      
+      console.log('Accepted resources:', acceptedResources);
+      console.log('Rejected resources:', rejectedResources);
+      
+    } catch (error) {
+      console.error("Failed to confirm resources:", error);
+    }
+  };
 
   const { t } = useTranslation();
 
@@ -112,13 +160,11 @@ function RouteComponent() {
               <TableBody>
                 {resources.map((resource) => (
                   <TableRow key={resource.id}>
-                    <TableCell className="font-medium">{resource.category}</TableCell>
+                    <TableCell className="font-medium">{resource.type}</TableCell>
                     <TableCell>{resource.name}</TableCell>
                     <TableCell className="text-right">{resource.quantity}</TableCell>
                     <TableCell>
                       <RadioGroup
-                        defaultValue="pending"
-                        value={resource.status}
                         onValueChange={(value) => handleStatusChange(resource.id, value)}
                         className="flex space-x-4 justify-center"
                       >

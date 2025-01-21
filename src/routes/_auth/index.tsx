@@ -101,7 +101,7 @@ function IndexRoute() {
   useEffect(() => {
     const fetchAvailableReports = async () => {
       try {
-        const available = await api<unknown[]>("/available", "GET");
+        const available = await api<unknown[]>("/volunteer/available", "GET");
         setReportStatus(prev => ({ ...prev, open: available.length }));
       } catch (err) {
         console.error("Failed to fetch available reports:", err);
@@ -110,7 +110,7 @@ function IndexRoute() {
 
     const fetchCompletedReports = async () => {
       try {
-        const completed = await api<unknown[]>("/completed", "GET");
+        const completed = await api<unknown[]>("/volunteer/completed", "GET");
         setReportStatus(prev => ({ ...prev, closed: completed.length }));
       } catch (err) {
         console.error("Failed to fetch completed reports:", err);
@@ -119,7 +119,7 @@ function IndexRoute() {
 
     const fetchResources = async () => {
       try {
-        const allResources = await api<Resource[]>("/", "GET");
+        const allResources = await api<Resource[]>("/volunteer/", "GET");
         setResources(allResources);
       } catch (err) {
         console.error("Failed to fetch resources:", err);

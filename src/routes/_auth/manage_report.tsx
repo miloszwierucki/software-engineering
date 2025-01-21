@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -17,24 +17,22 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { useTranslation } from "react-i18next";
+import { api } from "@/utils/api";
 
 interface Report {
   id: number
   charityId: number
-  firstName: string
-  lastName: string
+  victimId: number
   category: string
   reportDate: Date
   status: 'Oczekujące' | 'Zaakceptowane' | 'Zakończone'
 }
 
-// Dane z backendu
 const mockReports: Report[] = [
   {
     id: 1,
     charityId: 101,
-    firstName: "Ktos1",
-    lastName: "Tam1",
+    victimId: 1,
     category: "costam1",
     reportDate: new Date('2024-11-11'),
     status: 'Oczekujące'
@@ -42,8 +40,7 @@ const mockReports: Report[] = [
   {
     id: 2,
     charityId: 102,
-    firstName: "Ktos2",
-    lastName: "Tam2",
+    victimId: 2,
     category: "costam2",
     reportDate: new Date('2024-10-10'),
     status: 'Zaakceptowane'
@@ -51,8 +48,7 @@ const mockReports: Report[] = [
   {
     id: 3,
     charityId: 103,
-    firstName: "Ktos3",
-    lastName: "Tam3",
+    victimId: 3,
     category: "costam3",
     reportDate: new Date('2024-10-10'),
     status: 'Zakończone'
@@ -67,6 +63,43 @@ function RouteComponent() {
   const [reports, setReports] = useState<Report[]>(mockReports)
   const [selectedReport, setSelectedReport] = useState<Report | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await api<any[]>("/report/", "GET");
+        
+        const transformedReports = response.map(report => ({
+          id: report.report_id,
+          charityId: report.charity.id,
+          victimId: report.victim.id,
+          category: report.category,
+          reportDate: new Date(report.report_date),
+          status: transformStatus(report.status)
+        }));
+
+        setReports(transformedReports);
+      } catch (err) {
+        console.error("Failed to fetch reports:", err);
+        setReports(mockReports);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const transformStatus = (apiStatus: string): Report['status'] => {
+    switch (apiStatus) {
+      case 'PENDING':
+        return 'Oczekujące';
+      case 'ACCEPTED':
+        return 'Zaakceptowane';
+      case 'COMPLETED':
+        return 'Zakończone';
+      default:
+        return 'Oczekujące';
+    }
+  };
 
   const handleStatusChange = (reportId: number, newStatus: Report['status']) => {
     setReports(prevReports =>
@@ -112,8 +145,7 @@ function RouteComponent() {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>{t("manage_reports.organization")}</TableHead>
-                <TableHead>{t("manage_reports.f_name")}</TableHead>
-                <TableHead>{t("manage_reports.l_name")}</TableHead>
+                <TableHead>{t("manage_reports.victim")}</TableHead>
                 <TableHead>{t("manage_reports.category")}</TableHead>
                 <TableHead>{t("manage_reports.date")}</TableHead>
                 <TableHead>{t("manage_reports.status")}</TableHead>
@@ -125,8 +157,7 @@ function RouteComponent() {
                 <TableRow key={report.id}>
                   <TableCell>{report.id}</TableCell>
                   <TableCell>{report.charityId}</TableCell>
-                  <TableCell>{report.firstName}</TableCell>
-                  <TableCell>{report.lastName}</TableCell>
+                  <TableCell>{report.victimId}</TableCell>
                   <TableCell>{report.category}</TableCell>
                   <TableCell>{report.reportDate.toLocaleDateString()}</TableCell>
                   <TableCell>
@@ -163,7 +194,7 @@ function RouteComponent() {
                 <div className="space-y-2">
                   <p><strong>ID:</strong> {selectedReport.id}</p>
                   <p><strong>{t("manage_reports.popup.organization")}:</strong> {selectedReport.charityId}</p>
-                  <p><strong>{t("manage_reports.popup.person")}:</strong> {selectedReport.firstName} {selectedReport.lastName}</p>
+                  <p><strong>{t("manage_reports.victim")}:</strong> {selectedReport.victimId}</p>
                   <p><strong>{t("manage_reports.popup.category")}:</strong> {selectedReport.category}</p>
                   <p><strong>{t("manage_reports.popup.status")}:</strong> <span className={getStatusColor(selectedReport.status)}>{selectedReport.status}</span></p>
                 </div>

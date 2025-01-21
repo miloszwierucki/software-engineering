@@ -25,6 +25,7 @@ import { useState, useEffect } from 'react'
 import 'leaflet/dist/leaflet.css'
 import { Icon } from 'leaflet'
 import { useTranslation } from "react-i18next";
+import { api } from "@/utils/api";
 
 // Walidacja formularza
 const formSchema = z.object({
@@ -70,6 +71,22 @@ export const Route = createFileRoute('/_auth/add_report')({
   component: AddReport,
 })
 
+interface Location {
+  city: string;
+  street: string;
+  buildingnumber: number;
+  zipcode: string;
+}
+
+interface Report {
+  victim: { id: number };
+  charity: { id: number };
+  category: string;
+  location: Location;
+  status: 'PENDING';
+  report_date: string;
+}
+
 function AddReport() {
   const [position, setPosition] = useState({ lat: 51.7471696, lng: 19.4533291 })
 
@@ -89,9 +106,35 @@ function AddReport() {
     form.setValue('coordinates', position)
   }, [position, form])
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Łączenie z backendem
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const currentDate = new Date().toISOString();
+      
+      const reportData: Report = {
+        victim: { id: 1 },
+        charity: { id: 1 },
+        category: values.category,
+        location: {
+          city: values.city,
+          street: values.street,
+          buildingnumber: parseInt(values.buildingNumber),
+          zipcode: values.zipCode
+        },
+        status: 'PENDING',
+        report_date: currentDate
+      };
+
+      await api<Report>(
+        "/report/",
+        "POST",
+        reportData
+      );
+
+      console.log("Report submitted successfully");
+      
+    } catch (error) {
+      console.error("Failed to submit report:", error);
+    }
   }
 
   const { t } = useTranslation();
