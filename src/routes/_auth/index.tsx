@@ -12,35 +12,38 @@ import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Polygon, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react";
+import { api } from "@/utils/api";
 
 export const Route = createFileRoute("/_auth/")({
   component: IndexRoute,
 });
-
-type Resource = {
-  category: string;
-  name: string;
-  quantity: number;
-};
 
 type ReportStatus = {
   open: number;
   closed: number;
 };
 
-function IndexRoute() {
-  const resources: Resource[] = [
-    { category: "Pieniądze", name: "Pieniądze", quantity: 24000 },
-    { category: "Jedzenie", name: "Woda", quantity: 500 },
-    { category: "Jedzenie", name: "Chleb", quantity: 50 },
-    { category: "Ubrania", name: "Skarpety", quantity: 100 },
-    { category: "Wolontariusze", name: "Wolontariusze", quantity: 40 },
-  ];
-
-  const reportStatus: ReportStatus = {
-    open: 15,
-    closed: 45,
+interface Resource {
+  resource_id: number;
+  type: 'DONATION' | 'VOLUNTEER';
+  quantity: number;
+  available: boolean;
+  volunteer?: {
+    userId: number;
   };
+  donation?: {
+    donation_id: number;
+  };
+}
+
+function IndexRoute() {
+  const [resources, setResources] = useState<Resource[]>([]);
+
+  const [reportStatus, setReportStatus] = useState<ReportStatus>({
+    open: 0,
+    closed: 0
+  });
 
   const { t } = useTranslation();
 
@@ -94,6 +97,39 @@ function IndexRoute() {
   const marker2Position: [number, number] = [51.775509, 19.455379];
   const marker3Position: [number, number] = [51.755961, 19.487287];
   const marker4Position: [number, number] = [51.754452, 19.483596];
+
+  useEffect(() => {
+    const fetchAvailableReports = async () => {
+      try {
+        const available = await api<unknown[]>("/available", "GET");
+        setReportStatus(prev => ({ ...prev, open: available.length }));
+      } catch (err) {
+        console.error("Failed to fetch available reports:", err);
+      }
+    };
+
+    const fetchCompletedReports = async () => {
+      try {
+        const completed = await api<unknown[]>("/completed", "GET");
+        setReportStatus(prev => ({ ...prev, closed: completed.length }));
+      } catch (err) {
+        console.error("Failed to fetch completed reports:", err);
+      }
+    };
+
+    const fetchResources = async () => {
+      try {
+        const allResources = await api<Resource[]>("/", "GET");
+        setResources(allResources);
+      } catch (err) {
+        console.error("Failed to fetch resources:", err);
+      }
+    };
+
+    fetchAvailableReports();
+    fetchCompletedReports();
+    fetchResources();
+  }, []);
 
   return (
     <>
@@ -201,24 +237,24 @@ function IndexRoute() {
               <TableHeader>
                 <TableRow>
                   <TableHead>{t("index.res_category")}</TableHead>
-                  <TableHead>{t("index.res_name")}</TableHead>
                   <TableHead className="text-right">
                     {t("index.res_amount")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {resources.map((resource, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">
-                      {resource.category}
-                    </TableCell>
-                    <TableCell>{resource.name}</TableCell>
-                    <TableCell className="text-right">
-                      {resource.quantity}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {resources
+                  .filter(resource => resource.available)
+                  .map((resource) => (
+                    <TableRow key={resource.resource_id}>
+                      <TableCell className="font-medium">
+                        {resource.type}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {resource.quantity}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </CardContent>

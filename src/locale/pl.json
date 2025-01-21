@@ -93,8 +93,8 @@
     "index": {
       "title": "Raport Działań",
       "subtitle": "Przegląd działań i wgląd w mape",
-      "open_reps": "Otwarte Raporty",
-      "closed_reps": "Zamknięte Raporty",
+      "open_reps": "Otwarte Zgłoszenia",
+      "closed_reps": "Zamknięte Zgłoszenia",
       "resources": "Dostępne Zasoby",
       "res_category": "Kategoria",
       "res_name": "Nazwa",
