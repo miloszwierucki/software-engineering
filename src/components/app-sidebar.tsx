@@ -1,5 +1,6 @@
 import * as React from "react";
-
+import { useTranslation } from "react-i18next";
+import { Toggle } from "@/components/ui/toggle";
 import {
   // Bot,
   Command,
@@ -15,8 +16,6 @@ import {
   MessagesSquare,
   Library,
 } from "lucide-react";
-
-import { useTranslation } from "react-i18next";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -29,6 +28,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useState } from "react";
 
 const data = {
   // TODO: add user data
@@ -41,7 +41,14 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { t } = useTranslation();
+  const { t, i18n: { changeLanguage, language } } = useTranslation();
+  const [currentLanguage, setCurrentLanguage] = React.useState(language);
+
+  const handleChangeLanguage = () => {
+    const newLanguage = currentLanguage === "en" ? "pl" : "en";
+    setCurrentLanguage(newLanguage);
+    changeLanguage(newLanguage);
+  };
 
   const navMain = [
     {
@@ -123,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-between">
             <SidebarMenuButton size="lg" asChild>
               <a href="/#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
@@ -135,6 +142,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
               </a>
             </SidebarMenuButton>
+            <Toggle
+              aria-label="Toggle language"
+              onClick={handleChangeLanguage}
+              className="uppercase"
+            >
+              {currentLanguage}
+            </Toggle>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

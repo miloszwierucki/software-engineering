@@ -2,51 +2,23 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Form } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useForm } from 'react-hook-form'
-import { useState, useEffect } from 'react'
-import { useTranslation } from "react-i18next";
+import { useState, useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next'
+import { Client, IFrame } from '@stomp/stompjs'
+
+let isSub = false;
 
 interface Message {
   id: number
-  first_name: string
-  last_name: string
+  senderName: string
   content: string
   timestamp: Date
+  chatName?: string
 }
 
 interface ChatFormValues {
   message: string
 }
-
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    first_name: "John",
-    last_name: "Doe",
-    content: "Hello! How can we help you today?",
-    timestamp: new Date(Date.now() - 3000000),
-  },
-  {
-    id: 2,
-    first_name: "Current",
-    last_name: "User",
-    content: "Cały czas tłukło, ale to tak tłukło, całe noce całe dnie tłukło",
-    timestamp: new Date(Date.now() - 2000000),
-  },
-  {
-    id: 3,
-    first_name: "John",
-    last_name: "Doe",
-    content: "I understand. Let's talk about what tłukło.",
-    timestamp: new Date(Date.now() - 1000000),
-  },
-  {
-    id: 4,
-    first_name: "Alice",
-    last_name: "Smith",
-    content: "Młotek tak tłukł",
-    timestamp: new Date(Date.now() - 500000),
-  },
-]
 
 export const Route = createFileRoute('/_auth/chat')({
   component: ChatComponent,
@@ -54,6 +26,15 @@ export const Route = createFileRoute('/_auth/chat')({
 
 function ChatComponent() {
   const [messages, setMessages] = useState<Message[]>([])
+  const [stompClient, setStompClient] = useState<Client | null>(null)
+  const userId = '1'
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const form = useForm<ChatFormValues>({
     defaultValues: {
@@ -62,25 +43,193 @@ function ChatComponent() {
   })
 
   useEffect(() => {
-    setMessages(initialMessages)
-  }, [])
+      scrollToBottom();
+  }, [messages]);
 
-  const onSubmit = (values: ChatFormValues) => {
-    if (!values.message.trim()) return
+  useEffect(() => {
+    const chatId = 1;
+    //const userId = 1;
 
-    const newMessage: Message = {
-      id: Date.now(),
-      first_name: "Current",
-      last_name: "User",
-      content: values.message,
-      timestamp: new Date(),
+    const url = `http://localhost:8080/chat/getChatHistory?chatId=${chatId}&userId=${userId}`;
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json(); // Assuming the response is JSON
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        console.log("Chat history:", data);
+        //wstawianie wiadomosci do chatu
+        data.forEach((value) => {
+          try {
+            setMessages(prev => [...prev, {
+              id: Date.now(),
+              senderName: value.senderName,
+              content: value.message,
+              timestamp: new Date(value.timestamp),
+              chatName: "General Chat"
+            }])
+
+            console.log(value)
+          } catch (error) {
+            console.error(error.message)
+          }
+        })
+
+        scrollToBottom();
+      })
+      .catch((error) => {
+        console.error("Error fetching chat history:", error);
+      });
+
+
+    const socket = new WebSocket('ws://localhost:8080/chatSystem');
+    //const socket = new SockJS('http://localhost:8080/chatSystem')
+    const client = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => console.log('[STOMP]', str),
+      connectHeaders: {
+        userId: userId,
+      },
+    })
+
+    client.onConnect = (frame) => {
+      if (isSub)
+        return;
+
+      console.log('Connected to chat:', frame)
+      setStompClient(client)
+
+      client.subscribe(`/user/${userId}/queue/notifications`, (message) => {
+        const newMessage = JSON.parse(message.body)
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now(),
+            senderName: newMessage.senderName,
+            content: newMessage.message,
+            timestamp: new Date(newMessage.date),
+            chatName: newMessage.chatName,
+          },
+        ])
+      })
+
+      client.subscribe('/topic/public', (message) => {
+        const newMessage = JSON.parse(message.body)
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now(),
+            senderName: newMessage.senderName,
+            content: newMessage.message,
+            timestamp: new Date(newMessage.date),
+            chatName: newMessage.chatName,
+          },
+        ])
+      })
+
+      isSub = true;
     }
 
-    setMessages(prev => [...prev, newMessage])
+    client.onStompError = (frame: IFrame) => {
+      console.error('Broker reported error:', frame.headers['message'])
+      console.error('Additional details:', frame.body)
+    }
+
+    client.activate()
+
+    return () => {
+      if (client.connected) {
+        console.log('Disconnecting from chat...')
+        client.deactivate()
+        isSub = false;
+      }
+    }
+  }, [userId])
+
+  const onSubmit = (values: ChatFormValues) => {
+    if (!values.message.trim() || !stompClient) return
+
+    const chatMessage = {
+      senderId: parseInt(userId),
+      message: values.message,
+      chatId: 1,
+    }
+
+    fetch("http://localhost:8080/chat/sendMessage", {
+      method: "POST",
+      body: JSON.stringify(chatMessage),
+      headers: {
+        "Content-type": "application/json;"
+      }
+    }).then((response) => {
+      if (response.ok) {
+       console.log(`OK: ${response.status}`);
+
+        const chatId = 1;
+        //const userId = 1;
+
+        const url = `http://localhost:8080/chat/getChatHistory?chatId=${chatId}&userId=${userId}`;
+
+        fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json(); // Assuming the response is JSON
+            } else {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+          })
+          .then((data) => {
+            console.log("Chat history:", data);
+            setMessages([]);
+            //wstawianie wiadomosci do chatu
+            data.forEach((value) => {
+              try {
+                setMessages(prev => [...prev, {
+                  id: Date.now(),
+                  senderName: value.senderName,
+                  content: value.message,
+                  timestamp: new Date(value.timestamp),
+                  chatName: "General Chat"
+                }])
+
+                console.log(value)
+              } catch (error) {
+                console.error(error.message)
+              }
+            })
+
+            scrollToBottom();
+          })
+          .catch((error) => {
+            console.error("Error fetching chat history:", error);
+          });
+      } else {
+        // Obsługa błędów
+        console.error(`Error: ${response.status}`);
+        console.error("Failed to send message:");
+      }
+    }).catch((error) => {
+        console.error("Failed to send message:", error);
+      });
+
     form.reset()
   }
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <div className="flex flex-col h-[88vh] max-h-screen p-2">
@@ -89,18 +238,20 @@ function ChatComponent() {
           <div
             key={message.id}
             className={`flex ${
-              message.first_name === "Current" ? 'justify-end' : 'justify-start'
+              message.senderName === 'Current User'
+                ? 'justify-end'
+                : 'justify-start'
             }`}
           >
             <div
               className={`max-w-[80%] rounded-lg p-4 ${
-                message.first_name === "Current"
+                message.senderName === 'Current User'
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-muted'
               }`}
             >
               <div className="text-sm font-semibold mb-1">
-                {message.first_name} {message.last_name}
+                {message.senderName}
               </div>
               <div className="break-all">
                 <p className="whitespace-pre-wrap">{message.content}</p>
@@ -111,13 +262,14 @@ function ChatComponent() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} /> {/* Scrolling to the last message */}
       </div>
 
       <div className="sticky bottom-0 bg-background pt-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <Textarea
-              placeholder={t("chat.message")}
+              placeholder={t('chat.message')}
               {...form.register('message')}
               className="min-h-[80px] resize-none"
             />
@@ -125,7 +277,7 @@ function ChatComponent() {
               type="submit"
               className="w-full bg-primary text-primary-foreground rounded-md py-2 px-4 hover:bg-primary/90"
             >
-              {t("chat.button")}
+              {t('chat.button')}
             </button>
           </form>
         </Form>
