@@ -22,7 +22,6 @@ import { Route as AuthChatImport } from './routes/_auth/chat'
 import { Route as AuthAddresourcesImport } from './routes/_auth/add_resources'
 import { Route as AuthAddreportImport } from './routes/_auth/add_report'
 import { Route as AuthAccountImport } from './routes/_auth/account'
-import { Route as AuthAboutImport } from './routes/_auth/about'
 
 // Create/Update Routes
 
@@ -91,12 +90,6 @@ const AuthAccountRoute = AuthAccountImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthAboutRoute = AuthAboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => AuthRoute,
-} as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -114,13 +107,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
-    }
-    '/_auth/about': {
-      id: '/_auth/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AuthAboutImport
-      parentRoute: typeof AuthImport
     }
     '/_auth/account': {
       id: '/_auth/account'
@@ -191,7 +177,6 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthRouteChildren {
-  AuthAboutRoute: typeof AuthAboutRoute
   AuthAccountRoute: typeof AuthAccountRoute
   AuthAddreportRoute: typeof AuthAddreportRoute
   AuthAddresourcesRoute: typeof AuthAddresourcesRoute
@@ -204,7 +189,6 @@ interface AuthRouteChildren {
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthAboutRoute: AuthAboutRoute,
   AuthAccountRoute: AuthAccountRoute,
   AuthAddreportRoute: AuthAddreportRoute,
   AuthAddresourcesRoute: AuthAddresourcesRoute,
@@ -221,7 +205,6 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/about': typeof AuthAboutRoute
   '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
@@ -235,7 +218,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
-  '/about': typeof AuthAboutRoute
   '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
@@ -251,7 +233,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/_auth/about': typeof AuthAboutRoute
   '/_auth/account': typeof AuthAccountRoute
   '/_auth/add_report': typeof AuthAddreportRoute
   '/_auth/add_resources': typeof AuthAddresourcesRoute
@@ -268,7 +249,6 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
-    | '/about'
     | '/account'
     | '/add_report'
     | '/add_resources'
@@ -281,7 +261,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
-    | '/about'
     | '/account'
     | '/add_report'
     | '/add_resources'
@@ -295,7 +274,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth'
     | '/login'
-    | '/_auth/about'
     | '/_auth/account'
     | '/_auth/add_report'
     | '/_auth/add_resources'
@@ -335,7 +313,6 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/about",
         "/_auth/account",
         "/_auth/add_report",
         "/_auth/add_resources",
@@ -349,10 +326,6 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/_auth/about": {
-      "filePath": "_auth/about.tsx",
-      "parent": "/_auth"
     },
     "/_auth/account": {
       "filePath": "_auth/account.tsx",

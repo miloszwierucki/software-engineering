@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+
 import { api } from "@/utils/api";
 
 export interface User {
@@ -13,25 +14,32 @@ export interface User {
   surname: string;
   email: string;
   phone: string;
+  role: string;
 }
 
-export interface Response {
+interface Response {
+  status: Status;
+}
+interface ResponseLogin extends Response {
   id: string;
   token: string;
 }
+
+export type Status = "success" | "error";
 
 export interface AuthContextState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  logIn: (email: string, password: string) => Promise<void>;
+  logIn: (email: string, password: string) => Promise<Status>;
   signUp: (
     firstname: string,
     surname: string,
+    role: string,
     email: string,
     password: string,
     phone: string
-  ) => Promise<void>;
+  ) => Promise<Status>;
   logOut: () => Promise<void>;
 }
 
@@ -59,22 +67,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const isAuthenticated = !!token;
 
   const signUp = useCallback(
-    async (name: string, email: string, password: string, phone: string) => {
+    async (
+      firstname: string,
+      surname: string,
+      role: string,
+      email: string,
+      password: string,
+      phone: string
+    ) => {
       try {
-        const response = await api<Response>("/api/auth", "POST", {
-          name,
+        const response = await api<Response>("/api/signup", "POST", {
+          firstname,
+          surname,
+          role,
           email,
           password,
           phone,
         });
 
-        const { token, id } = response;
-        setStoredToken(token);
-        setToken(token);
-        setId(id);
+        if (response.status === "error") {
+          throw new Error("Sign up failed");
+        }
+
+        return "success";
       } catch (error) {
         console.error("Sign up failed", error);
-        throw error;
+        return "error";
       }
     },
     []
@@ -82,17 +100,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logIn = useCallback(async (email: string, password: string) => {
     try {
-      const response = await api<Response>("/api/auth", "POST", {
+      const response = await api<ResponseLogin>("/api/login", "POST", {
         email,
         password,
       });
+
+      if (response.status === "error") {
+        throw new Error("Login failed");
+      }
+
       const { token, id } = response;
       setStoredToken(token);
       setToken(token);
       setId(id);
+
+      return "success";
     } catch (error) {
       console.error("Login failed", error);
-      throw error;
+      return "error";
     }
   }, []);
 
@@ -102,18 +127,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setId(null);
   }, []);
 
-  // TODO: Conect to backend
   // Fetch user data when token changes
   useEffect(() => {
     const fetchUserData = async () => {
       if (token) {
         try {
-          const userData = await api<User>(
-            "/api/auth/me",
-            "GET",
-            { id },
-            token
-          );
+          const userData = await api<User>("/api/user", "GET", { id }, token);
           setUser(userData);
         } catch (error) {
           console.error("Failed to fetch user data:", error);

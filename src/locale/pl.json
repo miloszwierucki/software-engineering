@@ -4,7 +4,12 @@
       "tabs": {
         "logIn": "Zaloguj się",
         "signUp": "Zarejestruj się"
-      }
+      },
+      "error": "Błąd",
+      "error_default": "Coś poszło nie tak, spróbuj ponownie",
+      "error_empty": "Proszę wypełnić wszystkie pola",
+      "error_password": "Hasła nie pasują do siebie",
+      "error_password_short": "Hasło musi mieć co najmniej 8 znaków"
     },
     "loginPage": {
       "title": "Logowanie",
@@ -24,7 +29,13 @@
         "email": "Adres Email",
         "password": "Hasło",
         "repeatPassword": "Powtórz Hasło",
-        "phone": "Numer Telefonu"
+        "phone": "Numer Telefonu",
+        "role": {
+          "role": "Rola",
+          "donator": "Darczyńca",
+          "volunteer": "Dobroczyńca",
+          "victim": "Zabójca"
+        }
       },
       "terms": "Akceptuję regulamin",
       "button": "Zarejestruj się"

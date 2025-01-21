@@ -2,7 +2,7 @@ import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,14 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Toggle } from "@/components/ui/toggle";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const FALLBACK = "/";
 
@@ -39,11 +47,13 @@ function LoginComponent() {
 
   const [activeTab, setActiveTab] = useState("log-in");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
   const {
     t,
@@ -57,26 +67,89 @@ function LoginComponent() {
     changeLanguage(newLanguage);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setError("empty");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("password_short");
+      return;
+    }
+
     try {
-      await logIn(email, password);
+      const response = await logIn(email, password);
+
+      if (response === "error") {
+        throw new Error("Login failed");
+      }
       router.history.push(search.redirect || FALLBACK);
     } catch (error) {
+      setError("default");
       console.error("Login failed", error);
     }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!email || !password || !firstname || !surname || !phone || !role) {
+      setError("empty");
+      return;
+    }
+
+    if (password !== repeatPassword) {
+      setError("password");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("password_short");
+      return;
+    }
+
     try {
-      await signUp(email, password, firstname, surname, phone);
+      const response = await signUp(
+        email,
+        password,
+        firstname,
+        surname,
+        phone,
+        role
+      );
+
+      if (response === "error") {
+        throw new Error("Sign up failed");
+      }
       router.history.push(search.redirect || FALLBACK);
     } catch (error) {
+      setError("default");
       console.error("Sign up failed", error);
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  }, [error]);
+
   return (
-    <main className="flex h-screen items-center justify-center bg-sign-up bg-cover bg-center bg-no-repeat">
+    <main className="relative flex h-screen items-center justify-center bg-sign-up bg-cover bg-center bg-no-repeat">
+      {error && (
+        <Alert
+          variant="destructive"
+          className="absolute bottom-8 right-8 w-full max-w-sm bg-white"
+        >
+          <AlertTitle>{t("auth.error")}</AlertTitle>
+          <AlertDescription>{t(`auth.error_${error}`)}</AlertDescription>
+        </Alert>
+      )}
       <Card className="w-full max-w-md p-2">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex w-full">
@@ -99,35 +172,38 @@ function LoginComponent() {
               <CardDescription>{t("loginPage.description")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">{t("loginPage.form.email")}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="mail@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+              <form onSubmit={handleLogin}>
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">{t("loginPage.form.email")}</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="mail@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">
+                      {t("loginPage.form.password")}
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="********"
+                      value={password}
+                      minLength={8}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    {t("loginPage.button")}
+                  </Button>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">
-                    {t("loginPage.form.password")}
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button onClick={handleLogin} className="w-full">
-                  {t("loginPage.button")}
-                </Button>
-              </div>
+              </form>
             </CardContent>
           </TabsContent>
 
@@ -140,95 +216,122 @@ function LoginComponent() {
             </CardHeader>
 
             <CardContent>
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="firstname">
-                    {t("signUpPage.form.firstname")}
-                  </Label>
-                  <Input
-                    id="firstname"
-                    type="firstname"
-                    placeholder="..."
-                    value={firstname}
-                    onChange={(e) => setFirstname(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="surname">
-                    {t("signUpPage.form.surname")}
-                  </Label>
-                  <Input
-                    id="surname"
-                    type="surname"
-                    placeholder="..."
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                    required
-                  />
-                </div>
+              <form onSubmit={handleSignUp}>
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="firstname">
+                      {t("signUpPage.form.firstname")}
+                    </Label>
+                    <Input
+                      id="firstname"
+                      type="firstname"
+                      placeholder="..."
+                      value={firstname}
+                      onChange={(e) => setFirstname(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="surname">
+                      {t("signUpPage.form.surname")}
+                    </Label>
+                    <Input
+                      id="surname"
+                      type="surname"
+                      placeholder="..."
+                      value={surname}
+                      onChange={(e) => setSurname(e.target.value)}
+                      required
+                    />
+                  </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="email">{t("signUpPage.form.email")}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="mail@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="surname">
+                      {t("signUpPage.form.role.role")}
+                    </Label>
+                    <Select onValueChange={(value) => setRole(value)} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="donator">
+                          {t("signUpPage.form.role.donator")}
+                        </SelectItem>
+                        <SelectItem value="volunteer">
+                          {t("signUpPage.form.role.volunteer")}
+                        </SelectItem>
+                        <SelectItem value="victim">
+                          {t("signUpPage.form.role.victim")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="password">
-                    {t("signUpPage.form.password")}
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="********"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">{t("signUpPage.form.email")}</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="mail@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="repeatPassword">
-                    {t("signUpPage.form.repeatPassword")}
-                  </Label>
-                  <Input
-                    id="repeatPassword"
-                    type="password"
-                    placeholder="********"
-                    value={repeatPassword}
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">
+                      {t("signUpPage.form.password")}
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="********"
+                      value={password}
+                      minLength={8}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">{t("signUpPage.form.phone")}</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+48000000000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
-                </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="repeatPassword">
+                      {t("signUpPage.form.repeatPassword")}
+                    </Label>
+                    <Input
+                      id="repeatPassword"
+                      type="password"
+                      placeholder="********"
+                      value={repeatPassword}
+                      minLength={8}
+                      onChange={(e) => setRepeatPassword(e.target.value)}
+                      required
+                    />
+                  </div>
 
-                <div className="inline-flex items-center gap-2">
-                  <Checkbox id="terms" required />
-                  <Label htmlFor="terms">{t("signUpPage.terms")}</Label>
-                </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phone">{t("signUpPage.form.phone")}</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="000000000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      pattern="[0-9]{9}"
+                      required
+                    />
+                  </div>
 
-                <Button onClick={handleSignUp} className="mt-2 w-full">
-                  {t("signUpPage.button")}
-                </Button>
-              </div>
+                  <div className="inline-flex items-center gap-2">
+                    <Checkbox id="terms" required />
+                    <Label htmlFor="terms">{t("signUpPage.terms")}</Label>
+                  </div>
+
+                  <Button type="submit" className="mt-2 w-full">
+                    {t("signUpPage.button")}
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </TabsContent>
         </Tabs>

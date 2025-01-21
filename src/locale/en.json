@@ -4,7 +4,12 @@
       "tabs": {
         "logIn": "Log In",
         "signUp": "Sign Up"
-      }
+      },
+      "error": "Error",
+      "error_default": "Something went wrong, please try again",
+      "error_empty": "Please fill all fields",
+      "error_password": "Passwords do not match",
+      "error_password_short": "Password must be at least 8 characters"
     },
     "loginPage": {
       "title": "Login",
@@ -24,7 +29,13 @@
         "email": "Email",
         "password": "Password",
         "repeatPassword": "Repeat Password",
-        "phone": "Phone number"
+        "phone": "Phone number",
+        "role": {
+          "role": "Role",
+          "donator": "Donator",
+          "volunteer": "Volunteer",
+          "victim": "Victim"
+        }
       },
       "terms": "Accept terms and condition",
       "button": "Sign Up"
