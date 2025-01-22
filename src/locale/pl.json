@@ -51,6 +51,13 @@
         "repeatPassword": "Powtórz Hasło",
         "phone": "Numer Telefonu"
       },
+      "alert": {
+        "title": "Aktualizacja konta",
+        "empty": "Proszę wypełnić wszystkie pola",
+        "error": "Wystąpił błąd podczas aktualizowania konta",
+        "password": "Hasła nie pasują do siebie",
+        "password_short": "Hasło musi mieć co najmniej 8 znaków"
+      },
       "dataButton": "Zatwierdź zmiany",
       "passwordButton": "Zmień hasło"
     },

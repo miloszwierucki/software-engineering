@@ -3,20 +3,74 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toggle } from "@/components/ui/toggle";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { api } from "@/utils/api";
+import { Response, useAuth } from "@/auth";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const Route = createFileRoute("/_auth/account")({
   component: AccountComponent,
 });
 
-// TODO: Add account page
+interface UserData {
+  firstname: string;
+  surname: string;
+  email: string;
+  phone: string;
+}
+
+interface UserPasswordData {
+  password: string;
+  repeatPassword: string;
+}
+
 function AccountComponent() {
   const {
     t,
     i18n: { changeLanguage, language },
   } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(language);
+  const [status, setStatus] = useState<string>("");
+  const { user } = useAuth();
+  const [userData, setUserData] = useState<UserData>(
+    user ?? {
+      firstname: "",
+      surname: "",
+      email: "",
+      phone: "",
+    }
+  );
+  const [passwordData, setPasswordData] = useState<UserPasswordData>({
+    password: "",
+    repeatPassword: "",
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await api<UserData>("/user", "GET");
+      setUserData(response);
+    };
+    fetchUserData();
+  }, []);
+
+  const handleChangeUserDataInput = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+    if (name in userData) {
+      setUserData((prevData) => ({ ...prevData, [name]: value }));
+    }
+  };
+
+  const handleChangePasswordDataInput = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+    if (name in passwordData) {
+      setPasswordData((prevData) => ({ ...prevData, [name]: value }));
+    }
+  };
 
   const handleChangeLanguage = () => {
     const newLanguage = currentLanguage === "en" ? "pl" : "en";
@@ -24,13 +78,83 @@ function AccountComponent() {
     changeLanguage(newLanguage);
   };
 
+  const handleChangeUserData = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      !userData.email ||
+      !userData.phone ||
+      !userData.firstname ||
+      !userData.surname
+    ) {
+      setStatus("empty");
+      return;
+    }
+
+    try {
+      const response = await api<Response>("/user", "PUT", userData);
+      setStatus(response.status);
+    } catch (error) {
+      console.error("Failed to update user data:", error);
+      setStatus("error");
+    }
+  };
+
+  const handleChangePasswordData = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    if (!passwordData.password || !passwordData.repeatPassword) {
+      setStatus("empty");
+      return;
+    }
+
+    if (passwordData.password !== passwordData.repeatPassword) {
+      setStatus("password");
+      return;
+    }
+
+    if (passwordData.password.length < 8) {
+      setStatus("password_short");
+      return;
+    }
+
+    try {
+      const response = await api<Response>("/user/password", "PUT", userData);
+      setStatus(response.status);
+    } catch (error) {
+      console.error("Failed to update password:", error);
+      setStatus("error");
+    }
+  };
+
+  useEffect(() => {
+    if (status) {
+      setTimeout(() => {
+        setStatus("");
+      }, 3000);
+    }
+  }, [status]);
+
   return (
     <>
-      <div className="bg-panel-gradient inline-flex w-full items-center justify-between gap-2 bg-cover bg-no-repeat px-4 py-6">
+      {status && (
+        <Alert
+          variant={status === "success" ? "default" : "destructive"}
+          className="absolute bottom-8 right-8 w-full max-w-sm bg-white"
+        >
+          <AlertTitle>{t("accountPage.alert.title")}</AlertTitle>
+          <AlertDescription>
+            {t(`accountPage.alert.${status}`)}
+          </AlertDescription>
+        </Alert>
+      )}
+      <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
         <div>
           <h1 className="text-4xl font-semibold">{t("accountPage.title")}</h1>
           <p className="ml-1 font-light text-gray-600">
-          {t("accountPage.subtitle")}
+            {t("accountPage.subtitle")}
           </p>
         </div>
 
@@ -44,57 +168,97 @@ function AccountComponent() {
       </div>
 
       <div className="mx-auto grid w-full grid-cols-2 gap-10 px-4">
-        <div className="flex flex-col gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="firstname">{t("accountPage.form.firstname")}</Label>
-            <Input id="firstname" type="firstname" placeholder="..." required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="surname">{t("accountPage.form.surname")}</Label>
-            <Input id="surname" type="surname" placeholder="..." required />
-          </div>
+        <form onSubmit={handleChangeUserData}>
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="firstname">
+                {t("accountPage.form.firstname")}
+              </Label>
+              <Input
+                id="firstname"
+                name="firstname"
+                type="text"
+                placeholder="..."
+                required
+                onChange={handleChangeUserDataInput}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="surname">{t("accountPage.form.surname")}</Label>
+              <Input
+                id="surname"
+                name="surname"
+                type="text"
+                placeholder="..."
+                required
+                onChange={handleChangeUserDataInput}
+              />
+            </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="email">{t("accountPage.form.email")}</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="mail@example.com"
-              required
-            />
+            <div className="grid gap-2">
+              <Label htmlFor="email">{t("accountPage.form.email")}</Label>
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="mail@example.com"
+                required
+                onChange={handleChangeUserDataInput}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="phone">{t("accountPage.form.phone")}</Label>
+              <Input
+                id="phone"
+                type="tel"
+                name="phone"
+                placeholder="000000000"
+                required
+                onChange={handleChangeUserDataInput}
+              />
+            </div>
+            <Button className="mt-2 w-full" type="submit">
+              {t("accountPage.dataButton")}
+            </Button>
           </div>
+        </form>
 
-          <div className="grid gap-2">
-            <Label htmlFor="phone">{t("accountPage.form.phone")}</Label>
-            <Input id="phone" type="tel" placeholder="+48000000000" required />
+        <form onSubmit={handleChangePasswordData}>
+          <div className="flex flex-col gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="password">{t("accountPage.form.password")}</Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="********"
+                minLength={8}
+                required
+                onChange={handleChangePasswordDataInput}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="repeatPassword">
+                {t("accountPage.form.repeatPassword")}
+              </Label>
+              <Input
+                id="repeatPassword"
+                type="password"
+                name="repeatPassword"
+                placeholder="********"
+                minLength={8}
+                required
+                onChange={handleChangePasswordDataInput}
+              />
+            </div>
+
+            <Button className="mt-2 w-full" type="submit">
+              {t("accountPage.passwordButton")}
+            </Button>
           </div>
-
-          <Button className="mt-2 w-full">{t("accountPage.dataButton")}</Button>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="password">{t("accountPage.form.password")}</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="********"
-              required
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="repeatPassword">{t("accountPage.form.repeatPassword")}</Label>
-            <Input
-              id="repeatPassword"
-              type="password"
-              placeholder="********"
-              required
-            />
-          </div>
-
-          <Button className="mt-2 w-full">{t("accountPage.passwordButton")}</Button>
-        </div>
+        </form>
       </div>
     </>
   );

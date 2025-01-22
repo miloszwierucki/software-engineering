@@ -51,6 +51,13 @@
         "repeatPassword": "Repeat Password",
         "phone": "Phone number"
       },
+      "alert": {
+        "title": "Account Update",
+        "empty": "Please fill in all fields",
+        "error": "An error occurred while updating your account",
+        "password": "Passwords do not match",
+        "password_short": "Password must be at least 8 characters long"
+      },
       "dataButton": "Apply Changes",
       "passwordButton": "Change Password"
     },

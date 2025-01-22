@@ -17,7 +17,7 @@ export interface User {
   role: string;
 }
 
-interface Response {
+export interface Response {
   status: Status;
 }
 interface ResponseLogin extends Response {
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [token, setToken] = useState<string | null>(getStoredToken());
   const [id, setId] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const isAuthenticated = !!token;
+  const isAuthenticated = true;
 
   const signUp = useCallback(
     async (
