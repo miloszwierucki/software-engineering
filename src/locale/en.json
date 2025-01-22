@@ -56,7 +56,8 @@
         "empty": "Please fill in all fields",
         "error": "An error occurred while updating your account",
         "password": "Passwords do not match",
-        "password_short": "Password must be at least 8 characters long"
+        "password_short": "Password must be at least 8 characters long",
+        "success": "Account updated successfully"
       },
       "dataButton": "Apply Changes",
       "passwordButton": "Change Password"
@@ -69,12 +70,23 @@
       "manageTitle": "Manage",
       "addTitle": "Add"
     },
+    "donation": {
+      "alert": {
+        "title": "Add new donation",
+        "empty": "Please fill in all fields",
+        "error": "An error occurred while updating your donation",
+        "success": "Donation updated successfully"
+      }
+    },
     "donationsTable": {
       "title": "Donations",
       "subtitle": "All donations and info about them",
       "donationID": "Donation ID",
       "donatorName": "Donator",
-      "resources": "Resources",
+      "resource": {
+        "name": "Name",
+        "quantity": "Quantity"
+      },
       "status": "Status",
       "donationDate": "Donate Date",
       "acceptDate": "Accept Date",
@@ -90,7 +102,8 @@
         "donationDate": "Donation Date",
         "acceptDate": "Accept Date",
         "status": "Status",
-        "saveButton": "Save changes"
+        "saveButton": "Save changes",
+        "quantity": "Quantity"
       },
       "nextButton": "Next",
       "previousButton": "Previous",
@@ -98,10 +111,12 @@
       "column": {
         "label": "Columns",
         "donator_name": "Donator",
-        "resources": "Resources",
+        "resource_name": "Resource name",
+        "resource_quantity": "Resource quantity",
         "Status": "Status",
         "donationDate": "Donate Date",
-        "acceptDate": "Accept Date"
+        "acceptDate": "Accept Date",
+        "quantity": "Quantity"
       }
     },
     "usersNav": {

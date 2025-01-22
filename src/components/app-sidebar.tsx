@@ -2,16 +2,11 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Toggle } from "@/components/ui/toggle";
 import {
-  // Bot,
   Command,
   Send,
   ListPlus,
   ListTree,
   Gift,
-  Frame,
-  Map,
-  PieChart,
-  SquareTerminal,
   FileText,
   MessagesSquare,
   Library,
@@ -28,21 +23,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useState } from "react";
-
-const data = {
-  // TODO: add user data
-  user: {
-    name: "sheldon",
-    email: "system@slave.com",
-    avatar: "",
-  },
-  // TODO: add all nav items
-};
+import { useAuth } from "@/auth";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { t, i18n: { changeLanguage, language } } = useTranslation();
+  const {
+    t,
+    i18n: { changeLanguage, language },
+  } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = React.useState(language);
+  const { user } = useAuth();
 
   const handleChangeLanguage = () => {
     const newLanguage = currentLanguage === "en" ? "pl" : "en";
@@ -110,7 +99,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           isDisabled: false,
         },
       ],
-    },{
+    },
+    {
       title: t("sideNavBar.chatTitle"),
       link: { to: "/chat" },
       icon: MessagesSquare,
@@ -157,7 +147,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            name: `${user?.firstname || ""} ${user?.surname || ""}`,
+            email: user?.email || "",
+            avatar: "",
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   );

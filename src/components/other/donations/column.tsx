@@ -1,3 +1,5 @@
+import { ColumnDef } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 import {
   ArrowUpDown,
   Check,
@@ -5,8 +7,8 @@ import {
   Clock,
   MoreHorizontal,
 } from "lucide-react";
-import { ColumnDef } from "@tanstack/react-table";
 
+import { Donation } from "@/routes/_auth/donations";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,25 +17,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTranslation } from "react-i18next";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export interface Donation {
-  donation_id: number;
-  donator: {
-    userId: number;
-    name: string;
-  };
-  status: "PENDING" | "ACCEPTED" | "COMPLETED";
-  donationDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
-  acceptDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
-  resources: {
-    resourceId: number;
-    name: string;
-    quantity: number;
-  }[];
-}
 
 export const columns = () => {
   // TODO: Please uncomment me :P
@@ -88,17 +74,22 @@ export const columns = () => {
       ),
     },
     {
-      accessorKey: "resources",
-      header: t("donationsTable.resources"),
-      cell: ({ row }) => {
-        const arr: any[] = row.getValue("resources");
-
-        return (
-          <div className="truncate text-right font-medium">
-            {arr.map((resource) => resource.name).join(", ")}
-          </div>
-        );
-      },
+      accessorKey: "resource.name",
+      header: t("donationsTable.resource.name"),
+      cell: ({ row }) => (
+        <div className="truncate text-right font-medium">
+          {row.original.resource.name}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "resource.quantity",
+      header: t("donationsTable.resource.quantity"),
+      cell: ({ row }) => (
+        <div className="truncate text-right font-medium">
+          {row.original.resource.quantity}
+        </div>
+      ),
     },
     {
       accessorKey: t("donationsTable.status"),
@@ -114,12 +105,12 @@ export const columns = () => {
         );
       },
       cell: ({ row }) =>
-        row.getValue("status") === "PENDING" ? (
+        row.original.status === "PENDING" ? (
           <div className="inline-flex items-center gap-1 text-gray-400">
             <Clock size="14" />
             Pending
           </div>
-        ) : row.getValue("status") === "ACCEPTED" ? (
+        ) : row.original.status === "ACCEPTED" ? (
           <div className="inline-flex items-center gap-1 text-lime-400">
             <Check size="14" />
             Accepted
@@ -149,7 +140,7 @@ export const columns = () => {
         );
       },
       cell: ({ row }) => {
-        const date = new Date(row.getValue("donationDate"));
+        const date = new Date(row.original.donationDate);
 
         if (date instanceof Date && !isNaN(date.getTime())) {
           const formatted = date.toLocaleDateString("en-US", {
@@ -181,7 +172,9 @@ export const columns = () => {
         );
       },
       cell: ({ row }) => {
-        const date = new Date(row.getValue("acceptDate"));
+        const date = row.original.acceptDate
+          ? new Date(row.original.acceptDate)
+          : null;
 
         if (date instanceof Date && !isNaN(date.getTime())) {
           const formatted = date.toLocaleDateString("en-US", {

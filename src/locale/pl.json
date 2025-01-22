@@ -56,7 +56,8 @@
         "empty": "Proszę wypełnić wszystkie pola",
         "error": "Wystąpił błąd podczas aktualizowania konta",
         "password": "Hasła nie pasują do siebie",
-        "password_short": "Hasło musi mieć co najmniej 8 znaków"
+        "password_short": "Hasło musi mieć co najmniej 8 znaków",
+        "success": "Konto zaktualizowane pomyślnie"
       },
       "dataButton": "Zatwierdź zmiany",
       "passwordButton": "Zmień hasło"
@@ -69,12 +70,20 @@
       "manageTitle": "Zarządzaj",
       "addTitle": "Dodaj"
     },
+    "donation": {
+      "alert": {
+        "title": "Dodaj nową darowiznę",
+        "empty": "Proszę wypełnić wszystkie pola",
+        "error": "Wystąpił błąd podczas aktualizowania darowizny",
+        "success": "Darowizna zaktualizowana pomyślnie"
+      }
+    },
     "donationsTable": {
       "title": "Darowizny",
       "subtitle": "Informacje o wszystkich darowiznach",
       "donationID": "Numer darowizny",
       "donatorName": "Darczyńca",
-      "resources": "Zasoby",
+      "resource": { "name": "Nazwa", "quantity": "Ilość" },
       "status": "Status",
       "donationDate": "Data przekazania",
       "acceptDate": "Data akceptacji",
@@ -90,7 +99,8 @@
         "donationDate": "Data darowizny",
         "acceptDate": "Data akceptacji",
         "status": "Status",
-        "saveButton": "Dodaj darowiznę"
+        "saveButton": "Dodaj darowiznę",
+        "quantity": "Ilość"
       },
       "nextButton": "Następna strona",
       "previousButton": "Poprzednia strona",
@@ -98,10 +108,12 @@
       "column": {
         "label": "Kolumny",
         "donator_name": "Darczyńca",
-        "resources": "Zasoby",
+        "resource_name": "Nazwa zasobu",
+        "resource_quantity": "Ilość zasobu",
         "Status": "Status",
         "donationDate": "Data przekazania",
-        "acceptDate": "Data akceptacji"
+        "acceptDate": "Data akceptacji",
+        "quantity": "Ilość"
       }
     },
     "usersNav": {

@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Donation } from "@/routes/_auth/donations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,7 +33,6 @@ import {
 import { ChevronDown } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Donation } from "./column";
 import { EditDonation } from "./edit";
 
 interface DataTableProps<TData, TValue> {

@@ -1,12 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useTranslation } from "react-i18next";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { DataTable } from "@/components/other/donations/data-table";
 import { columns } from "@/components/other/donations/column";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Response } from "@/auth";
+import { api } from "@/utils/api";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +34,7 @@ export const Route = createFileRoute("/_auth/donations")({
   },
 });
 
-interface Donation {
+export interface Donation {
   donation_id: number;
   donator: {
     userId: number;
@@ -39,195 +42,93 @@ interface Donation {
   };
   status: "PENDING" | "ACCEPTED" | "COMPLETED";
   donationDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
-  acceptDate: string; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
-  resources: {
+  acceptDate: string | null; // ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
+  resource: {
     resourceId: number;
     name: string;
     quantity: number;
-  }[];
+  };
 }
 
-const donations: Donation[] = [
-  {
-    donation_id: 1,
-    donator: { userId: 4, name: "Ewa Zielińska" },
-    status: "COMPLETED",
-    donationDate: "2023-11-06T00:00:00.000Z",
-    acceptDate: "2023-11-24T00:00:00.000Z",
-    resources: [
-      { resourceId: 3, name: "Medical Supplies", quantity: 10 },
-      { resourceId: 1, name: "Blanket", quantity: 5 },
-    ],
-  },
-  {
-    donation_id: 2,
-    donator: { userId: 2, name: "Anna Black" },
-    status: "PENDING",
-    donationDate: "2023-05-23T00:00:00.000Z",
-    acceptDate: "2023-05-26T00:00:00.000Z",
-    resources: [
-      { resourceId: 2, name: "Canned Food", quantity: 15 },
-      { resourceId: 3, name: "Medical Supplies", quantity: 7 },
-    ],
-  },
-  {
-    donation_id: 3,
-    donator: { userId: 5, name: "Michał Nowak" },
-    status: "COMPLETED",
-    donationDate: "2023-07-03T00:00:00.000Z",
-    acceptDate: "2023-07-09T00:00:00.000Z",
-    resources: [{ resourceId: 3, name: "Medical Supplies", quantity: 12 }],
-  },
-  {
-    donation_id: 4,
-    donator: { userId: 3, name: "Krzysztof Przyczepa" },
-    status: "ACCEPTED",
-    donationDate: "2023-11-26T00:00:00.000Z",
-    acceptDate: "2023-12-08T00:00:00.000Z",
-    resources: [
-      { resourceId: 1, name: "Blanket", quantity: 20 },
-      { resourceId: 2, name: "Canned Food", quantity: 30 },
-    ],
-  },
-  {
-    donation_id: 5,
-    donator: { userId: 2, name: "Anna Black" },
-    status: "COMPLETED",
-    donationDate: "2023-10-21T00:00:00.000Z",
-    acceptDate: "2023-11-19T00:00:00.000Z",
-    resources: [{ resourceId: 2, name: "Canned Food", quantity: 18 }],
-  },
-  {
-    donation_id: 6,
-    donator: { userId: 1, name: "Robert Lewandowski" },
-    status: "PENDING",
-    donationDate: "2023-03-12T00:00:00.000Z",
-    acceptDate: "2023-03-20T00:00:00.000Z",
-    resources: [
-      { resourceId: 1, name: "Blanket", quantity: 8 },
-      { resourceId: 2, name: "Canned Food", quantity: 25 },
-    ],
-  },
-  {
-    donation_id: 7,
-    donator: { userId: 4, name: "Ewa Zielińska" },
-    status: "ACCEPTED",
-    donationDate: "2023-04-15T00:00:00.000Z",
-    acceptDate: "2023-05-01T00:00:00.000Z",
-    resources: [{ resourceId: 3, name: "Medical Supplies", quantity: 10 }],
-  },
-  {
-    donation_id: 8,
-    donator: { userId: 3, name: "Krzysztof Przyczepa" },
-    status: "COMPLETED",
-    donationDate: "2023-09-10T00:00:00.000Z",
-    acceptDate: "2023-09-20T00:00:00.000Z",
-    resources: [
-      { resourceId: 2, name: "Canned Food", quantity: 12 },
-      { resourceId: 3, name: "Medical Supplies", quantity: 6 },
-    ],
-  },
-  {
-    donation_id: 9,
-    donator: { userId: 2, name: "Anna Black" },
-    status: "PENDING",
-    donationDate: "2023-02-22T00:00:00.000Z",
-    acceptDate: "2023-03-01T00:00:00.000Z",
-    resources: [{ resourceId: 1, name: "Blanket", quantity: 4 }],
-  },
-  {
-    donation_id: 10,
-    donator: { userId: 1, name: "Robert Lewandowski" },
-    status: "ACCEPTED",
-    donationDate: "2023-08-18T00:00:00.000Z",
-    acceptDate: "2023-08-25T00:00:00.000Z",
-    resources: [
-      { resourceId: 2, name: "Canned Food", quantity: 22 },
-      { resourceId: 1, name: "Blanket", quantity: 14 },
-    ],
-  },
-  {
-    donation_id: 11,
-    donator: { userId: 5, name: "Michał Nowak" },
-    status: "COMPLETED",
-    donationDate: "2023-07-05T00:00:00.000Z",
-    acceptDate: "2023-07-15T00:00:00.000Z",
-    resources: [{ resourceId: 3, name: "Medical Supplies", quantity: 9 }],
-  },
-  {
-    donation_id: 12,
-    donator: { userId: 4, name: "Ewa Zielińska" },
-    status: "PENDING",
-    donationDate: "2023-01-20T00:00:00.000Z",
-    acceptDate: "2023-01-28T00:00:00.000Z",
-    resources: [
-      { resourceId: 1, name: "Blanket", quantity: 7 },
-      { resourceId: 3, name: "Medical Supplies", quantity: 4 },
-    ],
-  },
-  {
-    donation_id: 13,
-    donator: { userId: 3, name: "Krzysztof Przyczepa" },
-    status: "ACCEPTED",
-    donationDate: "2023-05-25T00:00:00.000Z",
-    acceptDate: "2023-06-10T00:00:00.000Z",
-    resources: [{ resourceId: 2, name: "Canned Food", quantity: 15 }],
-  },
-  {
-    donation_id: 14,
-    donator: { userId: 2, name: "Anna Black" },
-    status: "COMPLETED",
-    donationDate: "2023-12-01T00:00:00.000Z",
-    acceptDate: "2023-12-10T00:00:00.000Z",
-    resources: [{ resourceId: 3, name: "Medical Supplies", quantity: 5 }],
-  },
-  {
-    donation_id: 15,
-    donator: { userId: 1, name: "Robert Lewandowski" },
-    status: "PENDING",
-    donationDate: "2023-11-01T00:00:00.000Z",
-    acceptDate: "2023-11-07T00:00:00.000Z",
-    resources: [
-      { resourceId: 1, name: "Blanket", quantity: 10 },
-      { resourceId: 2, name: "Canned Food", quantity: 20 },
-    ],
-  },
-];
-
 function DonationsRoute() {
-  const [data, setData] = useState<Donation[]>(donations);
+  const [data, setData] = useState<Donation[]>([]);
   const { new: createNew } = Route.useSearch();
   const [openDialog, setOpenDialog] = useState(createNew);
-
   const { t } = useTranslation();
+  const [status, setStatus] = useState<string>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await api<Donation[]>("/donations", "GET");
+      setData(response);
+    };
+    fetchData();
+  }, []);
 
   const [newDonation, setNewDonation] = useState<{
     donatorName: string;
-    resources: {
-      resourceId: number;
+    resource: {
       name: string;
       quantity: number;
-    }[];
+    };
   }>({
     donatorName: "",
-    resources: [],
+    resource: {
+      name: "",
+      quantity: 0,
+    },
   });
 
-  const handleAddNewDonation = () => {
-    setData([
-      ...data,
-      {
-        donation_id: data.length + 1,
-        donator: { userId: 0, name: newDonation.donatorName },
-        status: "PENDING",
-        donationDate: new Date().toISOString(),
-        acceptDate: "",
-        resources: newDonation.resources,
-      },
-    ]);
+  const handleAddDonation = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    setOpenDialog(false);
+    if (
+      !newDonation.donatorName ||
+      !newDonation.resource.name ||
+      !newDonation.resource.quantity
+    ) {
+      setStatus("empty");
+      return;
+    }
+
+    const donation: Donation = {
+      donation_id: -1,
+      donator: {
+        userId: -1,
+        name: newDonation.donatorName,
+      },
+      status: "PENDING",
+      donationDate: new Date().toISOString(),
+      acceptDate: null,
+      resource: {
+        ...newDonation.resource,
+        resourceId: -1,
+      },
+    };
+
+    try {
+      const response = await api<Response>("/api/donations", "POST", donation);
+
+      if (response.status === "error") {
+        throw new Error("Sign up failed");
+      }
+
+      setStatus(response.status);
+      setData([...data, donation]);
+      setOpenDialog(false);
+    } catch (error) {
+      console.error("Sign up failed", error);
+      setStatus("error");
+    }
   };
+
+  useEffect(() => {
+    if (status) {
+      setTimeout(() => {
+        setStatus("");
+      }, 3000);
+    }
+  }, [status]);
 
   return (
     <>
@@ -248,61 +149,97 @@ function DonationsRoute() {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{t("donationsTable.popup.title")}</DialogTitle>
-              <DialogDescription>
-                {t("donationsTable.popup.subtitle")}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="donator" className="text-right">
-                  {t("donationsTable.popup.donator")}
-                </Label>
-                <Input
-                  id="donator"
-                  placeholder="Pedro Duarte"
-                  className="col-span-3"
-                  onChange={(event) =>
-                    setNewDonation((prev) => ({
-                      ...prev,
-                      donatorName: event.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="resources" className="text-right">
-                  {t("donationsTable.popup.resources")}
-                </Label>
-                <Input
-                  id="resources"
-                  placeholder="Apple, Banana, Orange"
-                  className="col-span-3"
-                  onChange={(event) => {
-                    const resources = event.target.value.split(",");
+            {status && (
+              <Alert
+                variant={status === "success" ? "default" : "destructive"}
+                className="absolute -bottom-24 left-1/2 w-full max-w-sm -translate-x-1/2 bg-white"
+              >
+                <AlertTitle>{t("donation.alert.title")}</AlertTitle>
+                <AlertDescription>
+                  {t(`donation.alert.${status}`)}
+                </AlertDescription>
+              </Alert>
+            )}
 
-                    setNewDonation((prev) => ({
-                      ...prev,
-                      resources: resources.map((resource) => ({
-                        resourceId: 0,
-                        name: resource,
-                        quantity: 0,
-                      })),
-                    }));
-                  }}
-                />
+            <form onSubmit={handleAddDonation}>
+              <DialogHeader>
+                <DialogTitle>{t("donationsTable.popup.title")}</DialogTitle>
+                <DialogDescription>
+                  {t("donationsTable.popup.subtitle")}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="donator" className="text-right">
+                    {t("donationsTable.popup.donator")}
+                  </Label>
+                  <Input
+                    id="donator"
+                    placeholder="Pedro Duarte"
+                    className="col-span-3"
+                    required
+                    onChange={(event) =>
+                      setNewDonation((prev) => ({
+                        ...prev,
+                        donatorName: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="resource" className="text-right">
+                    {t("donationsTable.popup.resources")}
+                  </Label>
+                  <Input
+                    id="resource"
+                    placeholder="Apple"
+                    className="col-span-3"
+                    type="text"
+                    required
+                    onChange={(event) => {
+                      setNewDonation((prev) => ({
+                        ...prev,
+                        resource: {
+                          ...prev.resource,
+                          name: event.target.value,
+                        },
+                      }));
+                    }}
+                  />
+                  <Label htmlFor="quantity" className="text-right">
+                    {t("donationsTable.popup.quantity")}
+                  </Label>
+                  <Input
+                    id="quantity"
+                    placeholder="10"
+                    type="number"
+                    pattern="[0-9]*"
+                    className="col-span-3"
+                    required
+                    onChange={(event) => {
+                      const quantity = Number(event.target.value);
+
+                      setNewDonation((prev) => ({
+                        ...prev,
+                        resource: {
+                          ...prev.resource,
+                          quantity: quantity,
+                        },
+                      }));
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleAddNewDonation}>
-                {t("donationsTable.popup.saveButton")}
-              </Button>
-            </DialogFooter>
+
+              <DialogFooter>
+                <Button type="submit">
+                  {t("donationsTable.popup.saveButton")}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
-
       <div className="mx-auto w-full px-4">
         <DataTable columns={columns()} data={data} />
       </div>

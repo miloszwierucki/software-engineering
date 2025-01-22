@@ -1,3 +1,7 @@
+import { useTranslation } from "react-i18next";
+
+import { DatePicker } from "@/components/ui/data-picker";
+import { Donation } from "@/routes/_auth/donations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,9 +14,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Donation } from "./column";
-import { useTranslation } from "react-i18next";
-import { DatePicker } from "@/components/ui/data-picker";
 import {
   Select,
   SelectContent,
