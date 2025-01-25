@@ -83,7 +83,10 @@
       "subtitle": "Informacje o wszystkich darowiznach",
       "donationID": "Numer darowizny",
       "donatorName": "Darczyńca",
-      "resource": { "name": "Nazwa", "quantity": "Ilość" },
+      "resource": { 
+        "name": "Nazwa", 
+        "quantity": "Ilość" 
+      },
       "status": "Status",
       "donationDate": "Data przekazania",
       "acceptDate": "Data akceptacji",
@@ -225,6 +228,28 @@
     "unauthorized": {
       "title": "Twoje konto nie ma dostępu do tej strony",
       "message": "Skontaktuj się z administratorem"
+    },
+    "reports": {
+      "generate": "Generuj Raport",
+      "select_options": "Wybierz opcje generowania",
+      "type": "Typ raportu",
+      "format": "Format raportu",
+      "select_type": "Wybierz typ",
+      "select_format": "Wybierz format",
+      "select_both": "Wybierz format i typ",
+      "generated": "Poprawnie wygenerowano raport",
+      "error": "Wystąpił błąd podczas generowania raportu",
+      "types": {
+        "volunteers": "Wolontariusze",
+        "victims": "Poszkodowani",
+        "resources": "Zasoby",
+        "donations": "Darowizny",
+        "donators": "Darczyńcy",
+        "charities": "Organizacje",
+        "authorities": "Władze",
+        "reports": "Zgłoszenia",
+        "evaluations": "Oceny"
+      }
     }
   }
 }

@@ -135,6 +135,7 @@
       "map": "Map",
       "my_reports": "My Reports",
       "charity": "Charity ID",
+      "category": "Category",
       "date": "Report Date",
       "status": "Status",
       "statuses": {
@@ -227,6 +228,28 @@
     "unauthorized": {
       "title": "Your unauthorized for this page",
       "message": "Please contact your administrator"
+    },
+    "reports": {
+      "generate": "Generate Review",
+      "select_options": "Select Review Options",
+      "type": "Review Type",
+      "format": "Review Format",
+      "select_type": "Select a review type",
+      "select_format": "Select a format",
+      "select_both": "Please select both type and format",
+      "generated": "Review generated successfully",
+      "error": "Error generating review",
+      "types": {
+        "volunteers": "Volunteers",
+        "victims": "Victims",
+        "resources": "Resources",
+        "donations": "Donations",
+        "donators": "Donators",
+        "charities": "Charities",
+        "authorities": "Authorities",
+        "reports": "Reports",
+        "evaluations": "Evaluations"
+      }
     }
   }
 }

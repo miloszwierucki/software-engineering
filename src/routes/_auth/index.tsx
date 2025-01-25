@@ -14,6 +14,22 @@ import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import { api } from "@/utils/api";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/_auth/")({
   component: IndexRoute,
@@ -98,6 +114,37 @@ function IndexRoute() {
   const marker3Position: [number, number] = [51.755961, 19.487287];
   const marker4Position: [number, number] = [51.754452, 19.483596];
 
+  const [reportType, setReportType] = useState<string>("");
+  const [reportFormat, setReportFormat] = useState<string>("");
+
+  const reportTypes = [
+    "volunteers",
+    "victims",
+    "resources",
+    "donations",
+    "donators",
+    "charities",
+    "authorities",
+    "reports",
+    "evaluations",
+  ];
+
+  const reportFormats = ["csv", "pdf", "json"];
+
+  const handleGenerateReport = async () => {
+    if (!reportType || !reportFormat) {
+      alert(t("reports.select_both"));
+      return;
+    }
+
+    try {
+      await api(`/reporting/generateAndExportReport/${reportType}/${reportFormat}`, "POST");
+      alert(t("reports.generated"));
+    } catch (error) {
+      alert(t("reports.error"));
+    }
+  };
+
   useEffect(() => {
     const fetchAvailableReports = async () => {
       try {
@@ -131,6 +178,8 @@ function IndexRoute() {
     fetchResources();
   }, []);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <>
       <div className="inline-flex w-full items-center justify-between gap-2 bg-panel-gradient bg-cover bg-no-repeat px-4 py-6">
@@ -142,6 +191,60 @@ function IndexRoute() {
             {t("index.subtitle")}
           </p>
         </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="gap-2 mx-3">
+              <Download className="h-4 w-4" />
+              {t("reports.generate")}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="z-[1101]">
+            <DialogHeader>
+              <DialogTitle>{t("reports.select_options")}</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <label>{t("reports.type")}</label>
+                <Select
+                  value={reportType}
+                  onValueChange={(value) => setReportType(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("reports.select_type")} />
+                  </SelectTrigger>
+                  <SelectContent className="z-[1102]">
+                    {reportTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(`reports.types.${type}`)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <label>{t("reports.format")}</label>
+                <Select
+                  value={reportFormat}
+                  onValueChange={(value) => setReportFormat(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("reports.select_format")} />
+                  </SelectTrigger>
+                  <SelectContent className="z-[1102]">
+                    {reportFormats.map((format) => (
+                      <SelectItem key={format} value={format}>
+                        {format.toUpperCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleGenerateReport}>
+                {t("reports.generate")}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="space-y-6 p-6">
 
@@ -149,13 +252,17 @@ function IndexRoute() {
           <CardHeader>
             <CardTitle>{t("index.map")}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="relative">
+            
             <div className="h-[400px] w-full rounded-md border">
               <MapContainer
                 center={centerPosition}
                 zoom={13}
                 style={{ height: "100%", width: "100%" }}
               >
+                {isDialogOpen && (
+                  <div className="absolute inset-0 bg-black/80 z-[1000]" />
+                )}
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
