@@ -76,10 +76,12 @@ export const Route = createFileRoute('/_auth/add_report')({
 })
 
 interface Location {
+  latitude: number;
+  longitude: number;
   city: string;
   street: string;
-  buildingnumber: number;
-  zipcode: string;
+  number: string;
+  zipCode: string;
 }
 
 interface Report {
@@ -97,7 +99,7 @@ function AddReport() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "Flood",
+      category: "Food",
       coordinates: position,
       city: "",
       street: "",
@@ -114,16 +116,26 @@ function AddReport() {
     try {
       const currentDate = new Date().toISOString();
       
+      const locationData: Location = {
+        latitude: values.coordinates.lat,
+        longitude: values.coordinates.lng,
+        city: values.city,
+        street: values.street,
+        number: values.buildingNumber,
+        zipCode: values.zipCode
+      };
+
+      const locationResponse = await api<Location>(
+        "/api/locations/",
+        "POST",
+        locationData
+      );
+
       const reportData: Report = {
         victim: { id: 1 },
         charity: { id: 1 },
         category: values.category,
-        location: {
-          city: values.city,
-          street: values.street,
-          buildingnumber: parseInt(values.buildingNumber),
-          zipcode: values.zipCode
-        },
+        location: locationResponse,
         status: 'PENDING',
         report_date: currentDate
       };
@@ -134,10 +146,10 @@ function AddReport() {
         reportData
       );
 
-      console.log("Report submitted successfully");
+      console.log("Report and location submitted successfully");
       
     } catch (error) {
-      console.error("Failed to submit report:", error);
+      console.error("Failed to submit report or location:", error);
     }
   }
 
@@ -172,10 +184,10 @@ function AddReport() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="z-[1000]">
-                      <SelectItem value="Flood">Flood</SelectItem>
-                      <SelectItem value="Fire">Fire</SelectItem>
-                      <SelectItem value="Earthquake">Earthquake</SelectItem>
-                      <SelectItem value="Tornado">Tornado</SelectItem>
+                      <SelectItem value="Food">Food</SelectItem>
+                      <SelectItem value="Shelter">Shelter</SelectItem>
+                      <SelectItem value="Cloths">Cloths</SelectItem>
+                      <SelectItem value="Medication">Medication</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
