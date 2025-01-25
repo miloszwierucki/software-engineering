@@ -19,12 +19,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { protectRoute } from "@/routes/_auth";
 
 type DonationSearch = {
   new: boolean;
 };
 
 export const Route = createFileRoute("/_auth/donations")({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['donator', 'charity']);
+  },
   component: DonationsRoute,
   validateSearch: (search: Record<string, unknown>): DonationSearch => {
     // validate and parse the search params into a typed state

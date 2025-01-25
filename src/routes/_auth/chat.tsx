@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next'
 import { Client, IFrame } from '@stomp/stompjs'
+import { protectRoute } from '@/routes/_auth'
 
 let isSub = false;
 
@@ -21,6 +22,9 @@ interface ChatFormValues {
 }
 
 export const Route = createFileRoute('/_auth/chat')({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['volunteer', 'charity', 'victim']);
+  },
   component: ChatComponent,
 })
 

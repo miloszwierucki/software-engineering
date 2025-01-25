@@ -19,8 +19,12 @@ import { Label } from "@/components/ui/label"
 import { useState, useEffect } from 'react'
 import { useTranslation } from "react-i18next";
 import { api } from "@/utils/api";
+import { protectRoute } from "@/routes/_auth";
 
 export const Route = createFileRoute('/_auth/add_resources')({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['charity']);
+  },
   component: RouteComponent,
 })
 

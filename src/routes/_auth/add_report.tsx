@@ -26,6 +26,7 @@ import 'leaflet/dist/leaflet.css'
 import { Icon } from 'leaflet'
 import { useTranslation } from "react-i18next";
 import { api } from "@/utils/api";
+import { protectRoute } from "@/routes/_auth";
 
 // Walidacja formularza
 const formSchema = z.object({
@@ -68,6 +69,9 @@ function MapMarker({ position, setPosition }: {
 }
 
 export const Route = createFileRoute('/_auth/add_report')({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['victim', 'charity']);
+  },
   component: AddReport,
 })
 

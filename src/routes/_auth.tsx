@@ -7,8 +7,33 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
+export const protectRoute = (
+  context: { auth: any },
+  allowedRoles: string | string[]
+) => {
+  const userRole = context.auth.user?.role.toLowerCase();
+  const roles = Array.isArray(allowedRoles) 
+    ? allowedRoles.map(role => role.toLowerCase())
+    : [allowedRoles.toLowerCase()];
+  console.log(userRole);
+  if (userRole === undefined || !roles.includes(userRole)) {
+    throw redirect({
+      to: "/unauthorized",
+    });
+  }
+};
+
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
+    context.auth.user = { // do testów
+      id: "1",
+      firstname: "Jan",
+      surname: "Kowalski",
+      email: "jan.kowalski@example.com",
+      phone: "123456789",
+      role: "charity" // "victim" | "donator" | "volunteer" | "charity"
+    };
+
     if (!context.auth.isAuthenticated) {
       throw redirect({
         to: "/login",

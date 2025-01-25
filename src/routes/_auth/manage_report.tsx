@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import { useTranslation } from "react-i18next";
 import { api } from "@/utils/api";
+import { protectRoute } from "@/routes/_auth";
 
 interface Report {
   id: number
@@ -56,6 +57,9 @@ const mockReports: Report[] = [
 ]
 
 export const Route = createFileRoute('/_auth/manage_report')({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['charity']);
+  },
   component: RouteComponent,
 })
 

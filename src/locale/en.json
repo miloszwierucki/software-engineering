@@ -223,6 +223,10 @@
         "assign": "Assign Resource",
         "cancel": "Cancel"
       }
+    },
+    "unauthorized": {
+      "title": "Your unauthorized for this page",
+      "message": "Please contact your administrator"
     }
   }
 }

@@ -221,6 +221,10 @@
         "assign": "Przydziel",
         "cancel": "Zamknij"
       }
+    },
+    "unauthorized": {
+      "title": "Twoje konto nie ma dostępu do tej strony",
+      "message": "Skontaktuj się z administratorem"
     }
   }
 }

@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import { protectRoute } from "@/routes/_auth";
 
 // Dane z backendu
 const resources = [
@@ -59,6 +60,9 @@ const mockReports = [
 ]
 
 export const Route = createFileRoute('/_auth/manage_resources')({
+  beforeLoad: ({ context }) => {
+    protectRoute(context, ['charity']);
+  },
   component: RouteComponent,
 })
 

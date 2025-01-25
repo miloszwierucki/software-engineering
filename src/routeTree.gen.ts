@@ -15,6 +15,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthVictimindexImport } from './routes/_auth/victim_index'
 import { Route as AuthIndexImport } from './routes/_auth/index'
+import { Route as AuthUnauthorizedImport } from './routes/_auth/unauthorized'
 import { Route as AuthManageresourcesImport } from './routes/_auth/manage_resources'
 import { Route as AuthManagereportImport } from './routes/_auth/manage_report'
 import { Route as AuthDonationsImport } from './routes/_auth/donations'
@@ -45,6 +46,12 @@ const AuthVictimindexRoute = AuthVictimindexImport.update({
 const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthUnauthorizedRoute = AuthUnauthorizedImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -157,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManageresourcesImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/unauthorized': {
+      id: '/_auth/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof AuthUnauthorizedImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/victim_index': {
       id: '/_auth/victim_index'
       path: '/victim_index'
@@ -184,6 +198,7 @@ interface AuthRouteChildren {
   AuthDonationsRoute: typeof AuthDonationsRoute
   AuthManagereportRoute: typeof AuthManagereportRoute
   AuthManageresourcesRoute: typeof AuthManageresourcesRoute
+  AuthUnauthorizedRoute: typeof AuthUnauthorizedRoute
   AuthVictimindexRoute: typeof AuthVictimindexRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
@@ -196,6 +211,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthDonationsRoute: AuthDonationsRoute,
   AuthManagereportRoute: AuthManagereportRoute,
   AuthManageresourcesRoute: AuthManageresourcesRoute,
+  AuthUnauthorizedRoute: AuthUnauthorizedRoute,
   AuthVictimindexRoute: AuthVictimindexRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
@@ -212,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/unauthorized': typeof AuthUnauthorizedRoute
   '/victim_index': typeof AuthVictimindexRoute
   '/': typeof AuthIndexRoute
 }
@@ -225,6 +242,7 @@ export interface FileRoutesByTo {
   '/donations': typeof AuthDonationsRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
+  '/unauthorized': typeof AuthUnauthorizedRoute
   '/victim_index': typeof AuthVictimindexRoute
   '/': typeof AuthIndexRoute
 }
@@ -240,6 +258,7 @@ export interface FileRoutesById {
   '/_auth/donations': typeof AuthDonationsRoute
   '/_auth/manage_report': typeof AuthManagereportRoute
   '/_auth/manage_resources': typeof AuthManageresourcesRoute
+  '/_auth/unauthorized': typeof AuthUnauthorizedRoute
   '/_auth/victim_index': typeof AuthVictimindexRoute
   '/_auth/': typeof AuthIndexRoute
 }
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/donations'
     | '/manage_report'
     | '/manage_resources'
+    | '/unauthorized'
     | '/victim_index'
     | '/'
   fileRoutesByTo: FileRoutesByTo
@@ -268,6 +288,7 @@ export interface FileRouteTypes {
     | '/donations'
     | '/manage_report'
     | '/manage_resources'
+    | '/unauthorized'
     | '/victim_index'
     | '/'
   id:
@@ -281,6 +302,7 @@ export interface FileRouteTypes {
     | '/_auth/donations'
     | '/_auth/manage_report'
     | '/_auth/manage_resources'
+    | '/_auth/unauthorized'
     | '/_auth/victim_index'
     | '/_auth/'
   fileRoutesById: FileRoutesById
@@ -320,6 +342,7 @@ export const routeTree = rootRoute
         "/_auth/donations",
         "/_auth/manage_report",
         "/_auth/manage_resources",
+        "/_auth/unauthorized",
         "/_auth/victim_index",
         "/_auth/"
       ]
@@ -353,6 +376,10 @@ export const routeTree = rootRoute
     },
     "/_auth/manage_resources": {
       "filePath": "_auth/manage_resources.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/unauthorized": {
+      "filePath": "_auth/unauthorized.tsx",
       "parent": "/_auth"
     },
     "/_auth/victim_index": {

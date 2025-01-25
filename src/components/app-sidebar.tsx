@@ -32,6 +32,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = React.useState(language);
   const { user } = useAuth();
+  const userRole = user?.role.toLowerCase();
 
   const handleChangeLanguage = () => {
     const newLanguage = currentLanguage === "en" ? "pl" : "en";
@@ -40,74 +41,82 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const navMain = [
-    {
-      title: t("sideNavBar.donationTitle"),
-      link: { to: "/donations" },
-      icon: Gift,
-      isDisabled: false,
-      items: [
-        {
-          title: t("sideNavBar.manageTitle"),
-          link: { to: "/donations" },
-          icon: ListTree,
-          isDisabled: false,
-        },
-        {
-          title: t("sideNavBar.addTitle"),
-          link: { to: "/donations", search: { new: true } },
-          icon: ListPlus,
-          isDisabled: false,
-        },
-      ],
-    },
-    {
-      title: t("sideNavBar.reportTitle"),
-      link: { to: "/add_report" },
-      icon: FileText,
-      isDisabled: false,
-      items: [
-        {
-          title: t("sideNavBar.manageTitle"),
-          link: { to: "/manage_report" },
-          icon: ListTree,
-          isDisabled: false,
-        },
-        {
-          title: t("sideNavBar.addTitle"),
-          link: { to: "/add_report", search: { new: true } },
-          icon: ListPlus,
-          isDisabled: false,
-        },
-      ],
-    },
-    {
-      title: t("sideNavBar.resourceTitle"),
-      link: { to: "/add_resources" },
-      icon: Library,
-      isDisabled: false,
-      items: [
-        {
-          title: t("sideNavBar.manageTitle"),
-          link: { to: "/manage_resources" },
-          icon: ListTree,
-          isDisabled: false,
-        },
-        {
-          title: t("sideNavBar.addTitle"),
-          link: { to: "/add_resources", search: { new: true } },
-          icon: ListPlus,
-          isDisabled: false,
-        },
-      ],
-    },
-    {
-      title: t("sideNavBar.chatTitle"),
-      link: { to: "/chat" },
-      icon: MessagesSquare,
-      isDisabled: false,
-      items: [],
-    },
-  ];
+    ...(userRole === 'donator' || userRole === 'charity' ? [
+      {
+        title: t("sideNavBar.donationTitle"),
+        link: { to: "/donations" },
+        icon: Gift,
+        isDisabled: false,
+        items: [
+          {
+            title: t("sideNavBar.manageTitle"),
+            link: { to: "/donations" },
+            icon: ListTree,
+            isDisabled: false,
+          },
+          {
+            title: t("sideNavBar.addTitle"),
+            link: { to: "/donations", search: { new: true } },
+            icon: ListPlus,
+            isDisabled: false,
+          },
+        ],
+      },
+    ] : []),
+    ...(userRole === 'victim' || userRole === 'charity' ? [
+      {
+        title: t("sideNavBar.reportTitle"),
+        link: { to: "/add_report" },
+        icon: FileText,
+        isDisabled: false,
+        items: [
+          {
+            title: t("sideNavBar.manageTitle"),
+            link: { to: "/manage_report" },
+            icon: ListTree,
+            isDisabled: false,
+          },
+          {
+            title: t("sideNavBar.addTitle"),
+            link: { to: "/add_report", search: { new: true } },
+            icon: ListPlus,
+            isDisabled: false,
+          },
+        ],
+      },
+    ] : []),
+    ...((userRole === 'charity') ? [
+      {
+        title: t("sideNavBar.resourceTitle"),
+        link: { to: "/add_resources" },
+        icon: Library,
+        isDisabled: false,
+        items: [
+          {
+            title: t("sideNavBar.manageTitle"),
+            link: { to: "/manage_resources" },
+            icon: ListTree,
+            isDisabled: false,
+          },
+          {
+            title: t("sideNavBar.addTitle"),
+            link: { to: "/add_resources", search: { new: true } },
+            icon: ListPlus,
+            isDisabled: false,
+          },
+        ],
+      },
+    ] : []),
+    ...((userRole === 'victim' || userRole === 'volunteer' || userRole === 'charity') ? [
+      {
+        title: t("sideNavBar.chatTitle"),
+        link: { to: "/chat" },
+        icon: MessagesSquare,
+        isDisabled: false,
+        items: [],
+      },
+    ] : []),
+  ].filter(Boolean);
   const navSecondary = [
     {
       title: "Feedback",
