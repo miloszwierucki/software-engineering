@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { api } from '@/utils/api'
-import { protectRoute } from "@/routes/_auth";
+import { protectRoute } from '@/routes/_auth'
 
 interface Report {
   report_id: number
@@ -22,21 +22,21 @@ interface Report {
 }
 
 const mockReports: Report[] = [
-    {
-        report_id: 1,
-        charity: 101,
-        category: "costam1",
-        report_date: "2024-11-11",
-        status: 'PENDING'
-    },
-    {
-        report_id: 2,
-        charity: 102,
-        category: "costam2",
-        report_date: "2024-01-21",
-        status: 'ACCEPTED'
-    },
-  ]
+  {
+    report_id: 1,
+    charity: 101,
+    category: 'costam1',
+    report_date: '2024-11-11',
+    status: 'PENDING',
+  },
+  {
+    report_id: 2,
+    charity: 102,
+    category: 'costam2',
+    report_date: '2024-01-21',
+    status: 'ACCEPTED',
+  },
+]
 
 function IndexRoute() {
   const [reports, setReports] = useState<Report[]>([])
@@ -121,9 +121,9 @@ function IndexRoute() {
   )
 }
 
-export const Route = createFileRoute('/_auth/victim_index')({
+export const Route = createFileRoute('/_auth/volunteer_index')({
   beforeLoad: ({ context }) => {
-    protectRoute(context, ['victim']);
+    protectRoute(context, ['volunteer'])
   },
   component: IndexRoute,
 })

@@ -15,7 +15,7 @@ export const protectRoute = (
   const roles = Array.isArray(allowedRoles) 
     ? allowedRoles.map(role => role.toLowerCase())
     : [allowedRoles.toLowerCase()];
-  console.log(userRole);
+  
   if (userRole === undefined || !roles.includes(userRole)) {
     throw redirect({
       to: "/unauthorized",
@@ -41,6 +41,22 @@ export const Route = createFileRoute("/_auth")({
           redirect: location.href,
         },
       });
+    }
+
+    if (location.pathname === '/') {
+      const userRole = context.auth.user?.role.toLowerCase();
+      switch (userRole) {
+        case 'victim':
+          throw redirect({ to: '/victim_index' });
+        case 'donator':
+          throw redirect({ to: '/donator_index' });
+        case 'volunteer':
+          throw redirect({ to: '/volunteer_index' });
+        case 'charity':
+          throw redirect({ to: '/charity_index' });
+        default:
+          throw redirect({ to: '/unauthorized' });
+      }
     }
   },
   component: AuthLayout,

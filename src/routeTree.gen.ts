@@ -13,7 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
+import { Route as AuthVolunteerindexImport } from './routes/_auth/volunteer_index'
 import { Route as AuthVictimindexImport } from './routes/_auth/victim_index'
+import { Route as AuthDonatorindexImport } from './routes/_auth/donator_index'
+import { Route as AuthCharityindexImport } from './routes/_auth/charity_index'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthUnauthorizedImport } from './routes/_auth/unauthorized'
 import { Route as AuthManageresourcesImport } from './routes/_auth/manage_resources'
@@ -37,9 +40,27 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthVolunteerindexRoute = AuthVolunteerindexImport.update({
+  id: '/volunteer_index',
+  path: '/volunteer_index',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthVictimindexRoute = AuthVictimindexImport.update({
   id: '/victim_index',
   path: '/victim_index',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthDonatorindexRoute = AuthDonatorindexImport.update({
+  id: '/donator_index',
+  path: '/donator_index',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthCharityindexRoute = AuthCharityindexImport.update({
+  id: '/charity_index',
+  path: '/charity_index',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -136,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAddresourcesImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/charity_index': {
+      id: '/_auth/charity_index'
+      path: '/charity_index'
+      fullPath: '/charity_index'
+      preLoaderRoute: typeof AuthCharityindexImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/chat': {
       id: '/_auth/chat'
       path: '/chat'
@@ -148,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/donations'
       fullPath: '/donations'
       preLoaderRoute: typeof AuthDonationsImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/donator_index': {
+      id: '/_auth/donator_index'
+      path: '/donator_index'
+      fullPath: '/donator_index'
+      preLoaderRoute: typeof AuthDonatorindexImport
       parentRoute: typeof AuthImport
     }
     '/_auth/manage_report': {
@@ -178,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthVictimindexImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/volunteer_index': {
+      id: '/_auth/volunteer_index'
+      path: '/volunteer_index'
+      fullPath: '/volunteer_index'
+      preLoaderRoute: typeof AuthVolunteerindexImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
@@ -194,12 +236,15 @@ interface AuthRouteChildren {
   AuthAccountRoute: typeof AuthAccountRoute
   AuthAddreportRoute: typeof AuthAddreportRoute
   AuthAddresourcesRoute: typeof AuthAddresourcesRoute
+  AuthCharityindexRoute: typeof AuthCharityindexRoute
   AuthChatRoute: typeof AuthChatRoute
   AuthDonationsRoute: typeof AuthDonationsRoute
+  AuthDonatorindexRoute: typeof AuthDonatorindexRoute
   AuthManagereportRoute: typeof AuthManagereportRoute
   AuthManageresourcesRoute: typeof AuthManageresourcesRoute
   AuthUnauthorizedRoute: typeof AuthUnauthorizedRoute
   AuthVictimindexRoute: typeof AuthVictimindexRoute
+  AuthVolunteerindexRoute: typeof AuthVolunteerindexRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
@@ -207,12 +252,15 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthAccountRoute: AuthAccountRoute,
   AuthAddreportRoute: AuthAddreportRoute,
   AuthAddresourcesRoute: AuthAddresourcesRoute,
+  AuthCharityindexRoute: AuthCharityindexRoute,
   AuthChatRoute: AuthChatRoute,
   AuthDonationsRoute: AuthDonationsRoute,
+  AuthDonatorindexRoute: AuthDonatorindexRoute,
   AuthManagereportRoute: AuthManagereportRoute,
   AuthManageresourcesRoute: AuthManageresourcesRoute,
   AuthUnauthorizedRoute: AuthUnauthorizedRoute,
   AuthVictimindexRoute: AuthVictimindexRoute,
+  AuthVolunteerindexRoute: AuthVolunteerindexRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -224,12 +272,15 @@ export interface FileRoutesByFullPath {
   '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
+  '/charity_index': typeof AuthCharityindexRoute
   '/chat': typeof AuthChatRoute
   '/donations': typeof AuthDonationsRoute
+  '/donator_index': typeof AuthDonatorindexRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
   '/unauthorized': typeof AuthUnauthorizedRoute
   '/victim_index': typeof AuthVictimindexRoute
+  '/volunteer_index': typeof AuthVolunteerindexRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -238,12 +289,15 @@ export interface FileRoutesByTo {
   '/account': typeof AuthAccountRoute
   '/add_report': typeof AuthAddreportRoute
   '/add_resources': typeof AuthAddresourcesRoute
+  '/charity_index': typeof AuthCharityindexRoute
   '/chat': typeof AuthChatRoute
   '/donations': typeof AuthDonationsRoute
+  '/donator_index': typeof AuthDonatorindexRoute
   '/manage_report': typeof AuthManagereportRoute
   '/manage_resources': typeof AuthManageresourcesRoute
   '/unauthorized': typeof AuthUnauthorizedRoute
   '/victim_index': typeof AuthVictimindexRoute
+  '/volunteer_index': typeof AuthVolunteerindexRoute
   '/': typeof AuthIndexRoute
 }
 
@@ -254,12 +308,15 @@ export interface FileRoutesById {
   '/_auth/account': typeof AuthAccountRoute
   '/_auth/add_report': typeof AuthAddreportRoute
   '/_auth/add_resources': typeof AuthAddresourcesRoute
+  '/_auth/charity_index': typeof AuthCharityindexRoute
   '/_auth/chat': typeof AuthChatRoute
   '/_auth/donations': typeof AuthDonationsRoute
+  '/_auth/donator_index': typeof AuthDonatorindexRoute
   '/_auth/manage_report': typeof AuthManagereportRoute
   '/_auth/manage_resources': typeof AuthManageresourcesRoute
   '/_auth/unauthorized': typeof AuthUnauthorizedRoute
   '/_auth/victim_index': typeof AuthVictimindexRoute
+  '/_auth/volunteer_index': typeof AuthVolunteerindexRoute
   '/_auth/': typeof AuthIndexRoute
 }
 
@@ -271,12 +328,15 @@ export interface FileRouteTypes {
     | '/account'
     | '/add_report'
     | '/add_resources'
+    | '/charity_index'
     | '/chat'
     | '/donations'
+    | '/donator_index'
     | '/manage_report'
     | '/manage_resources'
     | '/unauthorized'
     | '/victim_index'
+    | '/volunteer_index'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -284,12 +344,15 @@ export interface FileRouteTypes {
     | '/account'
     | '/add_report'
     | '/add_resources'
+    | '/charity_index'
     | '/chat'
     | '/donations'
+    | '/donator_index'
     | '/manage_report'
     | '/manage_resources'
     | '/unauthorized'
     | '/victim_index'
+    | '/volunteer_index'
     | '/'
   id:
     | '__root__'
@@ -298,12 +361,15 @@ export interface FileRouteTypes {
     | '/_auth/account'
     | '/_auth/add_report'
     | '/_auth/add_resources'
+    | '/_auth/charity_index'
     | '/_auth/chat'
     | '/_auth/donations'
+    | '/_auth/donator_index'
     | '/_auth/manage_report'
     | '/_auth/manage_resources'
     | '/_auth/unauthorized'
     | '/_auth/victim_index'
+    | '/_auth/volunteer_index'
     | '/_auth/'
   fileRoutesById: FileRoutesById
 }
@@ -338,12 +404,15 @@ export const routeTree = rootRoute
         "/_auth/account",
         "/_auth/add_report",
         "/_auth/add_resources",
+        "/_auth/charity_index",
         "/_auth/chat",
         "/_auth/donations",
+        "/_auth/donator_index",
         "/_auth/manage_report",
         "/_auth/manage_resources",
         "/_auth/unauthorized",
         "/_auth/victim_index",
+        "/_auth/volunteer_index",
         "/_auth/"
       ]
     },
@@ -362,12 +431,20 @@ export const routeTree = rootRoute
       "filePath": "_auth/add_resources.tsx",
       "parent": "/_auth"
     },
+    "/_auth/charity_index": {
+      "filePath": "_auth/charity_index.tsx",
+      "parent": "/_auth"
+    },
     "/_auth/chat": {
       "filePath": "_auth/chat.tsx",
       "parent": "/_auth"
     },
     "/_auth/donations": {
       "filePath": "_auth/donations.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/donator_index": {
+      "filePath": "_auth/donator_index.tsx",
       "parent": "/_auth"
     },
     "/_auth/manage_report": {
@@ -384,6 +461,10 @@ export const routeTree = rootRoute
     },
     "/_auth/victim_index": {
       "filePath": "_auth/victim_index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/volunteer_index": {
+      "filePath": "_auth/volunteer_index.tsx",
       "parent": "/_auth"
     },
     "/_auth/": {

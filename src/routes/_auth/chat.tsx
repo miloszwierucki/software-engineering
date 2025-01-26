@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next'
 import { Client, IFrame } from '@stomp/stompjs'
 import { protectRoute } from '@/routes/_auth'
+import { useAuth } from "@/auth";
 
 let isSub = false;
 
@@ -31,7 +32,8 @@ export const Route = createFileRoute('/_auth/chat')({
 function ChatComponent() {
   const [messages, setMessages] = useState<Message[]>([])
   const [stompClient, setStompClient] = useState<Client | null>(null)
-  const userId = '1'
+  const { user } = useAuth();
+  const userId = user?.id;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
