@@ -57,8 +57,19 @@ interface Resource {
   }
 }
 
+interface Location {
+  location_id: number
+  latitude: number
+  longitude: number
+  city: string
+  street: string
+  number: string
+  zipCode: string
+}
+
 function IndexRoute() {
   const [resources, setResources] = useState<Resource[]>([])
+  const [locations, setLocations] = useState<Location[]>([])
 
   const [reportStatus, setReportStatus] = useState<ReportStatus>({
     open: 0,
@@ -112,11 +123,6 @@ function IndexRoute() {
     [51.754229, 19.489487],
     [51.757194, 19.488156],
   ]
-
-  const marker1Position: [number, number] = [51.773995, 19.457697]
-  const marker2Position: [number, number] = [51.775509, 19.455379]
-  const marker3Position: [number, number] = [51.755961, 19.487287]
-  const marker4Position: [number, number] = [51.754452, 19.483596]
 
   const [reportType, setReportType] = useState<string>('')
   const [reportFormat, setReportFormat] = useState<string>('')
@@ -180,9 +186,19 @@ function IndexRoute() {
       }
     }
 
+    const fetchLocations = async () => {
+      try {
+        const locations = await api<Location[]>('/api/locations/getAllLocations', 'GET')
+        setLocations(locations)
+      } catch (err) {
+        console.error('Failed to fetch locations:', err)
+      }
+    }
+
     fetchAvailableReports()
     fetchCompletedReports()
     fetchResources()
+    fetchLocations()
   }, [])
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -304,10 +320,13 @@ function IndexRoute() {
                     weight: 2,
                   }}
                 />
-                <Marker position={marker1Position} icon={customIcon} />
-                <Marker position={marker2Position} icon={customIcon} />
-                <Marker position={marker3Position} icon={customIcon} />
-                <Marker position={marker4Position} icon={customIcon} />
+                {locations.map((location) => (
+                  <Marker
+                    key={location.location_id}
+                    position={[location.latitude, location.longitude]}
+                    icon={customIcon}
+                  />
+                ))}
               </MapContainer>
             </div>
           </CardContent>

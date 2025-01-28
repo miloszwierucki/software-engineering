@@ -27,6 +27,7 @@ import { Icon } from 'leaflet'
 import { useTranslation } from "react-i18next";
 import { api } from "@/utils/api";
 import { protectRoute } from "@/routes/_auth";
+import { useAuth } from "@/auth";
 
 // Walidacja formularza
 const formSchema = z.object({
@@ -85,16 +86,17 @@ interface Location {
 }
 
 interface Report {
-  victim: { id: number };
-  charity: { id: number };
+  victim: { userId: number };
+  charity: { charity_id: number };
   category: string;
   location: Location;
-  status: 'PENDING';
+  reportStatus: 'PENDING';
   report_date: string;
 }
 
 function AddReport() {
   const [position, setPosition] = useState({ lat: 51.7471696, lng: 19.4533291 })
+  const { user } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -115,6 +117,7 @@ function AddReport() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const currentDate = new Date().toISOString();
+      if (!user) throw new Error('User not authenticated');
       
       const locationData: Location = {
         latitude: values.coordinates.lat,
@@ -126,17 +129,17 @@ function AddReport() {
       };
 
       const locationResponse = await api<Location>(
-        "/api/locations/",
+        "/api/locations/addLocation/",
         "POST",
         locationData
       );
 
       const reportData: Report = {
-        victim: { id: 1 },
-        charity: { id: 1 },
+        victim: { userId: parseInt(user?.id) },
+        charity: { charity_id: 1 },
         category: values.category,
         location: locationResponse,
-        status: 'PENDING',
+        reportStatus: 'PENDING',
         report_date: currentDate
       };
 

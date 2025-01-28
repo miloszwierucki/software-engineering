@@ -42,39 +42,8 @@ interface Resource {
   };
 }
 
-const mockResources: Resource[] = [
-  {
-    id: 1,
-    type: 'MONEY',
-    name: 'Pieniądze',
-    quantity: 500,
-    available: false,
-  },
-  {
-    id: 2,
-    type: 'CLOTHES',
-    name: 'Skarpety',
-    quantity: 10,
-    available: false,
-  },
-  {
-    id: 3,
-    type: 'FOOD',
-    name: 'Woda',
-    quantity: 100,
-    available: false,
-  },
-  {
-    id: 4,
-    type: 'VOLUNTEER',
-    name: 'Wolontariusze',
-    quantity: 1,
-    available: false,
-  },
-];
-
 function RouteComponent() {
-  const [resources, setResources] = useState<Resource[]>(mockResources);
+  const [resources, setResources] = useState<Resource[]>([]);
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -83,7 +52,6 @@ function RouteComponent() {
         setResources(response);
       } catch (err) {
         console.error("Failed to fetch resources:", err);
-        setResources(mockResources);
       }
     };
 

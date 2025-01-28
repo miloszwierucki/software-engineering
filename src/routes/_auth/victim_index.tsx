@@ -12,35 +12,23 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { api } from '@/utils/api'
 import { protectRoute } from "@/routes/_auth";
+import { useAuth } from "@/auth";
 
 interface Report {
   report_id: number
-  charity: number
+  charity: {
+    charity_id: number
+    charity_name: string
+  }
   category: string
-  status: 'PENDING' | 'ACCEPTED' | 'COMPLETED'
+  status: 'pending' | 'accepted' | 'completed'
   report_date: string
 }
 
-const mockReports: Report[] = [
-    {
-        report_id: 1,
-        charity: 101,
-        category: "costam1",
-        report_date: "2024-11-11",
-        status: 'PENDING'
-    },
-    {
-        report_id: 2,
-        charity: 102,
-        category: "costam2",
-        report_date: "2024-01-21",
-        status: 'ACCEPTED'
-    },
-  ]
-
 function IndexRoute() {
   const [reports, setReports] = useState<Report[]>([])
-  const victimId = 1
+  const { user } = useAuth();
+  const victimId = user?.id
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -53,7 +41,6 @@ function IndexRoute() {
         setReports(response)
       } catch (err) {
         console.error('Failed to fetch victim reports:', err)
-        setReports(mockReports)
       }
     }
 
@@ -62,11 +49,11 @@ function IndexRoute() {
 
   const getStatusColor = (status: Report['status']) => {
     switch (status) {
-      case 'PENDING':
+      case 'pending':
         return 'text-yellow-600 bg-yellow-100 px-2 py-1 rounded'
-      case 'ACCEPTED':
+      case 'accepted':
         return 'text-green-600 bg-green-100 px-2 py-1 rounded'
-      case 'COMPLETED':
+      case 'completed':
         return 'text-gray-600 bg-gray-100 px-2 py-1 rounded'
     }
   }
@@ -100,7 +87,7 @@ function IndexRoute() {
                 {reports.map((report) => (
                   <TableRow key={report.report_id}>
                     <TableCell>{report.report_id}</TableCell>
-                    <TableCell>{report.charity}</TableCell>
+                    <TableCell>{report.charity.charity_id}</TableCell>
                     <TableCell>{report.category}</TableCell>
                     <TableCell>
                       {new Date(report.report_date).toLocaleDateString()}

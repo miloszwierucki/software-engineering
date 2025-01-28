@@ -89,7 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ...((userRole === 'charity') ? [
       {
         title: t("sideNavBar.resourceTitle"),
-        link: { to: "/add_resources" },
+        link: { to: "/manage_resources" },
         icon: Library,
         isDisabled: false,
         items: [
@@ -97,12 +97,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: t("sideNavBar.manageTitle"),
             link: { to: "/manage_resources" },
             icon: ListTree,
-            isDisabled: false,
-          },
-          {
-            title: t("sideNavBar.addTitle"),
-            link: { to: "/add_resources", search: { new: true } },
-            icon: ListPlus,
             isDisabled: false,
           },
         ],

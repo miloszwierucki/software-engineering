@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from "react-i18next";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -26,38 +26,23 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { protectRoute } from "@/routes/_auth";
+import { api } from "@/utils/api";
 
-// Dane z backendu
-const resources = [
-  {
-    id: 1,
-    type: 'Pieniądze',
-    name: 'Pieniądze',
-    description: 'Pieniądze',
-    quantity: 500,
-  },
-  {
-    id: 2,
-    type: 'Jedzenie',
-    name: 'Woda',
-    description: '500ml',
-    quantity: 20,
-  },
-  {
-    id: 3,
-    type: 'Ubrania',
-    name: 'Skarpety',
-    description: 'Rozmiar 40',
-    quantity: 10,
-  },
-]
+interface Resource {
+  resource_id: number;
+  type: string;
+  quantity: number;
+  name: string;
+  available: boolean;
+}
 
-// Mock reports
-const mockReports = [
-  { id: 1, name: "Report #1" },
-  { id: 2, name: "Report #2" },
-  { id: 3, name: "Report #3" },
-]
+interface Report {
+  report_id: number;
+  category: string;
+  status: string;
+  report_date: string;
+  resources: Resource[];
+}
 
 export const Route = createFileRoute('/_auth/manage_resources')({
   beforeLoad: ({ context }) => {
@@ -68,21 +53,79 @@ export const Route = createFileRoute('/_auth/manage_resources')({
 
 function RouteComponent() {
   const { t } = useTranslation();
-  const [selectedResource, setSelectedResource] = useState<typeof resources[0] | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedReport, setSelectedReport] = useState<string>("")
-  const [quantity, setQuantity] = useState<number>(0)
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [reports, setReports] = useState<Report[]>([]);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(0);
 
-  const handleAssignResource = () => {
-    // logic to assign the resource to the report
-    console.log('Assigning resource:', selectedResource)
-    console.log('To report:', selectedReport)
-    console.log('Quantity:', quantity)
-    setIsDialogOpen(false)
-    setSelectedResource(null)
-    setSelectedReport("")
-    setQuantity(0)
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [resourcesData, reportsData] = await Promise.all([
+          api<Resource[]>('/resource', 'GET'),
+          api<Report[]>('/report', 'GET')
+        ]);
+        setResources(resourcesData.filter(r => r.available));
+        setReports(reportsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleAssignResource = async () => {
+    if (!selectedResource || !selectedReport) return;
+
+    try {
+      if (quantity === selectedResource.quantity) {
+        await api<Resource>(`/resource/${selectedResource.resource_id}`, 'PUT', {
+          ...selectedResource,
+          available: false
+        });
+
+        const reportToUpdate = reports.find(r => r.report_id.toString() === selectedReport);
+        if (reportToUpdate) {
+          await api<Report>(`/report/${reportToUpdate.report_id}`, 'PUT', {
+            ...reportToUpdate,
+            resources: [...reportToUpdate.resources, selectedResource]
+          });
+        }
+      } else {
+        await api<Resource>(`/resource/${selectedResource.resource_id}`, 'PUT', {
+          ...selectedResource,
+          quantity: selectedResource.quantity - quantity
+        });
+
+        const newResource = await api<Resource>('/resource', 'POST', {
+          type: selectedResource.type,
+          name: selectedResource.name,
+          quantity: quantity,
+          available: false
+        });
+
+        const reportToUpdate = reports.find(r => r.report_id.toString() === selectedReport);
+        if (reportToUpdate) {
+          await api<Report>(`/report/${reportToUpdate.report_id}`, 'PUT', {
+            ...reportToUpdate,
+            resources: [...reportToUpdate.resources, newResource]
+          });
+        }
+      }
+
+      const updatedResources = await api<Resource[]>('/resource', 'GET');
+      setResources(updatedResources.filter(r => r.available));
+
+      setIsDialogOpen(false);
+      setSelectedResource(null);
+      setSelectedReport("");
+      setQuantity(0);
+    } catch (error) {
+      console.error('Error assigning resource:', error);
+    }
+  };
 
   return (
     <>
@@ -105,26 +148,24 @@ function RouteComponent() {
                 <TableHead>ID</TableHead>
                 <TableHead>{t("manage_resources.category")}</TableHead>
                 <TableHead>{t("manage_resources.name")}</TableHead>
-                <TableHead>{t("manage_resources.description")}</TableHead>
                 <TableHead>{t("manage_resources.amount")}</TableHead>
                 <TableHead>{t("manage_resources.action")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {resources.map((resource) => (
-                <TableRow key={resource.id}>
-                  <TableCell>{resource.id}</TableCell>
+              {resources.map((resource: Resource) => (
+                <TableRow key={resource.resource_id}>
+                  <TableCell>{resource.resource_id}</TableCell>
                   <TableCell>{resource.type}</TableCell>
                   <TableCell>{resource.name}</TableCell>
-                  <TableCell>{resource.description}</TableCell>
                   <TableCell>{resource.quantity}</TableCell>
                   <TableCell>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        setSelectedResource(resource)
-                        setIsDialogOpen(true)
+                        setSelectedResource(resource);
+                        setIsDialogOpen(true);
                       }}
                     >
                       {t("manage_resources.assign")}
@@ -161,9 +202,9 @@ function RouteComponent() {
                         <SelectValue placeholder={t("manage_resources.popup.select_placeholder")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockReports.map((report) => (
-                          <SelectItem key={report.id} value={report.id.toString()}>
-                            {report.name}
+                        {reports.map((report) => (
+                          <SelectItem key={report.report_id} value={report.report_id.toString()}>
+                            {`Report ${report.report_id} - ${report.category} (${report.status})`}
                           </SelectItem>
                         ))}
                       </SelectContent>
