@@ -205,7 +205,15 @@
         "pending": "Oczekujące",
         "accepted": "Zaakceptowane",
         "closed": "Zakończone"
-      }
+      },
+      "volunteers": "Wolontariusze",
+      "assign_volunteer": "Przydziel Wolontariusza",
+      "evaluate_volunteers": "Oceń Wolontariuszy",
+      "assign_volunteer_title": "Przydziel Wolontariusza do Zgłoszenia",
+      "evaluate_volunteer_title": "Oceń Wolontariuszy",
+      "assign": "Przydziel",
+      "submit_evaluation": "Zatwierdź Ocenę",
+      "evaluation_description": "Wprowadź opis oceny..."
     },
     "manage_resources": {
       "title": "Zarządzanie zasobami",

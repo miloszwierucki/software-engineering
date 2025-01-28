@@ -205,7 +205,15 @@
         "pending": "Pending",
         "accepted": "Accepted",
         "closed": "Closed"
-      }
+      },
+      "volunteers": "Volunteers",
+      "assign_volunteer": "Assign Volunteer",
+      "evaluate_volunteers": "Evaluate Volunteers",
+      "assign_volunteer_title": "Assign Volunteer to Report",
+      "evaluate_volunteer_title": "Evaluate Volunteers",
+      "assign": "Assign",
+      "submit_evaluation": "Submit Evaluation",
+      "evaluation_description": "Enter evaluation description..."
     },
     "manage_resources": {
       "title": "Managing Resources",
