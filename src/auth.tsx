@@ -45,6 +45,7 @@ export interface AuthContextState {
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 const LOCAL_STORAGE_KEY = "auth.token";
+const LOCAL_STORAGE_ID = "auth.id";
 
 function getStoredToken() {
   return localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -58,11 +59,23 @@ function setStoredToken(token: string | null) {
   }
 }
 
+function getStoredID() {
+  return localStorage.getItem(LOCAL_STORAGE_ID);
+}
+
+function setStoredID(id: string | null) {
+  if (id) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, id);
+  } else {
+    localStorage.removeItem(LOCAL_STORAGE_ID);
+  }
+}
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [token, setToken] = useState<string | null>(getStoredToken());
-  const [id, setId] = useState<string | null>(null);
+  const [id, setId] = useState<string | null>(getStoredID());
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!token;
 
@@ -111,6 +124,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const { token, id } = response;
       setStoredToken(token);
+      setStoredID(id);
       setToken(token);
       setId(id);
 
@@ -123,6 +137,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logOut = useCallback(async () => {
     setStoredToken(null);
+    setStoredID(null);
     setToken(null);
     setId(null);
   }, []);
@@ -142,7 +157,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         } catch (error) {
           console.error("Failed to fetch user data:", error);
           setToken(null);
-          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          setStoredToken(null);
+
+          setId(null);
+          setStoredID(null);
         }
       } else {
         setUser(null);

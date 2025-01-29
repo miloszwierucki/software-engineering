@@ -25,15 +25,15 @@ export const protectRoute = (
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
-    context.auth.user = {
-      // do testów
-      id: "1",
-      firstName: "Jan",
-      lastName: "Kowalski",
-      email: "jan.kowalski@example.com",
-      phone: "123456789",
-      role: "charity", // "victim" | "donator" | "volunteer" | "charity"
-    };
+    // context.auth.user = {
+    //   // do testów
+    //   id: "1",
+    //   firstName: "Jan",
+    //   lastName: "Kowalski",
+    //   email: "jan.kowalski@example.com",
+    //   phone: "123456789",
+    //   role: "charity", // "victim" | "donator" | "volunteer" | "charity"
+    // };
 
     if (!context.auth.isAuthenticated) {
       throw redirect({
