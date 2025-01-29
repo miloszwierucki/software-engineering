@@ -49,8 +49,8 @@ function LoginComponent() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [surname, setSurname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
@@ -96,7 +96,7 @@ function LoginComponent() {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !password || !firstname || !surname || !phone || !role) {
+    if (!email || !password || !firstName || !lastName || !phone || !role) {
       setError("empty");
       return;
     }
@@ -115,8 +115,8 @@ function LoginComponent() {
       const response = await signUp(
         email,
         password,
-        firstname,
-        surname,
+        firstName,
+        lastName,
         phone,
         role
       );
@@ -219,34 +219,34 @@ function LoginComponent() {
               <form onSubmit={handleSignUp}>
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="firstname">
+                    <Label htmlFor="firstName">
                       {t("signUpPage.form.firstname")}
                     </Label>
                     <Input
-                      id="firstname"
-                      type="firstname"
+                      id="firstName"
+                      type="text"
                       placeholder="..."
-                      value={firstname}
-                      onChange={(e) => setFirstname(e.target.value)}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       required
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="surname">
+                    <Label htmlFor="lastName">
                       {t("signUpPage.form.surname")}
                     </Label>
                     <Input
-                      id="surname"
-                      type="surname"
+                      id="lastName"
+                      type="text"
                       placeholder="..."
-                      value={surname}
-                      onChange={(e) => setSurname(e.target.value)}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       required
                     />
                   </div>
 
                   <div className="grid gap-2">
-                    <Label htmlFor="surname">
+                    <Label htmlFor="role">
                       {t("signUpPage.form.role.role")}
                     </Label>
                     <Select onValueChange={(value) => setRole(value)} required>

@@ -10,8 +10,8 @@ import { api } from "@/utils/api";
 
 export interface User {
   id: string;
-  firstname: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   role: string;
@@ -68,8 +68,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signUp = useCallback(
     async (
-      firstname: string,
-      surname: string,
+      firstName: string,
+      lastName: string,
       role: string,
       email: string,
       password: string,
@@ -77,8 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     ) => {
       try {
         const response = await api<Response>("/api/api/signup", "POST", {
-          firstname,
-          surname,
+          firstName,
+          lastName,
           role,
           email,
           password,

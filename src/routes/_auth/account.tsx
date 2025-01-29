@@ -14,8 +14,8 @@ export const Route = createFileRoute("/_auth/account")({
 });
 
 interface UserData {
-  firstname: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
 }
@@ -35,8 +35,8 @@ function AccountComponent() {
   const { user } = useAuth();
   const [userData, setUserData] = useState<UserData>(
     user ?? {
-      firstname: "",
-      surname: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
     }
@@ -76,8 +76,8 @@ function AccountComponent() {
     if (
       !userData.email ||
       !userData.phone ||
-      !userData.firstname ||
-      !userData.surname
+      !userData.firstName ||
+      !userData.lastName
     ) {
       setStatus("empty");
       return;

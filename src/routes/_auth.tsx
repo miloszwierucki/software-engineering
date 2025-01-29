@@ -12,10 +12,10 @@ export const protectRoute = (
   allowedRoles: string | string[]
 ) => {
   const userRole = context.auth.user?.role.toLowerCase();
-  const roles = Array.isArray(allowedRoles) 
-    ? allowedRoles.map(role => role.toLowerCase())
+  const roles = Array.isArray(allowedRoles)
+    ? allowedRoles.map((role) => role.toLowerCase())
     : [allowedRoles.toLowerCase()];
-  
+
   if (userRole === undefined || !roles.includes(userRole)) {
     throw redirect({
       to: "/unauthorized",
@@ -25,13 +25,14 @@ export const protectRoute = (
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context, location }) => {
-    context.auth.user = { // do testów
+    context.auth.user = {
+      // do testów
       id: "1",
-      firstname: "Jan",
-      surname: "Kowalski",
+      firstName: "Jan",
+      lastName: "Kowalski",
       email: "jan.kowalski@example.com",
       phone: "123456789",
-      role: "charity" // "victim" | "donator" | "volunteer" | "charity"
+      role: "charity", // "victim" | "donator" | "volunteer" | "charity"
     };
 
     if (!context.auth.isAuthenticated) {
@@ -43,19 +44,19 @@ export const Route = createFileRoute("/_auth")({
       });
     }
 
-    if (location.pathname === '/') {
+    if (location.pathname === "/") {
       const userRole = context.auth.user?.role.toLowerCase();
       switch (userRole) {
-        case 'victim':
-          throw redirect({ to: '/victim_index' });
-        case 'donator':
-          throw redirect({ to: '/donator_index' });
-        case 'volunteer':
-          throw redirect({ to: '/volunteer_index' });
-        case 'charity':
-          throw redirect({ to: '/charity_index' });
+        case "victim":
+          throw redirect({ to: "/victim_index" });
+        case "donator":
+          throw redirect({ to: "/donator_index" });
+        case "volunteer":
+          throw redirect({ to: "/volunteer_index" });
+        case "charity":
+          throw redirect({ to: "/charity_index" });
         default:
-          throw redirect({ to: '/unauthorized' });
+          throw redirect({ to: "/unauthorized" });
       }
     }
   },
