@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       phone: string
     ) => {
       try {
-        const response = await api<Response>("/api/api/signup", "POST", {
+        const response = await api<Response>("/api/signup", "POST", {
           firstName,
           lastName,
           role,
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logIn = useCallback(async (email: string, password: string) => {
     try {
-      const response = await api<ResponseLogin>("/api/api/login", "POST", {
+      const response = await api<ResponseLogin>("/api/login", "POST", {
         email,
         password,
       });
@@ -133,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (token) {
         try {
           const userData = await api<User>(
-            `/api/api/user/${id}`,
+            `/api/user/${id}`,
             "GET",
             undefined,
             token

@@ -65,7 +65,7 @@ function DonationsRoute() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await api<Donation[]>(
-        "/api/donation",
+        "/donation",
         "GET",
         undefined,
         token!

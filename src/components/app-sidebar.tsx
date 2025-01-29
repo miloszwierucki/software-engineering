@@ -42,75 +42,85 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const navMain = [
-    ...(userRole === 'donator' || userRole === 'charity' ? [
-      {
-        title: t("sideNavBar.donationTitle"),
-        link: { to: "/donations" },
-        icon: Gift,
-        isDisabled: false,
-        items: [
+    ...(userRole === "donator" || userRole === "charity"
+      ? [
           {
-            title: t("sideNavBar.manageTitle"),
+            title: t("sideNavBar.donationTitle"),
             link: { to: "/donations" },
-            icon: ListTree,
+            icon: Gift,
             isDisabled: false,
+            items: [
+              {
+                title: t("sideNavBar.manageTitle"),
+                link: { to: "/donations" },
+                icon: ListTree,
+                isDisabled: false,
+              },
+              {
+                title: t("sideNavBar.addTitle"),
+                link: { to: "/donations", search: { new: true } },
+                icon: ListPlus,
+                isDisabled: false,
+              },
+            ],
           },
+        ]
+      : []),
+    ...(userRole === "victim" || userRole === "charity"
+      ? [
           {
-            title: t("sideNavBar.addTitle"),
-            link: { to: "/donations", search: { new: true } },
-            icon: ListPlus,
+            title: t("sideNavBar.reportTitle"),
+            link: { to: "/add_report" },
+            icon: FileText,
             isDisabled: false,
+            items: [
+              {
+                title: t("sideNavBar.manageTitle"),
+                link: { to: "/manage_report" },
+                icon: ListTree,
+                isDisabled: false,
+              },
+              {
+                title: t("sideNavBar.addTitle"),
+                link: { to: "/add_report", search: { new: true } },
+                icon: ListPlus,
+                isDisabled: false,
+              },
+            ],
           },
-        ],
-      },
-    ] : []),
-    ...(userRole === 'victim' || userRole === 'charity' ? [
-      {
-        title: t("sideNavBar.reportTitle"),
-        link: { to: "/add_report" },
-        icon: FileText,
-        isDisabled: false,
-        items: [
+        ]
+      : []),
+    ...(userRole === "charity"
+      ? [
           {
-            title: t("sideNavBar.manageTitle"),
-            link: { to: "/manage_report" },
-            icon: ListTree,
-            isDisabled: false,
-          },
-          {
-            title: t("sideNavBar.addTitle"),
-            link: { to: "/add_report", search: { new: true } },
-            icon: ListPlus,
-            isDisabled: false,
-          },
-        ],
-      },
-    ] : []),
-    ...((userRole === 'charity') ? [
-      {
-        title: t("sideNavBar.resourceTitle"),
-        link: { to: "/manage_resources" },
-        icon: Library,
-        isDisabled: false,
-        items: [
-          {
-            title: t("sideNavBar.manageTitle"),
+            title: t("sideNavBar.resourceTitle"),
             link: { to: "/manage_resources" },
-            icon: ListTree,
+            icon: Library,
             isDisabled: false,
+            items: [
+              {
+                title: t("sideNavBar.manageTitle"),
+                link: { to: "/manage_resources" },
+                icon: ListTree,
+                isDisabled: false,
+              },
+            ],
           },
-        ],
-      },
-    ] : []),
-    ...((userRole === 'victim' || userRole === 'volunteer' || userRole === 'charity') ? [
-      {
-        title: t("sideNavBar.chatTitle"),
-        link: { to: "/chat" },
-        icon: MessagesSquare,
-        isDisabled: false,
-        items: [],
-      },
-    ] : []),
+        ]
+      : []),
+    ...(userRole === "victim" ||
+    userRole === "volunteer" ||
+    userRole === "charity"
+      ? [
+          {
+            title: t("sideNavBar.chatTitle"),
+            link: { to: "/chat" },
+            icon: MessagesSquare,
+            isDisabled: false,
+            items: [],
+          },
+        ]
+      : []),
   ].filter(Boolean);
   const navSecondary = [
     {
@@ -153,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            name: `${user?.firstname || ""} ${user?.surname || ""}`,
+            name: `${user?.firstName || ""} ${user?.lastName || ""}`,
             email: user?.email || "",
             avatar: "",
           }}
