@@ -113,12 +113,12 @@ function LoginComponent() {
 
     try {
       const response = await signUp(
-        email,
-        password,
         firstName,
         lastName,
-        phone,
-        role
+        role,
+        email,
+        password,
+        phone
       );
 
       if (response === "error") {
