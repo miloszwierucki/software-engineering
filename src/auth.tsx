@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       phone: string
     ) => {
       try {
-        const response = await api<Response>("/api/signup", "POST", {
+        const response = await api<Response>("/api/api/signup", "POST", {
           firstname,
           surname,
           role,
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logIn = useCallback(async (email: string, password: string) => {
     try {
-      const response = await api<ResponseLogin>("/api/login", "POST", {
+      const response = await api<ResponseLogin>("/api/api/login", "POST", {
         email,
         password,
       });
@@ -132,7 +132,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchUserData = async () => {
       if (token) {
         try {
-          const userData = await api<User>("/api/user", "GET", { id }, token);
+          const userData = await api<User>(
+            `/api/api/user/${id}`,
+            "GET",
+            undefined,
+            token
+          );
           setUser(userData);
         } catch (error) {
           console.error("Failed to fetch user data:", error);

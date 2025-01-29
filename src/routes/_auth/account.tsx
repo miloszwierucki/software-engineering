@@ -46,14 +46,6 @@ function AccountComponent() {
     repeatPassword: "",
   });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await api<UserData>("/user", "GET");
-      setUserData(response);
-    };
-    fetchUserData();
-  }, []);
-
   const handleChangeUserDataInput = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -92,7 +84,7 @@ function AccountComponent() {
     }
 
     try {
-      const response = await api<Response>("/user", "PUT", userData);
+      const response = await api<Response>("/api/update", "PUT", userData);
       setStatus(response.status);
     } catch (error) {
       console.error("Failed to update user data:", error);

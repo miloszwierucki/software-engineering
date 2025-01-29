@@ -17,11 +17,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { api } from "@/utils/api";
+import { Response } from "@/auth";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns = () => {
+export const columns = (
+  setData: (data: Donation[]) => void,
+  data: Donation[]
+) => {
   // TODO: Please uncomment me :P
   const { t } = useTranslation();
 
@@ -211,7 +216,34 @@ export const columns = () => {
               >
                 {t("donationsTable.copyDonationID")}
               </DropdownMenuItem>
-              {/* <DropdownMenuItem onClick={editRow({ row })}>Edit</DropdownMenuItem> */}
+              <DropdownMenuItem
+                onClick={async () => {
+                  const token = localStorage.getItem("auth.token");
+
+                  try {
+                    const response = await api<Response>(
+                      `/api/donation/${donation.donation_id}`,
+                      "DELETE",
+                      undefined,
+                      token!
+                    );
+
+                    if (response.status === "error") {
+                      throw new Error("Delete failed");
+                    }
+
+                    const deleted = data.filter(
+                      (donation) =>
+                        donation.donation_id !== donation.donation_id
+                    );
+                    setData(deleted);
+                  } catch (error) {
+                    console.error("Delete failed", error);
+                  }
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

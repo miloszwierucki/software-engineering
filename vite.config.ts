@@ -11,6 +11,12 @@ export default defineConfig({
     viteReact(),
     // ...,
   ],
+  server: {
+    proxy: {
+      // Target is your backend API
+      "/api": "http://localhost:8080",
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

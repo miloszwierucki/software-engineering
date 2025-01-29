@@ -12,7 +12,7 @@ export const api = async <T>(
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(import.meta.env.VITE_BACKEND_URL + endpoint, {
+  const response = await fetch(endpoint, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,

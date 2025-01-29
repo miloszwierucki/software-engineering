@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Response } from "@/auth";
+import { Response, useAuth } from "@/auth";
 import { api } from "@/utils/api";
 import {
   Dialog,
@@ -27,7 +27,7 @@ type DonationSearch = {
 
 export const Route = createFileRoute("/_auth/donations")({
   beforeLoad: ({ context }) => {
-    protectRoute(context, ['donator', 'charity']);
+    protectRoute(context, ["donator", "charity"]);
   },
   component: DonationsRoute,
   validateSearch: (search: Record<string, unknown>): DonationSearch => {
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_auth/donations")({
 export interface Donation {
   donation_id: number;
   donator: {
-    userId: number;
+    userId: string;
     name: string;
   };
   status: "PENDING" | "ACCEPTED" | "COMPLETED";
@@ -60,10 +60,16 @@ function DonationsRoute() {
   const [openDialog, setOpenDialog] = useState(createNew);
   const { t } = useTranslation();
   const [status, setStatus] = useState<string>("");
+  const { token, user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await api<Donation[]>("/donations", "GET");
+      const response = await api<Donation[]>(
+        "/api/donation",
+        "GET",
+        undefined,
+        token!
+      );
       setData(response);
     };
     fetchData();
@@ -96,9 +102,9 @@ function DonationsRoute() {
     }
 
     const donation: Donation = {
-      donation_id: -1,
+      donation_id: Math.floor(Math.random() * 10000),
       donator: {
-        userId: -1,
+        userId: user?.id!,
         name: newDonation.donatorName,
       },
       status: "PENDING",
@@ -106,12 +112,17 @@ function DonationsRoute() {
       acceptDate: null,
       resource: {
         ...newDonation.resource,
-        resourceId: -1,
+        resourceId: Math.floor(Math.random() * 10000),
       },
     };
 
     try {
-      const response = await api<Response>("/api/donations", "POST", donation);
+      const response = await api<Response>(
+        "/api/donation",
+        "POST",
+        donation,
+        token!
+      );
 
       if (response.status === "error") {
         throw new Error("Sign up failed");
@@ -245,7 +256,7 @@ function DonationsRoute() {
         </Dialog>
       </div>
       <div className="mx-auto w-full px-4">
-        <DataTable columns={columns()} data={data} />
+        <DataTable columns={columns(setData, data)} data={data} />
       </div>
     </>
   );
